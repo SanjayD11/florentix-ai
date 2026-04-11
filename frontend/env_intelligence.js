@@ -107,7 +107,7 @@ async function fetchWeatherData(force = false) {
     }
     
     try {
-        const res = await fetch(`/api/weather/combined?lat=${envLocation.lat}&lon=${envLocation.lon}`);
+        const res = await fetch(`https://florentix-backend.onrender.com/api/weather/combined?lat=${envLocation.lat}&lon=${envLocation.lon}`);
         const data = await res.json();
         envCache = { timestamp: Date.now(), data: data };
         renderWeatherUI(data);

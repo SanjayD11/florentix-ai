@@ -2739,7 +2739,7 @@ async function _doSendChat() {
         // skeleton already shown; spinner added after 1.5s via setTimeout
         let spinnerTimer = null;
 
-            const resp = await fetch('/chat', {
+            const resp = await fetch('https://florentix-backend.onrender.com/chat', {
                 method:  'POST',
                 headers: {'Content-Type': 'application/json'},
                 body:    JSON.stringify(payload),
