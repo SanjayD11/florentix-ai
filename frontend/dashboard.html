@@ -211,8 +211,7 @@
 
 /* RE-ADDING SPA ESSENTIALS */
 .spa-section{
-  position:absolute;
-  top: 0; left: 0; right: 0;
+  display: none;
   opacity:0;pointer-events:none;
   transform:translateY(18px);
   transition:opacity .45s cubic-bezier(.22,1,.36,1),transform .45s cubic-bezier(.22,1,.36,1);
@@ -224,8 +223,6 @@
 .spa-section.active{
   opacity:1;pointer-events:auto;
   transform:translateY(0);
-  position:relative;
-  z-index: 10;
 }
 /* Basic modal/lightbox & scrollbar */
 #imgLightbox.open{opacity:1;pointer-events:auto;}
@@ -1073,13 +1070,17 @@ window.showSection = sectionId => {
     const el = document.getElementById('sec-' + id);
     if (el) {
       if (id === sectionId) {
-        el.style.display = '';
-        setTimeout(() => el.classList.add('active'), 10);
+        if (id === 'scan' || id === 'history' || id === 'doctor' || id === 'report') {
+            el.style.display = 'flex';
+        } else {
+            el.style.display = 'block';
+        }
+        // Force DOM reflow to enable transition smoothly
+        void el.offsetWidth;
+        el.classList.add('active');
       } else {
         el.classList.remove('active');
-        setTimeout(() => { 
-          if (!el.classList.contains('active')) el.style.display = 'none'; 
-        }, 400);
+        el.style.display = 'none'; 
       }
     }
   });
