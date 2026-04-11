@@ -975,8 +975,6 @@ async def get_weather_combined(lat: float, lon: float):
 
 
 # ─── STATIC FILES ─────────────────────────────────────────────────────────────
-app.mount(
-    "/",
-    StaticFiles(directory=os.path.join(BASE_DIR, "..", "frontend"), html=True),
-    name="frontend"
-)
+# Note: In the hybrid deployment, the frontend is hosted statically on Vercel.
+# The FastAPI backend acts strictly as an API server and no longer serves HTML.
+
