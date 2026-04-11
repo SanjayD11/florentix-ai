@@ -35,9 +35,9 @@ OPENROUTER_API_KEY = os.environ.get("OPENROUTER_API_KEY", "")
 OPENROUTER_API_URL = "https://openrouter.ai/api/v1/chat/completions"
 
 # Vision-capable models for plant diagnosis fallback
-PRIMARY_VISION_MODEL = "google/gemini-2.0-flash-lite-preview-02-05:free"
-FALLBACK_VISION_MODEL = "meta-llama/llama-3.2-11b-vision-instruct:free"
-EMERGENCY_VISION_MODEL = "qwen/qwen-vl-plus:free"
+PRIMARY_VISION_MODEL = "google/gemma-3-12b-it:free"
+FALLBACK_VISION_MODEL = "google/gemma-3-4b-it:free"
+EMERGENCY_VISION_MODEL = "google/gemma-3-27b-it:free"
 
 # Timeout configuration (seconds)
 RENDER_TIMEOUT_FIRST  = 3   # First attempt — aggressive
