@@ -35,9 +35,9 @@ OPENROUTER_API_KEY = os.environ.get("OPENROUTER_API_KEY", "")
 OPENROUTER_API_URL = "https://openrouter.ai/api/v1/chat/completions"
 
 # Vision-capable models for plant diagnosis fallback
-PRIMARY_VISION_MODEL = "google/gemma-3-27b-it:free"
-FALLBACK_VISION_MODEL = "meta-llama/llama-3.3-70b-instruct:free"
-EMERGENCY_VISION_MODEL = "openrouter/auto"
+PRIMARY_VISION_MODEL = "google/gemini-2.0-flash-lite-preview-02-05:free"
+FALLBACK_VISION_MODEL = "meta-llama/llama-3.2-11b-vision-instruct:free"
+EMERGENCY_VISION_MODEL = "qwen/qwen-vl-plus:free"
 
 # Timeout configuration (seconds)
 RENDER_TIMEOUT_FIRST  = 3   # First attempt — aggressive
@@ -346,10 +346,18 @@ async def predict(file: UploadFile = File(...)):
     render_data = try_render(image_bytes, filename, mime_type)
 
     if render_data:
-        result = normalise_response(render_data, source="local")
-        result["inference_time"] = round(time.time() - start, 3)
-        print(f"[Orchestrator] ✓ Local fallback result in {result['inference_time']}s")
-        return JSONResponse(result)
+        try:
+            conf = float(render_data.get("confidence", 0))
+        except (ValueError, TypeError):
+            conf = 0
+            
+        if conf >= CONFIDENCE_THRESHOLD:
+            result = normalise_response(render_data, source="local")
+            result["inference_time"] = round(time.time() - start, 3)
+            print(f"[Orchestrator] ✓ Local fallback result in {result['inference_time']}s")
+            return JSONResponse(result)
+        else:
+            print(f"[Orchestrator] Local fallback rejected due to fake low confidence: {conf}%")
 
     # ── Step 3: Emergency Hard-Safe Response ─────────────────────────────
     safe_response = {
