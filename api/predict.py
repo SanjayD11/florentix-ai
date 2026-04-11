@@ -314,38 +314,57 @@ def health_check():
 async def predict(file: UploadFile = File(...)):
     """
     Intelligent prediction orchestrator:
-      1. Try Render TFLite backend (3s + 2s retry)
-      2. If success AND confidence ≥ 70 → return local result
-      3. Else → cascade through OpenRouter vision models
-      4. Guarantee: ALWAYS returns a valid response
+      1. Try OpenRouter Vision (Cloud) FIRST for highly accurate general plant logic
+      2. If Cloud fails or times out → fallback to Render TFLite backend
+      3. Guarantee: ALWAYS returns a valid response
     """
     start = time.time()
     image_bytes = await file.read()
     mime_type = file.content_type or "image/jpeg"
     filename = file.filename or "upload.jpg"
 
-    # ── Step 1: Try Render (TFLite) ──────────────────────────────────────
+    image_b64 = base64.b64encode(image_bytes).decode("utf-8")
+
+    # ── Step 1: OpenRouter Vision (Primary) ──────────────────────────────
+    cloud_result = None
+    try:
+        # Attempt primary vision (e.g. Gemma 3)
+        raw_cloud = call_openrouter_vision(PRIMARY_VISION_MODEL, image_b64, mime_type, strict=False)
+        if not raw_cloud: # Fallback vision
+            raw_cloud = call_openrouter_vision(FALLBACK_VISION_MODEL, image_b64, mime_type, strict=True)
+        
+        if raw_cloud:
+            cloud_result = normalise_response(raw_cloud, source="cloud")
+            cloud_result["inference_time"] = round(time.time() - start, 3)
+            print(f"[Orchestrator] ✓ Cloud result in {cloud_result['inference_time']}s")
+            return JSONResponse(cloud_result)
+    except Exception as e:
+        print(f"[Orchestrator] Cloud primary failed: {e}")
+
+    # ── Step 2: Fallback to Render (TFLite) ──────────────────────────────
+    print("[Orchestrator] Cloud unavailable, pivoting to local TFLite fallback...")
     render_data = try_render(image_bytes, filename, mime_type)
 
     if render_data:
-        # Check confidence
-        try:
-            conf = float(render_data.get("confidence", 0))
-        except (ValueError, TypeError):
-            conf = 0
+        result = normalise_response(render_data, source="local")
+        result["inference_time"] = round(time.time() - start, 3)
+        print(f"[Orchestrator] ✓ Local fallback result in {result['inference_time']}s")
+        return JSONResponse(result)
 
-        if conf >= CONFIDENCE_THRESHOLD:
-            # Local model succeeded with high confidence
-            result = normalise_response(render_data, source="local")
-            result["inference_time"] = round(time.time() - start, 3)
-            print(f"[Orchestrator] ✓ Local result (conf={conf}%) in {result['inference_time']}s")
-            return JSONResponse(result)
-        else:
-            print(f"[Orchestrator] Local confidence too low ({conf}%), pivoting to cloud...")
+    # ── Step 3: Emergency Hard-Safe Response ─────────────────────────────
+    safe_response = {
+        "source":      "error",
+        "is_fallback":  True,
+        "plant":        "Unknown",
+        "prediction":   "Unable to Diagnose",
+        "confidence":   "0",
+        "analysis":     "All AI systems are currently unavailable. Please check back shortly.",
+        "symptoms":     [],
+        "treatment":    ["Retry: Try scanning again in a few minutes."],
+        "prevention":   [],
+        "risk_level":   "Unknown",
+        "model_used":   "None",
+        "inference_time": round(time.time() - start, 3)
+    }
+    return JSONResponse(safe_response)
 
-    # ── Step 2: Cloud Fallback ───────────────────────────────────────────
-    image_b64 = base64.b64encode(image_bytes).decode("utf-8")
-    cloud_result = cloud_fallback(image_b64, mime_type)
-    cloud_result["inference_time"] = round(time.time() - start, 3)
-    print(f"[Orchestrator] Cloud result in {cloud_result['inference_time']}s")
-    return JSONResponse(cloud_result)
