@@ -1,216 +1,88 @@
-# 🌱 Plant Disease Prediction AI
+<div align="center">
+  <img src=".github/assets/banner.png" alt="Florentix AI Banner" width="100%"/>
+  <br/>
+  <h1>🌿 Florentix AI — Intelligent Plant Pathology</h1>
+  <p><strong>A production-ready, hybrid-cloud platform for proactive plant health diagnostics.</strong></p>
 
-An AI-powered web application that detects tomato plant diseases from leaf images using Deep Learning.  
-Users can upload a plant leaf image and instantly get disease prediction, confidence score, and treatment recommendations.
-
----
-
-## 🚀 Features
-
-✅ Upload plant leaf image  
-✅ AI disease detection using Deep Learning  
-✅ Confidence score prediction  
-✅ Treatment & prevention suggestions  
-✅ Fast inference using TensorFlow Lite  
-✅ REST API with FastAPI backend  
-✅ User-friendly web interface  
-
----
-
-## 🧠 Model Details
-
-### Architecture
-- Transfer Learning
-- MobileNetV2 (ImageNet Pretrained)
-- Custom classification head
-
-### Training Strategy
-- **Phase 1 — Feature Extraction**
-  - Base MobileNetV2 frozen
-  - Only custom layers trained
-
-- **Phase 2 — Fine Tuning**
-  - Top layers of MobileNetV2 unfrozen
-  - Lower learning rate used
-  - Improved accuracy
-
-### Dataset
-Plant leaf disease dataset containing 5 tomato disease classes:
-
-- Early Blight
-- Healthy
-- Late Blight
-- Leaf Mold
-- Septoria Leaf Spot
-
-### Performance
-- **Test Accuracy:** ~88%
-- Image size: 224×224
-- Model optimized using TensorFlow Lite for faster inference
+  <p>
+    <img src="https://img.shields.io/badge/Architecture-Serverless%20Hybrid-059669?style=flat-square" alt="Architecture" />
+    <img src="https://img.shields.io/badge/Frontend-Vercel%20%7C%20Vanilla%20SPA-black?style=flat-square" alt="Frontend" />
+    <img src="https://img.shields.io/badge/Backend-FastAPI%20%7C%20Docker%20%7C%20Render-blue?style=flat-square" alt="Backend" />
+    <br/>
+    <img src="https://img.shields.io/badge/AI-TensorFlow%20Lite%20%7C%20Gemma--3%20Vision-FF6F00?style=flat-square" alt="AI Stack" />
+    <img src="https://img.shields.io/badge/Database-Firebase%20Firestore-F5C200?style=flat-square" alt="Database" />
+  </p>
+</div>
 
 ---
 
-## 🏗️ Project Structure
-```
-project/
-│
-├── backend/ # FastAPI server
-│ ├── app.py
-│ └── utils/
-│ ├── image_utils.py
-│ └── remedies.py
-│
-├── frontend/ # Web UI (HTML, CSS, JS)
-│
-├── dataset/ # Training images (not included)
-│
-├── model/ # Trained model files (.h5, .tflite)
-│
-├── train_model.ipynb # Model training notebook
-│
-└── convert_model.py # TensorFlow Lite conversion script
+## 🚀 Overview
 
+**Florentix AI** bridges the gap between botanical expertise and deep learning. It is an enterprise-grade web application designed to automatically scan, diagnose, and curate treatment plans for diseased plant life. 
 
-```  
----
-
-## ⚙️ Tech Stack
-
-### AI / ML
-- TensorFlow / Keras
-- MobileNetV2
-- Transfer Learning
-- TensorFlow Lite
-- NumPy
-- OpenCV
-
-### Backend
-- FastAPI
-- Python
-
-### Frontend
-- HTML
-- CSS
-- JavaScript
-
-### Tools
-- VS Code
-- Git & GitHub
-- Jupyter Notebook
+Engineered with modern web architectures in mind, Florentix utilizes a **Multi-Tiered Hybrid Inference Pipeline**, cascading between local Edge CNN models (for hyper-focused specialist domains) and advanced Cloud Vision LLMs (Gemma-3-12B/4B) to guarantee 100% response reliability regardless of external server loads or spotty networks.
 
 ---
 
-## 📊 Model Training Pipeline
+## 🔥 Key Highlights for Technical Recruiters
 
-### 1️⃣ Data Preparation
-- Dataset split → Train / Validation / Test
-- Data augmentation:
-  - Rotation
-  - Zoom
-  - Horizontal flip
-  - Width/Height shift
-
-### 2️⃣ Transfer Learning
-- MobileNetV2 pretrained weights
-- Feature extraction training
-
-### 3️⃣ Fine Tuning
-- Unfreezing top layers
-- Lower learning rate
-- Improved accuracy
-
-### 4️⃣ Model Optimization
-- TensorFlow Lite conversion
-- Reduced model size
-- Faster prediction speed
+- **Dynamic AI Orchestration Layer**: Designed a robust failover API in Python/FastAPI. The orchestrator intelligently prioritizes Cloud Vision LLMs, falling back to a locally packaged **TensorFlow Lite (XNNPACK)** Convolutional Neural Network if the cloud layer times out or drops to sub-standard confidence scores. It *never* hallucinates data to the user.
+- **Serverless Hybrid Deployment**: Decoupled monolithic architectures to optimize for free/low-cost tiers. The static frontend is hosted on **Vercel** with client-side image compression (reducing payloads from 15MB 4K images to <500KB Canvas chunks), whilst the heavy inference environment securely resides in a **Dockerized Render** instance.
+- **Asynchronous Data Streaming**: Developed a buffer-controlled Server-Sent Events (SSE) chat pipeline for the 'AI Botanist', managing concurrent HTTP abort requests, connection drops, and persisting complex chat histories natively to Firebase.
+- **Micro-Interaction UI/UX**: Hand-crafted a stunning, glassmorphism-inspired Single Page Application (SPA) without relying on heavy frameworks like React. Built strictly on Vanilla JS and TailwindCSS to achieve extreme lightweight performance and robust cross-device responsiveness.
 
 ---
 
-## 🧪 API Endpoints
+## 🛠 Technology Stack
 
-### Health Check
-GET /
+### Frontend Architecture (Vercel)
+* **Core:** Vanilla JavaScript (ES6+), HTML5
+* **Styling:** TailwindCSS with highly custom utility plugins and CSS micro-animations
+* **Authentication & DB:** Firebase v10 (Auth, Firestore)
+* **Feature Integration:** Open-Meteo Integration for real-time localized environmental intelligence (Humidity, UV Index, Wind, Soil suggestions).
 
-
-Response:
-{
-"status": "running",
-"message": "Plant Disease API is live"
-}
-
-
----
-
-### Predict Disease
-POST /predict
-
-
-Upload image → Returns:
-
-{
-"prediction": "Early_Blight",
-"confidence": 88.4
-}
-
+### Inference Backend (Render / Docker)
+* **Framework:** FastAPI (Uvicorn Async ASGI)
+* **Containerization:** Docker (Debian Slim, Multi-stage builds)
+* **Machine Learning:** TensorFlow Lite (`tflite-runtime`) configured with XNNPACK delegates for optimized low-memory CPU prediction.
+* **LLM Engine:** OpenRouter API explicitly calling Google's `gemma-3-12b-it` and `gemma-3-4b-it` multimodal Vision networks.
 
 ---
 
-## 💻 Local Setup
+## 🧠 The AI Inference Pipeline
 
-### 1. Clone Repository
-git clone https://github.com/siddhisarode/plant-disease-prediction-ai.git
-cd plant-disease-prediction-ai
+1. **Payload Ingestion:** The SPA intercepts the file, resizes utilizing Canvas APIs, converts to standardized Base64 JPEG buffers, and dispatches securely.
+2. **Cloud Vision Initialisation (Tier 1):** The orchestrator pings highly capable open-source Multi-Modal models (Gemma-3). If the model returns valid JSON with `>70%` symptomatic confidence, it renders immediately.
+3. **Local Edge Fallback (Tier 2):** If the network drops or API limits occur, the API delegates the buffer to the locally embedded `.tflite` ResNet model. 
+4. **Data Normalization:** All inputs are caught and unified against a strict Florentix JSON response schema consisting of: *Condition*, *Pathological Rationale*, *Granular Treatment Plans*, *Prevention Methods*, and *Live Environmental Requisites*.
 
+---
 
-### 2. Create Virtual Environment
+## 💻 Local Setup & Development
+
+### 1. Backend (Python Environment)
+```bash
+# Clone Repository
+git clone https://github.com/SanjayD11/florentix-ai.git
+cd florentix-ai/backend
+
+# Initialize venv and install dependencies
 python -m venv plantenv
-plantenv\Scripts\activate
+source plantenv/bin/activate  # or `plantenv\Scripts\activate` on Windows
+pip install -r requirements.local.txt
 
+# Run the Uvicorn server locally
+uvicorn app:app --reload --port 8000
+```
 
-### 3. Install Dependencies
-pip install -r requirements.txt
-
-
-### 4. Run Backend Server
-uvicorn backend.app:app --reload
-
-
-Backend runs at:
-http://127.0.0.1:8000
-
-
-### 5. Run Frontend
-Open the frontend folder using Live Server or any local web server.
+### 2. Frontend (Live Server)
+*   You must configure the Vercel variables or `api/predict.py` to point to your new local backend `http://127.0.0.1:8000` or hosted backend during development.
+*   You simply need to serve the `/frontend` directory utilizing a basic HTTP webserver (e.g. VS Code Live Server or `python -m http.server`).
 
 ---
 
-## 🎯 Use Cases
+## 🛡️ License
 
-- Smart agriculture systems
-- Plant disease detection automation
-- Crop monitoring tools
-- AI-powered gardening assistant
-- Household plant care guidance
+Distributed under the MIT License. See `LICENSE` for more information.
 
----
-
-## 📈 Future Improvements
-
-- Support for more plant species
-- Higher accuracy with larger dataset
-- Cloud deployment
-- Mobile app integration
-- Real-time camera detection
-- Weather-based plant care suggestions
-
----
-
-## 👨‍💻 Author
-
-**Siddhi Sarode**  
-AI / ML Developer — Python, Computer Vision & Deep Learning
-
----
-
-## ⭐ If you like this project, give it a star!
-
+> **Note**: This system was actively engineered and scaled to solve real-world architectural deployment problems, moving from initial local prototypes to hardened, production-stable cloud infrastructure.
