@@ -1,0 +1,31 @@
+{
+  "version": 2,
+  "buildCommand": null,
+  "installCommand": "pip install -r api/requirements.txt",
+  "framework": null,
+  "outputDirectory": "frontend",
+  "functions": {
+    "api/predict.py": {
+      "runtime": "@vercel/python@4.3.1",
+      "maxDuration": 60,
+      "memory": 1024
+    }
+  },
+  "headers": [
+    {
+      "source": "/api/(.*)",
+      "headers": [
+        { "key": "Access-Control-Allow-Origin", "value": "*" },
+        { "key": "Access-Control-Allow-Methods", "value": "GET, POST, OPTIONS" },
+        { "key": "Access-Control-Allow-Headers", "value": "Content-Type" },
+        { "key": "Cache-Control", "value": "no-store, no-cache, must-revalidate" }
+      ]
+    }
+  ],
+  "rewrites": [
+    { "source": "/api/predict", "destination": "/api/predict" },
+    { "source": "/api/health", "destination": "/api/predict" },
+    { "source": "/api/(.*)", "destination": "/api/predict" },
+    { "source": "/(.*)", "destination": "/$1" }
+  ]
+}

@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Florentix AI — Instant Plant Disease Diagnosis</title>
+    <script>
+        if (window.location.hostname === '127.0.0.1') {
+            window.location.hostname = 'localhost';
+        }
+    </script>
+    <meta name="description" content="Florentix AI uses computer vision to detect plant diseases from leaf images. Get instant diagnosis, confidence scores, and treatment plans.">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=block" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    colors: {
+                        brand: { 50:'#ecfdf5', 100:'#d1fae5', 200:'#a7f3d0', 300:'#6ee7b7', 400:'#34d399', 500:'#10b981', 600:'#059669', 700:'#047857', 800:'#065f46', 900:'#064e3b' },
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        *, *::before, *::after { box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
+
+        /* Hero — raw background image, no heavy filters */
+        .hero-section {
+            position: relative; overflow: hidden;
+            background: url('hero_bg.jpg') center/cover no-repeat fixed;
+        }
+        .hero-overlay {
+            position: absolute; inset: 0;
+            background: linear-gradient(165deg, rgba(6,78,59,0.55) 0%, rgba(6,95,70,0.45) 40%, rgba(4,120,87,0.35) 70%, rgba(13,148,136,0.3) 100%);
+            pointer-events: none;
+        }
+
+        /* Floating orbs */
+        .orb {
+            position: absolute; border-radius: 50%; pointer-events: none;
+            will-change: transform; backface-visibility: hidden;
+        }
+        .orb-1 {
+            width: 500px; height: 500px;
+            background: radial-gradient(circle, rgba(52,211,153,0.2) 0%, transparent 70%);
+            top: -100px; right: -100px; animation: orb-float 20s ease-in-out infinite;
+        }
+        .orb-2 {
+            width: 400px; height: 400px;
+            background: radial-gradient(circle, rgba(13,148,136,0.15) 0%, transparent 70%);
+            bottom: -80px; left: -80px; animation: orb-float 25s ease-in-out infinite reverse;
+        }
+
+        @keyframes orb-float {
+            0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+            33% { transform: translate3d(30px, -20px, 0) scale(1.05); }
+            66% { transform: translate3d(-20px, 15px, 0) scale(0.95); }
+        }
+
+        /* Scroll reveal with GPU acceleration */
+        .reveal {
+            opacity: 0; transform: translate3d(0, 28px, 0);
+            transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+            will-change: opacity, transform;
+        }
+        .reveal.active { opacity: 1; transform: translate3d(0, 0, 0); }
+
+        /* Feature cards with smooth GPU-powered transitions */
+        .feature-card {
+            transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease;
+            will-change: transform;
+        }
+        .feature-card:hover {
+            transform: translate3d(0, -8px, 0);
+            box-shadow: 0 24px 48px -12px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Stat cards */
+        .stat-card {
+            transition: background 0.3s ease, transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+            will-change: transform;
+        }
+        .stat-card:hover {
+            background: rgba(255,255,255,0.08);
+            transform: translate3d(0, -4px, 0);
+        }
+
+        /* Glass nav */
+        .glass-nav {
+            background: rgba(255,255,255, 0.92);
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(0,0,0,0.06);
+            transition: box-shadow 0.3s ease;
+        }
+        .glass-nav.scrolled { box-shadow: 0 1px 16px rgba(0,0,0,0.08); }
+
+        /* CTA glow */
+        .cta-glow {
+            position: relative;
+            transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease;
+            will-change: transform;
+        }
+        .cta-glow:hover {
+            transform: translate3d(0, -2px, 0);
+            box-shadow: 0 8px 30px -4px rgba(5, 150, 105, 0.4);
+        }
+
+        /* Image tilt */
+        .img-tilt {
+            transition: transform 0.5s cubic-bezier(0.16,1,0.3,1);
+            will-change: transform;
+        }
+        .img-tilt:hover { transform: rotate(1.5deg) scale(1.02); }
+
+        /* Subtle shimmer on hero badges */
+        @keyframes shimmer {
+            0% { background-position: -200% center; }
+            100% { background-position: 200% center; }
+        }
+        .hero-badge {
+            background: linear-gradient(90deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.15) 50%, rgba(255,255,255,0.05) 100%);
+            background-size: 200% auto;
+            animation: shimmer 4s linear infinite;
+        }
+
+        /* Smooth entrance for hero content */
+        @keyframes hero-fade-up {
+            from { opacity: 0; transform: translate3d(0, 30px, 0); }
+            to { opacity: 1; transform: translate3d(0, 0, 0); }
+        }
+        .hero-enter { animation: hero-fade-up 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        .hero-enter-d1 { animation-delay: 0.1s; opacity: 0; }
+        .hero-enter-d2 { animation-delay: 0.25s; opacity: 0; }
+        .hero-enter-d3 { animation-delay: 0.4s; opacity: 0; }
+        .hero-enter-d4 { animation-delay: 0.55s; opacity: 0; }
+        .hero-enter-d5 { animation-delay: 0.7s; opacity: 0; }
+
+        /* Shadcn Text Animations (Tailored for 2 lines) */
+        @keyframes gradient-foreground-1 {
+            0%, 40% { opacity: 1; }
+            50%, 90% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+        .animate-gradient-foreground-1 { animation: gradient-foreground-1 6s infinite; }
+
+        @keyframes gradient-foreground-2 {
+            0%, 40% { opacity: 0; }
+            50%, 90% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+        .animate-gradient-foreground-2 { animation: gradient-foreground-2 6s infinite; }
+
+        @keyframes gradient-background-1 {
+            0%, 40% { opacity: 0; }
+            50%, 90% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+        .before\:animate-gradient-background-1::before { content: attr(data-content); animation: gradient-background-1 6s infinite; position: absolute; left: 0; top: 0; width: 100%; height: 100%; z-index: -1; color: rgba(255,255,255,0.95); text-align: center; font-weight: 800; text-shadow: 0 4px 24px rgba(0,0,0,0.4); }
+
+        @keyframes gradient-background-2 {
+            0%, 40% { opacity: 1; }
+            50%, 90% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+        .before\:animate-gradient-background-2::before { content: attr(data-content); animation: gradient-background-2 6s infinite; position: absolute; left: 0; top: 0; width: 100%; height: 100%; z-index: -1; color: rgba(255,255,255,0.95); text-align: center; font-weight: 800; text-shadow: 0 4px 24px rgba(0,0,0,0.4); }
+
+        /* Custom Theme Gradients matching Florentix AI */
+        .from-gradient-1-start { --tw-gradient-from: #34d399; --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(52, 211, 153, 0)); }
+        .to-gradient-1-end { --tw-gradient-to: #0ea5e9; }
+        .from-gradient-2-start { --tw-gradient-from: #10b981; --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(16, 185, 129, 0)); }
+        .to-gradient-2-end { --tw-gradient-to: #14b8a6; }
+
+    </style>
+</head>
+<body class="bg-stone-50 text-stone-900">
+
+    <!-- ====== NAVIGATION ====== -->
+    <nav id="main-nav" class="glass-nav fixed w-full z-50">
+        <div class="max-w-6xl mx-auto px-6 h-[72px] flex items-center justify-between">
+            <a href="/" class="flex items-center gap-2.5 group">
+                <div class="w-9 h-9 bg-brand-600 rounded-xl flex items-center justify-center shadow-sm group-hover:shadow-brand-500/30 transition-shadow duration-300">
+                    <i data-lucide="leaf" class="h-5 w-5 text-white"></i>
+                </div>
+                <span class="text-xl font-bold tracking-tight text-stone-900">Florentix <span class="text-brand-600">AI</span></span>
+            </a>
+            <div class="hidden md:flex items-center gap-8">
+                <a href="#why" class="text-sm font-medium text-stone-500 hover:text-stone-900 transition-colors duration-200">Why Florentix</a>
+                <a href="#how" class="text-sm font-medium text-stone-500 hover:text-stone-900 transition-colors duration-200">How It Works</a>
+                <a href="#stats" class="text-sm font-medium text-stone-500 hover:text-stone-900 transition-colors duration-200">Accuracy</a>
+            </div>
+            <a id="navAuthBtn" href="signup.html" class="cta-glow bg-brand-600 text-white px-5 py-2.5 rounded-full text-sm font-semibold shadow-sm flex items-center gap-1">
+                Sign Up Free
+            </a>
+        </div>
+    </nav>
+
+    <!-- ====== HERO ====== -->
+    <header class="hero-section min-h-screen flex flex-col items-center justify-center text-center px-6 pt-20 relative">
+        <div class="hero-overlay"></div>
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+
+        <div class="max-w-3xl relative z-10 space-y-8 flex flex-col items-center justify-center">
+            <div class="hero-badge hero-enter hero-enter-d1 inline-flex items-center gap-2 backdrop-blur-md px-4 py-2 rounded-full border border-white/15 text-sm text-emerald-100 font-medium">
+                <div class="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></div>
+                AI-powered plant diagnostics
+            </div>
+
+            <h1 class="hero-enter hero-enter-d2 tracking-tight flex select-none flex-col text-center text-5xl md:text-[3.75rem] lg:text-7xl font-extrabold leading-[1.1] text-white mx-auto drop-shadow-2xl">
+                <span data-content="See what's wrong." class="before:animate-gradient-background-1 relative block w-full pb-1 md:pb-2">
+                    <span class="from-gradient-1-start to-gradient-1-end animate-gradient-foreground-1 bg-gradient-to-r bg-clip-text text-transparent absolute inset-0 text-center">See what's wrong.</span>
+                    <span class="opacity-0">See what's wrong.</span>
+                </span>
+                <span data-content="Fix it faster." class="before:animate-gradient-background-2 relative block w-full">
+                    <span class="from-gradient-2-start to-gradient-2-end animate-gradient-foreground-2 bg-gradient-to-r bg-clip-text text-transparent absolute inset-0 text-center">Fix it faster.</span>
+                    <span class="opacity-0">Fix it faster.</span>
+                </span>
+            </h1>
+
+            <p class="hero-enter hero-enter-d3 text-lg md:text-xl text-emerald-100/80 max-w-xl mx-auto leading-relaxed font-normal">
+                Upload a leaf photo and get an instant AI diagnosis with confidence scores and treatment guidance. Free to start.
+            </p>
+
+            <div class="hero-enter hero-enter-d4 flex flex-col sm:flex-row gap-4 justify-center pt-2">
+                <a id="heroAuthBtn" href="signup.html" class="cta-glow bg-white text-brand-800 font-semibold text-base px-8 py-4 rounded-2xl shadow-lg inline-flex items-center justify-center gap-2.5">
+                    <i data-lucide="user-plus" class="w-5 h-5"></i> Create Free Account
+                </a>
+                <a href="#why" class="bg-white/10 hover:bg-white/15 backdrop-blur-md text-white border border-white/15 font-medium text-base px-8 py-4 rounded-2xl transition-all duration-300 inline-flex items-center justify-center gap-2">
+                    See how it works <i data-lucide="arrow-down" class="w-4 h-4"></i>
+                </a>
+            </div>
+
+            <!-- Trust strip -->
+            <div class="hero-enter hero-enter-d5 flex flex-wrap justify-center gap-x-8 gap-y-3 pt-6 text-emerald-200/60 text-sm font-medium">
+                <span class="flex items-center gap-1.5"><i data-lucide="shield-check" class="w-4 h-4"></i> AI-assisted</span>
+                <span class="flex items-center gap-1.5"><i data-lucide="zap" class="w-4 h-4"></i> Instant results</span>
+                <span class="flex items-center gap-1.5"><i data-lucide="lock-open" class="w-4 h-4"></i> Free to use</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- ====== PROBLEM / WHY ====== -->
+    <section id="why" class="py-24 md:py-32 px-6 bg-white">
+        <div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-16 items-center">
+            <div class="reveal">
+                <img src="greenhouse.jpg" class="rounded-3xl shadow-2xl img-tilt" alt="Healthy greenhouse plants vs struggling home plants">
+            </div>
+            <div class="space-y-6 reveal" style="transition-delay:100ms">
+                <span class="text-xs font-bold text-brand-600 uppercase tracking-[0.2em]">The Problem</span>
+                <h2 class="text-3xl md:text-4xl font-bold text-stone-900 leading-tight">
+                    Plants look perfect at the store.<br>Then they come home.
+                </h2>
+                <p class="text-stone-500 text-lg leading-relaxed">
+                    In controlled nursery environments, plants thrive. At home, they face unpredictable light, humidity shifts, and diseases that spread before you notice them.
+                </p>
+                <div class="space-y-4 pt-2">
+                    <div class="flex items-start gap-4 group">
+                        <div class="w-10 h-10 bg-red-50 rounded-xl flex items-center justify-center flex-shrink-0 mt-0.5 group-hover:bg-red-100 transition-colors duration-300">
+                            <i data-lucide="eye-off" class="w-5 h-5 text-red-500"></i>
+                        </div>
+                        <div>
+                            <p class="font-semibold text-stone-800 text-sm">Invisible infections</p>
+                            <p class="text-stone-500 text-sm">Fungal and bacterial diseases spread silently before symptoms are visible.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-4 group">
+                        <div class="w-10 h-10 bg-amber-50 rounded-xl flex items-center justify-center flex-shrink-0 mt-0.5 group-hover:bg-amber-100 transition-colors duration-300">
+                            <i data-lucide="help-circle" class="w-5 h-5 text-amber-500"></i>
+                        </div>
+                        <div>
+                            <p class="font-semibold text-stone-800 text-sm">Guesswork treatments</p>
+                            <p class="text-stone-500 text-sm">Without a proper diagnosis, most home remedies do more harm than good.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-4 group">
+                        <div class="w-10 h-10 bg-stone-100 rounded-xl flex items-center justify-center flex-shrink-0 mt-0.5 group-hover:bg-stone-200 transition-colors duration-300">
+                            <i data-lucide="clock" class="w-5 h-5 text-stone-500"></i>
+                        </div>
+                        <div>
+                            <p class="font-semibold text-stone-800 text-sm">Delayed action</p>
+                            <p class="text-stone-500 text-sm">By the time you search online or visit a nursery, it's often too late.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ====== STATS ====== -->
+    <section id="stats" class="py-24 md:py-32 bg-[#021c13] text-white relative overflow-hidden isolate">
+        <!-- Floating animated glow orbs -->
+        <div class="absolute top-0 right-1/4 w-[500px] h-[500px] bg-emerald-900/30 rounded-full blur-[120px] -z-10 mix-blend-screen animate-[pulse_4s_ease-in-out_infinite]"></div>
+        <div class="absolute bottom-0 left-1/4 w-[400px] h-[400px] bg-teal-900/30 rounded-full blur-[100px] -z-10 mix-blend-screen animate-[pulse_5s_ease-in-out_infinite_1s]"></div>
+        
+        <div class="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg viewBox=\'0 0 200 200\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'noiseFilter\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.85\' numOctaves=\'3\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23noiseFilter)\' opacity=\'0.05\'/%3E%3C/svg%3E')] opacity-30 mix-blend-overlay pointer-events-none"></div>
+
+        <div class="max-w-6xl mx-auto px-6 relative z-10">
+            <div class="text-center mb-16 reveal flex flex-col items-center">
+                <span class="inline-block py-1.5 px-4 bg-emerald-900/40 border border-emerald-500/20 text-emerald-300 rounded-full text-[10px] uppercase tracking-[0.2em] font-bold shadow-[0_0_15px_rgba(16,185,129,0.1)] mb-4">
+                    Performance
+                </span>
+                <h2 class="text-4xl md:text-5xl font-extrabold tracking-tight mt-2 text-white/90">
+                    Built for <span class="text-emerald-400 italic drop-shadow-[0_0_15px_rgba(52,211,153,0.4)]">accuracy</span>, not hype.
+                </h2>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 max-w-5xl mx-auto mt-8">
+                <!-- Card 1 -->
+                <div class="group relative reveal flex flex-col items-center justify-center h-full p-8 md:p-12 text-center rounded-[32px] bg-[#032418] bg-opacity-90 backdrop-blur-2xl border border-emerald-100/5 shadow-[0_8px_30px_rgb(0,0,0,0.4)] transition-all duration-500 hover:-translate-y-2 hover:border-emerald-500/40 hover:shadow-[0_30px_60px_-15px_rgba(16,185,129,0.3)]">
+                    <!-- Background hover glow -->
+                    <div class="absolute inset-0 rounded-[32px] bg-gradient-to-b from-emerald-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
+
+                    <!-- Icon -->
+                    <div class="w-16 h-16 rounded-[20px] bg-[#01140e] shadow-[inset_0_2px_10px_rgba(0,0,0,0.6)] border border-emerald-500/20 flex items-center justify-center mb-6 relative group-hover:scale-110 transition-all duration-500 z-10 group-hover:shadow-[0_0_25px_rgba(16,185,129,0.25)] group-hover:border-emerald-400/60">
+                        <div class="absolute inset-0 bg-emerald-400/20 blur-md opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-[20px]"></div>
+                        <i data-lucide="target" class="w-7 h-7 text-emerald-500 group-hover:text-emerald-300 relative z-10 transition-colors drop-shadow-[0_0_8px_rgba(16,185,129,0.5)]"></i>
+                    </div>
+                    
+                    <!-- Title -->
+                    <div class="text-5xl md:text-[64px] font-black text-white group-hover:text-emerald-50 transition-colors duration-500 tracking-tight mb-4 drop-shadow-lg z-10 relative">85%+</div>
+                    
+                    <!-- Subtitle -->
+                    <p class="text-emerald-100/60 text-[15px] leading-relaxed font-medium group-hover:text-emerald-100/90 transition-colors duration-500 z-10 relative">Accuracy across common<br>plant conditions</p>
+                </div>
+                
+                <!-- Card 2 -->
+                <div class="group relative reveal flex flex-col items-center justify-center h-full p-8 md:p-12 text-center rounded-[32px] bg-[#032418] bg-opacity-90 backdrop-blur-2xl border border-teal-100/5 shadow-[0_8px_30px_rgb(0,0,0,0.4)] transition-all duration-500 hover:-translate-y-2 hover:border-teal-500/40 hover:shadow-[0_30px_60px_-15px_rgba(20,184,166,0.3)]" style="transition-delay:80ms">
+                    <!-- Background hover glow -->
+                    <div class="absolute inset-0 rounded-[32px] bg-gradient-to-b from-teal-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
+
+                    <!-- Icon -->
+                    <div class="w-16 h-16 rounded-[20px] bg-[#01140e] shadow-[inset_0_2px_10px_rgba(0,0,0,0.6)] border border-teal-500/20 flex items-center justify-center mb-6 relative group-hover:scale-110 transition-all duration-500 z-10 group-hover:shadow-[0_0_25px_rgba(20,184,166,0.25)] group-hover:border-teal-400/60">
+                        <div class="absolute inset-0 bg-teal-400/20 blur-md opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-[20px]"></div>
+                        <i data-lucide="zap" class="w-7 h-7 text-teal-500 group-hover:text-teal-300 relative z-10 transition-colors drop-shadow-[0_0_8px_rgba(20,184,166,0.5)]"></i>
+                    </div>
+                    
+                    <!-- Title -->
+                    <div class="text-5xl md:text-[64px] font-black text-white group-hover:text-teal-50 transition-colors duration-500 tracking-tight mb-4 drop-shadow-lg z-10 relative">~7s</div>
+                    
+                    <!-- Subtitle -->
+                    <p class="text-teal-100/60 text-[15px] leading-relaxed font-medium group-hover:text-teal-100/90 transition-colors duration-500 z-10 relative">From photo upload<br>to full diagnosis</p>
+                </div>
+                
+                <!-- Card 3 -->
+                <div class="group relative reveal flex flex-col items-center justify-center h-full p-8 md:p-12 text-center rounded-[32px] bg-[#032418] bg-opacity-90 backdrop-blur-2xl border border-cyan-100/5 shadow-[0_8px_30px_rgb(0,0,0,0.4)] transition-all duration-500 hover:-translate-y-2 hover:border-cyan-500/40 hover:shadow-[0_30px_60px_-15px_rgba(6,182,212,0.3)]" style="transition-delay:160ms">
+                    <!-- Background hover glow -->
+                    <div class="absolute inset-0 rounded-[32px] bg-gradient-to-b from-cyan-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
+
+                    <!-- Icon -->
+                    <div class="w-16 h-16 rounded-[20px] bg-[#01140e] shadow-[inset_0_2px_10px_rgba(0,0,0,0.6)] border border-cyan-500/20 flex items-center justify-center mb-6 relative group-hover:scale-110 transition-all duration-500 z-10 group-hover:shadow-[0_0_25px_rgba(6,182,212,0.25)] group-hover:border-cyan-400/60">
+                        <div class="absolute inset-0 bg-cyan-400/20 blur-md opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-[20px]"></div>
+                        <i data-lucide="bug" class="w-7 h-7 text-cyan-500 group-hover:text-cyan-300 relative z-10 transition-colors drop-shadow-[0_0_8px_rgba(6,182,212,0.5)]"></i>
+                    </div>
+                    
+                    <!-- Title -->
+                    <div class="text-5xl md:text-[64px] font-black text-white group-hover:text-cyan-50 transition-colors duration-500 tracking-tight mb-4 drop-shadow-lg z-10 relative">50+</div>
+                    
+                    <!-- Subtitle -->
+                    <p class="text-cyan-100/60 text-[15px] leading-relaxed font-medium group-hover:text-cyan-100/90 transition-colors duration-500 z-10 relative">Conditions detected including<br>fungal & bacterial issues</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ====== HOW IT WORKS ====== -->
+    <section id="how" class="py-24 md:py-32 px-6 bg-stone-50">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center max-w-2xl mx-auto mb-16 reveal">
+                <span class="text-xs font-bold text-brand-600 uppercase tracking-[0.2em]">How It Works</span>
+                <h2 class="text-3xl md:text-4xl font-bold text-stone-900 mt-3">Three steps. One clear answer.</h2>
+                <p class="text-stone-500 mt-4">No apps to install, no accounts to create. Just upload and know.</p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-6 md:gap-8">
+                <div class="group relative feature-card bg-white p-8 md:p-10 rounded-[32px] border border-stone-200/60 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.02)] transition-all duration-500 hover:-translate-y-2 hover:border-brand-200 hover:shadow-[0_30px_60px_-15px_rgba(16,185,129,0.15)] reveal overflow-hidden">
+                    <div class="absolute inset-0 bg-gradient-to-b from-brand-50/0 to-brand-50/0 group-hover:from-brand-50/50 group-hover:to-transparent transition-colors duration-500 pointer-events-none"></div>
+                    <div class="relative z-10 w-full h-full flex flex-col">
+                        <div class="w-14 h-14 bg-white shadow-[0_2px_10px_rgba(0,0,0,0.06)] border border-stone-100 rounded-[20px] flex items-center justify-center mb-8 group-hover:scale-110 transition-transform duration-500 group-hover:shadow-[0_8px_20px_rgba(16,185,129,0.15)] group-hover:border-brand-100">
+                            <i data-lucide="image-plus" class="w-6 h-6 text-brand-600 transition-colors duration-500 group-hover:text-brand-500"></i>
+                        </div>
+                        <div class="text-[11px] font-bold text-brand-600/80 uppercase tracking-[0.2em] mb-3">Step 1</div>
+                        <h3 class="text-xl font-bold text-stone-900 mb-3 tracking-tight">Upload a photo</h3>
+                        <p class="text-stone-500 text-[15px] leading-relaxed">Take a clear photo of the affected leaf and drag it into the scanner securely.</p>
+                    </div>
+                </div>
+
+                <div class="group relative feature-card bg-white p-8 md:p-10 rounded-[32px] border border-stone-200/60 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.02)] transition-all duration-500 hover:-translate-y-2 hover:border-teal-200 hover:shadow-[0_30px_60px_-15px_rgba(20,184,166,0.15)] reveal overflow-hidden" style="transition-delay:80ms">
+                    <div class="absolute inset-0 bg-gradient-to-b from-teal-50/0 to-teal-50/0 group-hover:from-teal-50/50 group-hover:to-transparent transition-colors duration-500 pointer-events-none"></div>
+                    <div class="relative z-10 w-full h-full flex flex-col">
+                        <div class="w-14 h-14 bg-white shadow-[0_2px_10px_rgba(0,0,0,0.06)] border border-stone-100 rounded-[20px] flex items-center justify-center mb-8 group-hover:scale-110 transition-transform duration-500 group-hover:shadow-[0_8px_20px_rgba(20,184,166,0.15)] group-hover:border-teal-100">
+                            <i data-lucide="cpu" class="w-6 h-6 text-teal-600 transition-colors duration-500 group-hover:text-teal-500"></i>
+                        </div>
+                        <div class="text-[11px] font-bold text-teal-600/80 uppercase tracking-[0.2em] mb-3">Step 2</div>
+                        <h3 class="text-xl font-bold text-stone-900 mb-3 tracking-tight">AI analyzes</h3>
+                        <p class="text-stone-500 text-[15px] leading-relaxed">Our advanced models scan leaf texture, color patterns, and disease markers in milliseconds.</p>
+                    </div>
+                </div>
+
+                <div class="group relative feature-card bg-white p-8 md:p-10 rounded-[32px] border border-stone-200/60 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.02)] transition-all duration-500 hover:-translate-y-2 hover:border-amber-200 hover:shadow-[0_30px_60px_-15px_rgba(245,158,11,0.15)] reveal overflow-hidden" style="transition-delay:160ms">
+                    <div class="absolute inset-0 bg-gradient-to-b from-amber-50/0 to-amber-50/0 group-hover:from-amber-50/50 group-hover:to-transparent transition-colors duration-500 pointer-events-none"></div>
+                    <div class="relative z-10 w-full h-full flex flex-col">
+                        <div class="w-14 h-14 bg-white shadow-[0_2px_10px_rgba(0,0,0,0.06)] border border-stone-100 rounded-[20px] flex items-center justify-center mb-8 group-hover:scale-110 transition-transform duration-500 group-hover:shadow-[0_8px_20px_rgba(245,158,11,0.15)] group-hover:border-amber-100">
+                            <i data-lucide="clipboard-check" class="w-6 h-6 text-amber-600 transition-colors duration-500 group-hover:text-amber-500"></i>
+                        </div>
+                        <div class="text-[11px] font-bold text-amber-600/80 uppercase tracking-[0.2em] mb-3">Step 3</div>
+                        <h3 class="text-xl font-bold text-stone-900 mb-3 tracking-tight">Get your report</h3>
+                        <p class="text-stone-500 text-[15px] leading-relaxed">Receive a clear diagnosis with an exact confidence score and actionable treatment plan.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ====== DUAL ENGINE ====== -->
+    <section class="py-24 md:py-28 px-6 bg-white">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center max-w-2xl mx-auto mb-16 reveal">
+                <span class="text-xs font-bold text-brand-600 uppercase tracking-[0.2em]">Intelligence</span>
+                <h2 class="text-3xl md:text-4xl font-bold text-stone-900 mt-3">Two engines. One smart system.</h2>
+                <p class="text-stone-500 mt-4">Florentix routes each scan to the best-suited AI model automatically.</p>
+            </div>
+            <div class="grid md:grid-cols-2 gap-6 md:gap-8 max-w-5xl mx-auto">
+                <div class="group relative feature-card bg-white p-8 md:p-10 rounded-[32px] border border-stone-200/60 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.02)] transition-all duration-500 hover:-translate-y-2 hover:border-brand-200 hover:shadow-[0_30px_60px_-15px_rgba(16,185,129,0.15)] reveal overflow-hidden">
+                    <div class="absolute inset-0 bg-gradient-to-b from-brand-50/0 to-brand-50/0 group-hover:from-brand-50/50 group-hover:to-transparent transition-colors duration-500 pointer-events-none"></div>
+                    <div class="relative z-10 w-full h-full flex flex-col">
+                        <div class="flex items-center gap-4 mb-6">
+                            <div class="w-14 h-14 bg-white shadow-[0_2px_10px_rgba(0,0,0,0.06)] border border-stone-100 rounded-[20px] flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform duration-500 group-hover:shadow-[0_8px_20px_rgba(16,185,129,0.15)] group-hover:border-brand-100">
+                                <i data-lucide="microscope" class="w-6 h-6 text-brand-600 transition-colors duration-500 group-hover:text-brand-500"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-stone-900 tracking-tight">Tomato Expert Model</h3>
+                        </div>
+                        <p class="text-stone-500 text-[15px] leading-relaxed mb-8 flex-grow">A specialized MobileNetV2-based model trained specifically on tomato diseases. Runs locally for faster, higher-accuracy results.</p>
+                        <div class="flex flex-wrap gap-2 mt-auto">
+                            <span class="text-[11px] font-bold bg-brand-50 border border-brand-100 text-brand-600 px-3 py-1.5 rounded-full uppercase tracking-wider group-hover:bg-brand-100/50 transition-colors">Early Blight</span>
+                            <span class="text-[11px] font-bold bg-brand-50 border border-brand-100 text-brand-600 px-3 py-1.5 rounded-full uppercase tracking-wider group-hover:bg-brand-100/50 transition-colors">Late Blight</span>
+                            <span class="text-[11px] font-bold bg-brand-50 border border-brand-100 text-brand-600 px-3 py-1.5 rounded-full uppercase tracking-wider group-hover:bg-brand-100/50 transition-colors">Leaf Mold</span>
+                            <span class="text-[11px] font-bold bg-brand-50 border border-brand-100 text-brand-600 px-3 py-1.5 rounded-full uppercase tracking-wider group-hover:bg-brand-100/50 transition-colors">Septoria</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="group relative feature-card bg-white p-8 md:p-10 rounded-[32px] border border-stone-200/60 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.02)] transition-all duration-500 hover:-translate-y-2 hover:border-teal-200 hover:shadow-[0_30px_60px_-15px_rgba(20,184,166,0.15)] reveal overflow-hidden" style="transition-delay:80ms">
+                    <div class="absolute inset-0 bg-gradient-to-b from-teal-50/0 to-teal-50/0 group-hover:from-teal-50/50 group-hover:to-transparent transition-colors duration-500 pointer-events-none"></div>
+                    <div class="relative z-10 w-full h-full flex flex-col">
+                        <div class="flex items-center gap-4 mb-6">
+                            <div class="w-14 h-14 bg-white shadow-[0_2px_10px_rgba(0,0,0,0.06)] border border-stone-100 rounded-[20px] flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform duration-500 group-hover:shadow-[0_8px_20px_rgba(20,184,166,0.15)] group-hover:border-teal-100">
+                                <i data-lucide="globe" class="w-6 h-6 text-teal-600 transition-colors duration-500 group-hover:text-teal-500"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-stone-900 tracking-tight">AI Vision Scan</h3>
+                        </div>
+                        <p class="text-stone-500 text-[15px] leading-relaxed mb-8 flex-grow">A general-purpose vision model that identifies a wide range of plants and conditions, powered by a cloud AI with multi-species understanding.</p>
+                        <div class="flex flex-wrap gap-2 mt-auto">
+                            <span class="text-[11px] font-bold bg-teal-50 border border-teal-100 text-teal-600 px-3 py-1.5 rounded-full uppercase tracking-wider group-hover:bg-teal-100/50 transition-colors">Multi-plant</span>
+                            <span class="text-[11px] font-bold bg-teal-50 border border-teal-100 text-teal-600 px-3 py-1.5 rounded-full uppercase tracking-wider group-hover:bg-teal-100/50 transition-colors">50+ conditions</span>
+                            <span class="text-[11px] font-bold bg-teal-50 border border-teal-100 text-teal-600 px-3 py-1.5 rounded-full uppercase tracking-wider group-hover:bg-teal-100/50 transition-colors">Cloud AI</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ====== FINAL CTA ====== -->
+    <section class="py-24 md:py-32 px-6 relative overflow-hidden">
+        <div class="max-w-5xl mx-auto group">
+            <div class="relative rounded-[40px] p-[1px] bg-gradient-to-b from-brand-400/40 via-brand-500/10 to-transparent overflow-hidden shadow-[0_8px_40px_-12px_rgba(16,185,129,0.3)] hover:shadow-[0_40px_80px_-20px_rgba(16,185,129,0.5)] transition-all duration-700 hover:-translate-y-2 reveal">
+                <!-- Inner Container -->
+                <div class="relative h-full w-full bg-gradient-to-br from-[#064e3b] via-[#022c22] to-[#01140e] rounded-[39px] px-8 py-16 md:py-24 md:px-20 text-center overflow-hidden z-10">
+                    <!-- Ambient Background Effects -->
+                    <div class="absolute inset-0 overflow-hidden pointer-events-none">
+                        <div class="parallax-bg absolute top-[-10%] right-[-5%] w-[800px] h-[800px] rounded-full bg-gradient-to-br from-emerald-500/20 to-teal-500/20 blur-[120px] mix-blend-multiply opacity-70 animate-pulse-slow"></div>
+                        <div class="parallax-bg absolute bottom-[-10%] left-[-10%] w-[600px] h-[600px] rounded-full bg-gradient-to-tr from-brand-600/20 to-emerald-400/20 blur-[100px] mix-blend-multiply opacity-60"></div>
+                        <div class="absolute top-[20%] left-[20%] w-[300px] h-[300px] rounded-full bg-brand-400/20 blur-[80px] opacity-40"></div>
+                    </div>
+                    <div class="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg viewBox=\'0 0 200 200\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'noiseFilter\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.85\' numOctaves=\'3\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23noiseFilter)\' opacity=\'0.05\'/%3E%3C/svg%3E')] opacity-20 mix-blend-overlay pointer-events-none"></div>
+
+                    <div class="relative z-20 flex flex-col items-center justify-center">
+                        <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-emerald-500/30 bg-emerald-500/10 backdrop-blur-md mb-8 shadow-[0_0_15px_rgba(16,185,129,0.2)] group-hover:border-emerald-400/50 transition-colors duration-500">
+                            <div class="w-2 h-2 bg-emerald-400 rounded-full animate-pulse shadow-[0_0_8px_rgba(52,211,153,1)]"></div>
+                            <span class="text-emerald-200 text-xs font-bold tracking-[0.15em] uppercase">Start Your Journey</span>
+                        </div>
+                        <h2 class="text-4xl md:text-6xl font-black mb-6 text-white tracking-tight drop-shadow-xl group-hover:drop-shadow-[0_0_20px_rgba(16,185,129,0.3)] transition-all duration-500">Ready to save your plants?</h2>
+                        <p class="text-emerald-100/70 text-lg md:text-xl mb-12 max-w-2xl mx-auto leading-relaxed font-medium">
+                            Join Florentix AI today. Get instant access to expert diagnostics, persistent scan history, and personalized recovery plans.
+                        </p>
+                        
+                        <div class="flex flex-col sm:flex-row items-center gap-5 pt-2">
+                            <a id="ctaPrimaryBtn" href="signup.html" class="relative overflow-hidden group/btn inline-flex items-center justify-center gap-2 bg-gradient-to-r from-emerald-400 to-emerald-500 text-stone-900 font-extrabold text-[16px] px-10 py-5 rounded-2xl shadow-[0_0_20px_rgba(16,185,129,0.3)] hover:shadow-[0_0_40px_rgba(52,211,153,0.6)] transition-all duration-300 hover:-translate-y-1">
+                                <span class="relative z-10 flex items-center gap-2">Join Florentix Free <i data-lucide="user-plus" class="w-5 h-5 group-hover/btn:scale-110 transition-transform duration-300"></i></span>
+                            </a>
+                            <a id="ctaSecondaryBtn" href="login.html" class="inline-flex items-center justify-center gap-2 px-8 py-5 rounded-2xl bg-white/5 border border-white/10 text-emerald-200 font-semibold hover:bg-white/10 hover:border-emerald-400/30 hover:text-white transition-all duration-300">
+                                Already have an account? <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ====== FOOTER ====== -->
+    <footer class="bg-white border-t border-stone-150 py-10 px-6">
+        <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-2.5">
+                <div class="w-8 h-8 bg-brand-600 rounded-lg flex items-center justify-center">
+                    <i data-lucide="leaf" class="h-4 w-4 text-white"></i>
+                </div>
+                <span class="text-lg font-bold text-stone-800">Florentix <span class="text-brand-600">AI</span></span>
+            </div>
+            <p class="text-stone-400 text-sm">© 2025 Florentix AI. Built with AI and care for nature.</p>
+        </div>
+    </footer>
+
+    <!-- ====== SCRIPTS ====== -->
+    <script>
+        lucide.createIcons();
+
+        // Smooth Scrolling for Nav Links (Fixes Refresh Lightning Strike)
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                if(targetId === '#') return;
+                const target = document.querySelector(targetId);
+                if(target) {
+                    const headerOffset = 90;
+                    const elementPosition = target.getBoundingClientRect().top;
+                    const offsetPosition = elementPosition + window.scrollY - headerOffset;
+                    window.scrollTo({
+                        top: offsetPosition,
+                        behavior: "smooth"
+                    });
+                }
+            });
+        });
+
+        // Setup Reveal Animations
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
+        
+        // Setup Parallax Backgrounds
+        window.addEventListener('scroll', () => {
+            const scrolled = window.scrollY;
+            document.querySelectorAll('.parallax-bg').forEach((el, i) => {
+                const speed = i === 0 ? 0.25 : 0.4;
+                el.style.transform = `translateY(${scrolled * speed}px)`;
+            });
+        }, { passive: true });
+
+        // Nav scroll effect
+        const nav = document.getElementById('main-nav');
+        let ticking = false;
+        window.addEventListener('scroll', () => {
+            if (!ticking) {
+                requestAnimationFrame(() => {
+                    if (nav) nav.classList.toggle('scrolled', window.scrollY > 20);
+                    ticking = false;
+                });
+                ticking = true;
+            }
+        });
+    </script>
+    <script type="module">
+        import { auth } from './firebase-config.js';
+        import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-auth.js";
+
+        const navAuthBtn = document.getElementById('navAuthBtn');
+        const heroAuthBtn = document.getElementById('heroAuthBtn');
+        const ctaPrimaryBtn = document.getElementById('ctaPrimaryBtn');
+        const ctaSecondaryBtn = document.getElementById('ctaSecondaryBtn');
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                // Update Nav Button
+                if (navAuthBtn) {
+                    navAuthBtn.href = "dashboard.html";
+                    navAuthBtn.innerHTML = 'Dashboard <i data-lucide="arrow-right" class="w-4 h-4 ml-1"></i>';
+                }
+
+                // Update Hero Button
+                if (heroAuthBtn) {
+                    heroAuthBtn.href = "dashboard.html";
+                    heroAuthBtn.innerHTML = '<i data-lucide="layout-dashboard" class="w-5 h-5"></i> Go to Dashboard →';
+                }
+                
+                // Update CTA Buttons
+                if (ctaPrimaryBtn) {
+                    ctaPrimaryBtn.href = "dashboard.html";
+                    ctaPrimaryBtn.innerHTML = '<span class="relative z-10 flex items-center gap-2">Enter Dashboard <i data-lucide="layout-dashboard" class="w-5 h-5 group-hover/btn:scale-110 transition-transform duration-300"></i></span>';
+                }
+                if (ctaSecondaryBtn) {
+                    ctaSecondaryBtn.style.display = 'none';
+                }
+                
+                lucide.createIcons();
+            } else {
+                if (navAuthBtn) {
+                    navAuthBtn.href = "login.html";
+                    navAuthBtn.innerHTML = "Sign In";
+                }
+                if (heroAuthBtn) {
+                    heroAuthBtn.href = "signup.html";
+                    heroAuthBtn.innerHTML = '<i data-lucide="user-plus" class="w-5 h-5"></i> Create Free Account';
+                }
+                if (ctaPrimaryBtn) {
+                    ctaPrimaryBtn.href = "signup.html";
+                    ctaPrimaryBtn.innerHTML = '<span class="relative z-10 flex items-center gap-2">Join Florentix Free <i data-lucide="user-plus" class="w-5 h-5 group-hover/btn:scale-110 transition-transform duration-300"></i></span>';
+                }
+                if (ctaSecondaryBtn) {
+                    ctaSecondaryBtn.style.display = 'inline-flex';
+                }
+                lucide.createIcons();
+            }
+        });
+    </script>
+</body>
+</html>

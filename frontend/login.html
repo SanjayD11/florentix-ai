@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Log In | Florentix AI</title>
+    <script>
+        if (window.location.hostname === '127.0.0.1') {
+            window.location.hostname = 'localhost';
+        }
+    </script>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&amp;display=block" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=block" rel="stylesheet"/>
+    <script id="tailwind-config">
+          tailwind.config = {
+            darkMode: "class",
+            theme: {
+              extend: {
+                colors: {
+                  "tertiary-container": "#823f3a",
+                  "error-container": "#ffdad6",
+                  "primary": "#004532",
+                  "primary-fixed": "#a6f2d1",
+                  "on-secondary-fixed-variant": "#005049",
+                  "inverse-primary": "#8bd6b6",
+                  "on-error": "#ffffff",
+                  "inverse-on-surface": "#f1f1f0",
+                  "secondary": "#006a61",
+                  "outline": "#6f7973",
+                  "on-primary": "#ffffff",
+                  "inverse-surface": "#2f3130",
+                  "surface-container-low": "#f3f4f3",
+                  "background": "#f9f9f8",
+                  "surface-variant": "#e2e2e2",
+                  "on-secondary-fixed": "#00201d",
+                  "on-secondary": "#ffffff",
+                  "tertiary-fixed-dim": "#ffb3ac",
+                  "primary-container": "#065f46",
+                  "surface-container-highest": "#e2e2e2",
+                  "secondary-fixed-dim": "#6bd8cb",
+                  "on-tertiary-fixed": "#3b0908",
+                  "outline-variant": "#bec9c2",
+                  "on-tertiary": "#ffffff",
+                  "primary-fixed-dim": "#8bd6b6",
+                  "surface": "#f9f9f8",
+                  "on-primary-container": "#8bd6b7",
+                  "on-error-container": "#93000a",
+                  "tertiary-fixed": "#ffdad6",
+                  "surface-bright": "#f9f9f8",
+                  "tertiary": "#652925",
+                  "surface-container": "#eeeeed",
+                  "surface-container-high": "#e8e8e7",
+                  "on-secondary-container": "#006f66",
+                  "surface-tint": "#1b6b51",
+                  "on-tertiary-fixed-variant": "#73332f",
+                  "error": "#ba1a1a",
+                  "secondary-container": "#86f2e4",
+                  "secondary-fixed": "#89f5e7",
+                  "surface-container-lowest": "#ffffff",
+                  "on-tertiary-container": "#ffb4ad",
+                  "on-primary-fixed": "#002116",
+                  "surface-dim": "#dadad9",
+                  "on-background": "#1a1c1c",
+                  "on-primary-fixed-variant": "#00513b",
+                  "on-surface-variant": "#3f4944",
+                  "on-surface": "#1a1c1c"
+                },
+                fontFamily: {
+                  "headline": ["Inter"],
+                  "body": ["Inter"],
+                  "label": ["Inter"]
+                },
+                borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+              },
+            },
+          }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f9f9f8;
+        }
+        .mesh-gradient {
+            background: radial-gradient(at 0% 0%, #e6f4f1 0%, transparent 50%),
+                        radial-gradient(at 100% 0%, #f0fdf4 0%, transparent 50%),
+                        radial-gradient(at 100% 100%, #ffffff 0%, transparent 50%),
+                        radial-gradient(at 0% 100%, #f9f9f8 0%, transparent 50%);
+            background-attachment: fixed;
+        }
+        .grain-texture {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            opacity: 0.03;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+        .glass-card {
+            backdrop-filter: blur(24px);
+            background: rgba(255, 255, 255, 0.75);
+        }
+    </style>
+    <style>
+        .animate-fade-in-up { animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) both; }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        
+        @keyframes float-slow { 0%, 100% { transform: translate(0, 0) scale(1); } 50% { transform: translate(20px, -20px) scale(1.05); } }
+        .orb-anim { animation: float-slow 18s ease-in-out infinite; }
+        .orb-anim-rev { animation: float-slow 24s ease-in-out infinite reverse; }
+    </style>
+</head>
+<body class="mesh-gradient h-screen flex flex-col font-body selection:bg-primary-fixed-dim selection:text-primary overflow-hidden">
+    <div class="grain-texture"></div>
+    
+    <header class="w-full px-8 h-20 flex justify-between items-center relative z-10 shrink-0">
+        <a href="index.html" class="text-2xl font-black tracking-tighter text-primary hover:opacity-80 transition-opacity">
+            Florentix AI
+        </a>
+        <div class="text-sm font-medium text-on-surface-variant">
+            Don't have an account? <a class="text-primary font-bold hover:underline" href="signup.html">Sign up</a>
+        </div>
+    </header>
+    
+    <main class="flex-grow flex items-center justify-center px-6 py-4 md:py-6 relative z-10 w-full min-h-0">
+        <div class="w-full max-w-6xl grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center animate-fade-in-up">
+            
+            <div class="hidden lg:flex flex-col flex-1 gap-6 pr-10 xl:pr-16 max-w-xl">
+                <div class="space-y-3">
+                    <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-50 border border-emerald-100 text-[#059669] text-[11px] font-bold uppercase tracking-widest shadow-sm">
+                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                        Welcome Back
+                    </div>
+                    <h1 class="text-[44px] xl:text-[52px] font-extrabold text-on-surface leading-[1.05] tracking-tight">
+                        Continue your<br/><span class="text-[#047857] italic">plant mastery.</span>
+                    </h1>
+                    <p class="text-[16px] text-on-surface-variant leading-relaxed mt-2 max-w-md">
+                        Log in to access your scan history, monitor your plants' recovery, and instantly detect any new issues.
+                    </p>
+                </div>
+                
+                <div class="flex flex-col gap-4 mt-3">
+                    <div class="flex items-center gap-4 group">
+                        <div class="w-10 h-10 rounded-xl bg-white border border-emerald-100 flex items-center justify-center text-[#059669] shrink-0 shadow-sm group-hover:scale-110 group-hover:bg-[#ecfdf5] transition-all duration-300">
+                             <span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">history</span>
+                        </div>
+                        <span class="text-on-surface-variant font-semibold text-[14px] group-hover:text-on-surface transition-colors">Access past diagnoses & photos</span>
+                    </div>
+                    <div class="flex items-center gap-4 group">
+                        <div class="w-10 h-10 rounded-xl bg-white border border-emerald-100 flex items-center justify-center text-[#059669] shrink-0 shadow-sm group-hover:scale-110 group-hover:bg-[#ecfdf5] transition-all duration-300">
+                             <span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">trending_up</span>
+                        </div>
+                        <span class="text-on-surface-variant font-semibold text-[14px] group-hover:text-on-surface transition-colors">Track treatment progress over time</span>
+                    </div>
+                    <div class="flex items-center gap-4 group">
+                        <div class="w-10 h-10 rounded-xl bg-white border border-emerald-100 flex items-center justify-center text-[#059669] shrink-0 shadow-sm group-hover:scale-110 group-hover:bg-[#ecfdf5] transition-all duration-300">
+                             <span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">bolt</span>
+                        </div>
+                        <span class="text-on-surface-variant font-semibold text-[14px] group-hover:text-on-surface transition-colors">Instant new scans anytime</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="flex flex-col items-center lg:items-end w-full flex-1">
+                <div class="glass-card bg-white/85 backdrop-blur-xl w-full max-w-[420px] p-8 lg:p-9 rounded-[28px] border border-white shadow-[0_32px_64px_-16px_rgba(4,120,87,0.12)] relative overflow-hidden shrink-0 group transition-all duration-500 hover:shadow-[0_40px_80px_-16px_rgba(4,120,87,0.2)]">
+                    <div class="absolute top-0 right-0 w-48 h-48 bg-gradient-to-bl from-teal-400/20 to-emerald-500/5 rounded-bl-full -mr-20 -mt-20 blur-2xl transition-transform duration-700 group-hover:scale-125"></div>
+                    <div class="relative z-10">
+                        <div class="mb-6">
+                            <h2 class="text-[32px] font-extrabold text-on-surface tracking-tight leading-none mb-1.5">
+                                Welcome back
+                            </h2>
+                            <p class="text-[14px] leading-relaxed text-on-surface-variant/80">
+                                Log in to continue your plant diagnosis.
+                            </p>
+                        </div>
+                        
+                        <!-- Login Form with JS simulated state & validation -->
+                        <form id="loginForm" class="space-y-4">
+                            <!-- Global Error Message Hook -->
+                            <div id="errorMsgContainer" class="hidden overflow-hidden transition-all duration-300 opacity-0 transform -translate-y-2 max-h-0 bg-error/10 border border-error/20 p-3 rounded-xl flex gap-2 items-start mt-4">
+                                <span class="material-symbols-outlined text-error text-[18px]">error</span>
+                                <p class="text-[12px] text-error font-semibold flex-1 leading-snug">Invalid email or password. Please try again.</p>
+                            </div>
+                            
+                            <!-- Global Success Message Hook -->
+                            <div id="successMsgContainer" class="hidden overflow-hidden transition-all duration-300 opacity-0 transform -translate-y-2 max-h-0 bg-[#ecfdf5] border border-[#059669]/20 p-3 rounded-xl flex gap-2 items-start mt-4">
+                                <span class="material-symbols-outlined text-[#059669] text-[18px]">check_circle</span>
+                                <p class="text-[12px] text-[#047857] font-semibold flex-1 leading-snug"></p>
+                            </div>
+                            
+                            <div class="space-y-1.5">
+                                <label class="block text-[10px] font-bold uppercase tracking-wider text-on-surface-variant/80 ml-1">Email</label>
+                                <input id="emailInput" class="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-xl focus:ring-4 focus:ring-[#059669]/15 focus:border-[#059669] focus:bg-white transition-all duration-300 outline-none text-on-surface placeholder:text-stone-400 shadow-sm hover:border-stone-300" placeholder="name@greenhouse.com" type="email" required/>
+                            </div>
+                            <div class="space-y-1.5 pt-1">
+                                <label class="block text-[10px] font-bold uppercase tracking-wider text-on-surface-variant/80 ml-1">Password</label>
+                                <div class="relative">
+                                    <input id="passwordInput" class="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-xl focus:ring-4 focus:ring-[#059669]/15 focus:border-[#059669] focus:bg-white transition-all duration-300 outline-none text-on-surface placeholder:text-stone-400 shadow-sm hover:border-stone-300 pr-12" placeholder="••••••••••••" type="password" required/>
+                                    <button type="button" id="togglePasswordBtn" class="absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant/40 hover:text-primary transition-colors flex items-center justify-center p-1">
+                                        <span class="material-symbols-outlined text-[20px]" id="toggleIcon">visibility_off</span>
+                                    </button>
+                                </div>
+                                <div class="flex justify-end pt-1">
+                                    <a id="forgotPasswordBtn" href="#" class="text-[11px] font-bold text-primary hover:text-[#059669] underline decoration-primary/30 transition-all focus:outline-none focus:ring-2 focus:ring-[#059669]/20 rounded-sm">Forgot password?</a>
+                                </div>
+                            </div>
+                            
+                            <button id="submitBtn" class="w-full bg-[#047857] text-white py-3.5 rounded-xl font-bold flex items-center justify-center gap-2 shadow-[0_8px_20px_-6px_rgba(4,120,87,0.4)] hover:shadow-[0_12px_24px_-8px_rgba(4,120,87,0.5)] hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300 mt-6 group relative overflow-hidden" type="submit">
+                                <span id="btnText" class="flex items-center gap-2 transition-opacity duration-300">
+                                    Continue
+                                    <span class="material-symbols-outlined text-[20px] transition-transform group-hover:translate-x-1">arrow_forward</span>
+                                </span>
+                                <!-- Loading Spinner overlay hidden by default -->
+                                <div id="btnSpinner" class="absolute inset-0 flex items-center justify-center bg-[#047857] opacity-0 pointer-events-none transition-opacity duration-300">
+                                    <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                      <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                      <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                    </svg>
+                                    <span class="ml-2 font-bold tracking-wide">Logging in...</span>
+                                </div>
+                            </button>
+                        </form>
+                        
+                        <div class="my-6 flex items-center">
+                            <div class="flex-grow border-t border-outline-variant/30"></div>
+                            <span class="px-3 text-[10px] uppercase tracking-widest text-on-surface-variant/60 font-black">Or</span>
+                            <div class="flex-grow border-t border-outline-variant/30"></div>
+                        </div>
+
+                        <div class="flex items-center justify-center">
+                            <!-- Button hook for Google -->
+                            <button id="googleBtn" type="button" class="w-full flex items-center justify-center gap-2.5 py-3 px-4 bg-white border border-outline-variant/30 rounded-xl hover:bg-surface-container-lowest focus:ring-2 focus:ring-[#059669]/20 transition-all text-on-surface shadow-sm hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed font-medium">
+                                <svg class="w-4 h-4" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="currentColor"></path><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="currentColor"></path><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="currentColor"></path><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="currentColor"></path></svg>
+                                <span id="googleBtnText" class="text-[13px] tracking-wide">Continue with Google</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-4 flex items-center gap-4 text-on-surface-variant/60 justify-center w-full max-w-[400px]">
+                    <span class="text-[9px] uppercase tracking-[0.2em] font-bold">Secure authentication</span>
+                    <span class="w-0.5 h-0.5 rounded-full bg-outline-variant/30 hidden sm:block"></span>
+                    <span class="text-[9px] uppercase tracking-[0.2em] font-bold hidden sm:block">No spam</span>
+                    <span class="w-0.5 h-0.5 rounded-full bg-outline-variant/30 hidden sm:block"></span>
+                    <span class="text-[9px] uppercase tracking-[0.2em] font-bold hidden sm:block">Your data stays private</span>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <footer class="w-full py-6 border-t border-emerald-900/10 bg-emerald-50/50 backdrop-blur-sm relative z-10 shrink-0">
+        <div class="flex flex-col md:flex-row justify-between items-center px-6 lg:px-12 gap-3 w-full max-w-screen-2xl mx-auto">
+            <div class="text-[10px] font-medium text-emerald-800/60">
+                © 2026 Florentix AI. <span class="pl-2 ml-2 border-l border-emerald-900/20">Built for plant care using AI.</span>
+            </div>
+            <div class="flex gap-6">
+                <a class="text-[10px] font-medium text-emerald-800/60 hover:text-emerald-900 transition-colors" href="#">Privacy Policy</a>
+                <a class="text-[10px] font-medium text-emerald-800/60 hover:text-emerald-900 transition-colors" href="#">Terms of Service</a>
+                <a class="text-[10px] font-medium text-emerald-800/60 hover:text-emerald-900 transition-colors" href="#">Trust Center</a>
+            </div>
+        </div>
+    </footer>
+    
+    <div class="fixed -bottom-48 -left-48 w-[800px] h-[800px] rounded-full bg-primary-fixed/20 blur-[120px] pointer-events-none orb-anim"></div>
+    <div class="fixed -top-48 -right-48 w-[800px] h-[800px] rounded-full bg-secondary-fixed/20 blur-[120px] pointer-events-none orb-anim-rev"></div>
+
+    <script type="module">
+        import { auth, googleProvider } from './firebase-config.js';
+        import { 
+            signInWithEmailAndPassword, 
+            sendPasswordResetEmail,
+            onAuthStateChanged,
+            signInWithPopup 
+        } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-auth.js";
+
+        // Block logged-in users tracking
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                window.location.href = "dashboard.html";
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const form = document.getElementById('loginForm');
+            const toggleBtn = document.getElementById('togglePasswordBtn');
+            const passwordInput = document.getElementById('passwordInput');
+            const toggleIcon = document.getElementById('toggleIcon');
+            const submitBtn = document.getElementById('submitBtn');
+            const btnText = document.getElementById('btnText');
+            const btnSpinner = document.getElementById('btnSpinner');
+            const errorMsgContainer = document.getElementById('errorMsgContainer');
+            const errorText = errorMsgContainer.querySelector('p');
+            const successMsgContainer = document.getElementById('successMsgContainer');
+            const successText = successMsgContainer.querySelector('p');
+            const emailInput = document.getElementById('emailInput');
+            const googleBtn = document.getElementById('googleBtn');
+            const googleBtnText = document.getElementById('googleBtnText');
+            const forgotBtn = document.getElementById('forgotPasswordBtn');
+            
+            // Helper to show errors
+            function showError(msg) {
+                successMsgContainer.classList.add('hidden');
+                errorText.textContent = msg;
+                errorMsgContainer.classList.remove('hidden');
+                setTimeout(() => {
+                    errorMsgContainer.style.maxHeight = '100px';
+                    errorMsgContainer.classList.remove('opacity-0', '-translate-y-2');
+                    errorMsgContainer.classList.add('opacity-100', 'translate-y-0');
+                }, 10);
+            }
+
+            // Helper to show success messages
+            function showSuccess(msg) {
+                errorMsgContainer.classList.add('hidden');
+                successText.textContent = msg;
+                successMsgContainer.classList.remove('hidden');
+                setTimeout(() => {
+                    successMsgContainer.style.maxHeight = '100px';
+                    successMsgContainer.classList.remove('opacity-0', '-translate-y-2');
+                    successMsgContainer.classList.add('opacity-100', 'translate-y-0');
+                }, 10);
+            }
+
+            // Check for post-reset redirect
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('reset') === 'success') {
+                showSuccess("Password updated successfully. Please log in.");
+                window.history.replaceState({}, document.title, window.location.pathname);
+            }
+
+            // Password visibility toggle
+            toggleBtn.addEventListener('click', () => {
+                if (passwordInput.type === 'password') {
+                    passwordInput.type = 'text';
+                    toggleIcon.textContent = 'visibility';
+                    toggleBtn.classList.add('text-primary');
+                } else {
+                    passwordInput.type = 'password';
+                    toggleIcon.textContent = 'visibility_off';
+                    toggleBtn.classList.remove('text-primary');
+                }
+            });
+
+            // Focus highlighting effect (clears errors on focus)
+            [emailInput, passwordInput].forEach(input => {
+                input.addEventListener('focus', () => {
+                    input.classList.remove('border-error/50', 'bg-error/5');
+                    errorMsgContainer.classList.add('opacity-0', '-translate-y-2');
+                    errorMsgContainer.classList.remove('opacity-100', 'translate-y-0');
+                    successMsgContainer.classList.add('opacity-0', '-translate-y-2');
+                    successMsgContainer.classList.remove('opacity-100', 'translate-y-0');
+                    setTimeout(() => {
+                        errorMsgContainer.classList.add('hidden');
+                        successMsgContainer.classList.add('hidden');
+                    }, 300);
+                });
+            });
+
+            // Form submission & loading state
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                
+                // Show loading state
+                submitBtn.classList.add('cursor-wait');
+                submitBtn.disabled = true;
+                btnText.classList.add('opacity-0');
+                btnSpinner.classList.remove('opacity-0');
+
+                try {
+                    await signInWithEmailAndPassword(auth, emailInput.value.trim(), passwordInput.value);
+                    window.location.href = 'dashboard.html';
+                } catch (err) {
+                    // Restore button state
+                    submitBtn.classList.remove('cursor-wait');
+                    submitBtn.disabled = false;
+                    btnText.classList.remove('opacity-0');
+                    btnSpinner.classList.add('opacity-0');
+                    
+                    // Show error notification & highlight inputs
+                    emailInput.classList.add('border-error/50', 'bg-error/5');
+                    passwordInput.classList.add('border-error/50', 'bg-error/5');
+                    
+                    showError("Invalid email or password. Please try again.");
+                }
+            });
+
+            // Google Sign-In
+            googleBtn.addEventListener('click', () => {
+                googleBtn.disabled = true;
+                googleBtnText.textContent = "Connecting to Google...";
+                
+                signInWithPopup(auth, googleProvider)
+                    .then((result) => {
+                        window.location.href = "dashboard.html";
+                    })
+                    .catch((error) => {
+                        console.error("Google Sign-in Full Error:", error);
+                        console.error("Code:", error.code, "Message:", error.message);
+                        alert(`Google Sign-In Failed!\nCode: ${error.code}\nMessage: ${error.message}\n\nIf it says "unauthorized-domain", check Firebase Console > Auth > Settings > Authorized Domains.`);
+                        googleBtn.disabled = false;
+                        googleBtnText.textContent = "Continue with Google";
+                    });
+            });
+
+            // Forgot Password logic
+            forgotBtn.addEventListener('click', async (e) => {
+                e.preventDefault();
+                
+                const email = emailInput.value.trim();
+                if (!email) {
+                    showError("Email is required. Please enter it above first.");
+                    emailInput.focus();
+                    return;
+                }
+                
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(email)) {
+                    showError("Enter a valid email address.");
+                    return;
+                }
+
+                // UI Loading state
+                const originalText = forgotBtn.textContent;
+                forgotBtn.textContent = "Sending reset link...";
+                forgotBtn.style.pointerEvents = 'none';
+                forgotBtn.classList.add('opacity-50');
+
+                try {
+                    // Force the host prefix depending on local or prod envs
+                    const baseUrl = window.location.origin === "null" || window.location.origin === "file://" 
+                        ? "http://127.0.0.1:8000" 
+                        : window.location.origin;
+                        
+                    await sendPasswordResetEmail(auth, email, {
+                        url: `${baseUrl}/login.html?reset=success`,
+                    });
+                    showSuccess("Password reset link sent. Please check your email.");
+                } catch (err) {
+                    let msg = "Network error or something went wrong.";
+                    switch(err.code) {
+                        case 'auth/user-not-found': msg = "No account found with this email"; break;
+                        case 'auth/invalid-email': msg = "Invalid email format"; break;
+                        case 'auth/too-many-requests': msg = "Too many attempts. Try again later"; break;
+                        case 'auth/network-request-failed': msg = "Network error. Check your connection"; break;
+                    }
+                    showError(msg);
+                } finally {
+                    forgotBtn.textContent = originalText;
+                    forgotBtn.style.pointerEvents = 'auto';
+                    forgotBtn.classList.remove('opacity-50');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

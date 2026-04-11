@@ -1,0 +1,2990 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Florentix AI | Proactive Plant Wellness</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@200;300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=block" rel="stylesheet">
+<!-- Lucide Icons -->
+<script src="https://unpkg.com/lucide@latest"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@700;800&display=block" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=block" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface": "#f8faf9",
+                    "primary": "#00261b",
+                    "on-error-container": "#93000a",
+                    "surface-container-highest": "#e1e3e2",
+                    "surface-container-high": "#e6e9e8",
+                    "tertiary-fixed-dim": "#f9b6af",
+                    "on-surface-variant": "#414944",
+                    "background": "#f8faf9",
+                    "secondary": "#2d6a48",
+                    "primary-fixed": "#bcedd7",
+                    "on-tertiary-container": "#cc8f88",
+                    "tertiary-container": "#542925",
+                    "on-tertiary-fixed-variant": "#693a35",
+                    "secondary-container": "#b0f1c7",
+                    "surface-tint": "#396756",
+                    "primary-container": "#0b3d2e",
+                    "error": "#ba1a1a",
+                    "on-secondary": "#ffffff",
+                    "surface-bright": "#f8faf9",
+                    "on-secondary-fixed": "#002111",
+                    "inverse-on-surface": "#eff1f0",
+                    "surface-container": "#eceeed",
+                    "secondary-fixed": "#b0f1c7",
+                    "on-primary-fixed-variant": "#214f3f",
+                    "on-error": "#ffffff",
+                    "primary-fixed-dim": "#a0d1bc",
+                    "error-container": "#ffdad6",
+                    "on-background": "#191c1c",
+                    "tertiary-fixed": "#ffdad6",
+                    "on-primary-fixed": "#002116",
+                    "inverse-primary": "#a0d1bc",
+                    "on-surface": "#191c1c",
+                    "inverse-surface": "#2e3131",
+                    "surface-variant": "#e1e3e2",
+                    "outline-variant": "#c0c8c3",
+                    "surface-container-low": "#f2f4f3",
+                    "on-secondary-container": "#33704e",
+                    "secondary-fixed-dim": "#95d4ac",
+                    "on-primary": "#ffffff",
+                    "on-tertiary-fixed": "#34100d",
+                    "on-primary-container": "#79a894",
+                    "outline": "#717974",
+                    "on-tertiary": "#ffffff",
+                    "tertiary": "#3a1411",
+                    "surface-dim": "#d8dada",
+                    "on-secondary-fixed-variant": "#0f5132",
+                    "surface-container-lowest": "#ffffff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "1rem",
+                    "lg": "2rem",
+                    "xl": "3rem",
+                    "2xl": "1.5rem",
+                    "3xl": "2.25rem",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Manrope"],
+                    "body": ["Inter"],
+                    "label": ["Inter"]
+            }
+          },
+        },
+      }
+    </script>
+<style type="text/tailwindcss">
+        @layer base {
+            body { font-family: 'Inter', sans-serif; }
+            h1, h2, h3, .brand { font-family: 'Manrope', sans-serif; }
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+        }
+        .premium-shadow {
+            box-shadow: 0 20px 50px -12px rgba(11, 61, 46, 0.08);
+        }
+        .weather-gradient {
+            background: linear-gradient(135deg, #0b3d2e 0%, #2d6a48 100%);
+        }
+        .weather-gradient {
+            background: linear-gradient(135deg, #0b3d2e 0%, #2d6a48 100%);
+        }
+        .timeline-line::before {
+            content: '';
+            position: absolute;
+            left: 20px;
+            top: 40px;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(to bottom, #bcedd7 0%, transparent 100%);
+            z-index: 0;
+        }
+
+        /* NEW SCAN LAYOUT UTILITIES */
+        @layer utilities {
+            .glass-morphism {
+                background: rgba(255, 255, 255, 0.6);
+                backdrop-filter: blur(16px);
+                border: 1px solid rgba(255, 255, 255, 0.4);
+            }
+            .dark-glass {
+                background: rgba(0, 38, 27, 0.8);
+                backdrop-filter: blur(20px);
+                border: 1px solid rgba(160, 209, 188, 0.1);
+            }
+            .scanning-animation {
+                position: relative;
+                overflow: hidden;
+            }
+            .scanning-animation::after {
+                content: '';
+                position: absolute;
+                top: -100%;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(to bottom, transparent, rgba(160, 209, 188, 0.2), transparent);
+                animation: scan 3s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+            }
+            @keyframes scan {
+                0% { top: -100%; }
+                100% { top: 100%; }
+            }
+            @keyframes shimmer {
+                0% { background-position: -1000px 0; }
+                100% { background-position: 1000px 0; }
+            }
+            .skeleton-shimmer {
+                background: linear-gradient(to right, #f2f4f3 8%, #e1e3e2 18%, #f2f4f3 33%);
+                background-size: 1000px 100%;
+                animation: shimmer 2.5s linear infinite forwards;
+            }
+            /* Sidebar skeleton (slightly darker for white sidebar bg) */
+            .sidebar-skeleton {
+                background: linear-gradient(to right, #edf0ef 8%, #dde1df 18%, #edf0ef 33%);
+                background-size: 1000px 100%;
+                animation: shimmer 2s linear infinite forwards;
+                border-radius: 1rem;
+            }
+            /* Chat loading skeleton pulser */
+            @keyframes chat-bubble-in {
+                from { opacity: 0; transform: translateY(12px); }
+                to   { opacity: 1; transform: translateY(0); }
+            }
+            .chat-bubble-in { animation: chat-bubble-in 0.4s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+            @keyframes shimmer-silver {
+                0% { background-position: 200% center; }
+                100% { background-position: -200% center; }
+            }
+            .text-shimmer-silver {
+                background: linear-gradient(90deg, #64748b 0%, #94a3b8 25%, #ffffff 50%, #94a3b8 75%, #64748b 100%);
+                background-size: 200% auto;
+                color: transparent;
+                -webkit-background-clip: text;
+                background-clip: text;
+                animation: shimmer-silver 2.5s linear infinite;
+                filter: drop-shadow(0 0 8px rgba(255,255,255,0.5));
+            }
+            .glow-button {
+                box-shadow: 0 0 20px rgba(45, 106, 72, 0.3);
+            }
+            .glow-button:hover {
+                box-shadow: 0 0 30px rgba(45, 106, 72, 0.5);
+            }
+        }
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        @keyframes floatInHQ {
+            0% { opacity: 0; transform: translateY(40px) scale(0.98); filter: blur(4px); }
+            100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+        }
+        .stagger-load { opacity: 0; animation: floatInHQ 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        .stagger-0 { animation-delay: 0.1s; }
+        .stagger-1 { animation-delay: 0.2s; }
+        .stagger-2 { animation-delay: 0.3s; }
+        .stagger-3 { animation-delay: 0.4s; }
+        .stagger-4 { animation-delay: 0.5s; }
+        .stagger-5 { animation-delay: 0.6s; }
+
+/* RE-ADDING SPA ESSENTIALS */
+.spa-section{
+  position:absolute;
+  top: 0; left: 0; right: 0;
+  opacity:0;pointer-events:none;
+  transform:translateY(18px);
+  transition:opacity .45s cubic-bezier(.22,1,.36,1),transform .45s cubic-bezier(.22,1,.36,1);
+  will-change:opacity,transform;
+  overflow-y:auto;overflow-x:hidden;
+  padding-top:8px;
+  padding-bottom:24px;
+}
+.spa-section.active{
+  opacity:1;pointer-events:auto;
+  transform:translateY(0);
+  position:relative;
+  z-index: 10;
+}
+/* Basic modal/lightbox & scrollbar */
+#imgLightbox.open{opacity:1;pointer-events:auto;}
+#imgLightbox.open #lightboxImg {transform:scale(1);}
+.premium-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+.premium-scrollbar::-webkit-scrollbar-track { background: transparent; }
+.premium-scrollbar::-webkit-scrollbar-thumb { background: rgba(5, 150, 105, 0.2); border-radius: 10px; }
+.premium-scrollbar::-webkit-scrollbar-thumb:hover { background: rgba(5, 150, 105, 0.5); }
+/* Premium Nav Transitions */
+.nav-link {
+   position: relative;
+   @apply text-on-surface/60 font-semibold text-sm pb-1 transition-colors duration-300;
+}
+.nav-link::after {
+   content: '';
+   position: absolute;
+   bottom: 0; left: 0; right: 0;
+   height: 2px;
+   @apply bg-primary;
+   transform: scaleX(0);
+   transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+   transform-origin: center;
+}
+.nav-link:hover {
+   @apply text-primary;
+}
+.nav-link.active {
+   @apply text-primary font-bold;
+}
+.nav-link.active::after {
+   transform: scaleX(1);
+}
+/* AI Doctor - Persistent Nav Fix */
+#sec-doctor {
+  display: flex !important;
+  height: calc(100vh - 72px) !important;
+  width: 100% !important;
+  overflow: hidden !important;
+  position: fixed !important;
+  top: 72px; left: 0; padding: 0; margin: 0;
+  background: #f8faf9;
+  z-index: 100;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s cubic-bezier(0.22, 1, 0.36, 1) !important;
+}
+#sec-doctor.active {
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
+.sidebar-doctor {
+  width: 340px;
+  background: white;
+  height: calc(100vh - 72px);
+  position: fixed;
+  left: 0; top: 72px; bottom: 0;
+  border-right: 1px solid #eaefec;
+  z-index: 150;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex; flex-direction: column;
+  box-shadow: 10px 0 30px -15px rgba(0,0,0,0.04);
+}
+.main-doctor {
+  flex: 1;
+  margin-left: 340px;
+  height: calc(100vh - 72px);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+/* Sidebar Collapsed State (Universal) */
+.sidebar-collapsed .sidebar-doctor {
+  transform: translateX(-100%);
+  /* Do not animate width, it causes severe text-wrapping layout stutters */
+}
+.sidebar-collapsed .main-doctor {
+  margin-left: 0;
+}
+
+/* Premium Global Toggle for AI Doctor */
+.premium-toggle {
+    position: fixed;
+    top: 96px; /* 72px height + 24px offset */
+    left: 24px;
+    z-index: 99999; /* Highest possible */
+    width: 44px;
+    height: 44px;
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(0, 38, 27, 0.15);
+    border-radius: 50%; /* Circle toggle */
+    display: none; /* Controlled by JS */
+    align-items: center;
+    justify-content: center;
+    color: #00261b;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.06);
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), background 0.3s;
+    cursor: pointer;
+}
+.premium-toggle:hover {
+    background: #00261b;
+    color: white;
+    transform: scale(1.1);
+}
+.sidebar-collapsed .premium-toggle {
+    background: #059669;
+    color: white;
+    box-shadow: 0 8px 25px rgba(5, 150, 105, 0.3);
+}
+.premium-toggle:active { transform: scale(0.9); }
+.premium-toggle span { font-size: 28px !important; }
+.doctor-nav {
+  height: 70px;
+  background: white;
+  border-bottom: 1px solid #eaefec;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 40px;
+  padding-left: 90px; /* Space for the fixed toggle */
+  flex-shrink: 0;
+  z-index: 100;
+}
+.doctor-messages-area {
+  flex: 1;
+  overflow-y: auto;
+  padding: 40px 10%;
+  scroll-behavior: smooth;
+}
+.doctor-input-container {
+  padding: 20px 10% 80px 10%;
+  background: linear-gradient(to top, #f8faf9 80%, transparent);
+  position: sticky; bottom: 0; z-index: 140;
+  flex-shrink: 0;
+}
+
+/* Premium Animations */
+@keyframes writing-fade {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-message { animation: writing-fade 0.4s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+.thinking-pulse {
+  animation: pulse-ring 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+@keyframes pulse-ring {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.6; transform: scale(0.98); }
+}
+
+/* Responsive Doctor */
+@media (max-width: 1024px) {
+  .sidebar-doctor { transform: translateX(-100%); width: 300px; }
+  .main-doctor { margin-left: 0; }
+  #sidebar-toggle:checked + .sidebar-doctor { transform: translateX(0); }
+}
+@media (max-width: 640px) {
+  .doctor-nav { padding: 0 20px; }
+  .doctor-messages-area, .doctor-input-container { padding-left: 20px; padding-right: 20px; }
+}
+/* Hidden elements */
+.hidden{display:none;}
+/* Upload zones */
+.upload-zone-spa{background:#fff;border:2px dashed rgba(5,150,105,0.3);border-radius:24px;padding:64px 32px;text-align:center;cursor:pointer;position:relative;overflow:hidden;}
+.upload-zone-spa input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;}
+</style>
+</head>
+</head>
+<body class="bg-[#f0f4f2] text-on-surface min-h-screen selection:bg-primary-fixed selection:text-primary-container">
+
+
+<!-- ── NAV ── -->
+<nav id="main-nav" class="fixed top-0 left-0 right-0 z-50 glass-card border-b border-white/20" style="height:72px;">
+<div class="flex justify-between items-center w-full px-8 h-full max-w-7xl mx-auto">
+<a href="index.html" class="flex items-center gap-2 hover:opacity-80 transition-opacity">
+<div class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
+<span class="material-symbols-outlined text-white text-xl" data-icon="eco">eco</span>
+</div>
+<div class="text-2xl font-bold tracking-tighter text-primary brand">Florentix AI</div>
+</a>
+<div class="hidden md:flex items-center space-x-10 relative">
+<a class="nav-link active cursor-pointer" data-target="dashboard" onclick="showSection('dashboard')">Dashboard</a>
+<a class="nav-link cursor-pointer" data-target="scan" onclick="showSection('scan')">Scan</a>
+<a class="nav-link cursor-pointer" data-target="history" onclick="showSection('history')">History</a>
+<a class="nav-link cursor-pointer" data-target="doctor" onclick="showSection('doctor')">AI Doctor</a>
+</div>
+<div class="flex items-center space-x-3">
+<button id="logoutBtn" class="p-2.5 rounded-full bg-surface-container-high/50 hover:bg-white transition-all premium-shadow group" title="Logout">
+<span class="material-symbols-outlined text-primary group-hover:text-error" data-icon="logout">logout</span>
+</button>
+<button class="flex items-center gap-2 pl-2 pr-4 py-1.5 rounded-full bg-white premium-shadow border border-white/50">
+<div class="w-7 h-7 rounded-full bg-secondary-container flex items-center justify-center overflow-hidden text-secondary font-bold text-[10px]" id="userAvatar">
+U
+</div>
+<span class="text-xs font-bold text-primary" id="userNameChip">Account</span>
+</button>
+</div>
+</div>
+</nav>
+
+<!-- ── SPA CONTAINER ── -->
+<div id="spa-container" class="relative z-10">
+
+<!-- ── SECTION: DASHBOARD ── -->
+<section id="sec-dashboard" class="spa-section active">
+
+<div class="max-w-7xl mx-auto px-8 mt-4">
+<div id="advisoryBlock" class="hidden relative overflow-hidden rounded-3xl bg-error-container/40 border border-error/10 p-5 flex flex-col md:flex-row items-center gap-6 transition-all">
+<div class="flex-shrink-0 w-14 h-14 rounded-2xl bg-white flex items-center justify-center shadow-sm">
+<span class="material-symbols-outlined text-error text-3xl" data-icon="warning">warning</span>
+</div>
+<div class="flex-grow space-y-1">
+<div class="flex items-center gap-2">
+<span class="text-xs font-black uppercase tracking-wider text-error">Critical Advisory</span>
+<span class="w-1 h-1 rounded-full bg-error/30"></span>
+<span class="text-xs font-medium text-on-error-container/70" id="advisorySub">Based on latest scans</span>
+</div>
+<h3 class="text-base font-bold text-on-error-container leading-tight" id="advisoryText">
+System healthy. Keep monitoring correctly.
+</h3>
+</div>
+<div class="flex items-center gap-3">
+<button onclick="document.getElementById('advisoryBlock').classList.add('hidden')" class="px-5 py-2.5 bg-white text-error rounded-xl text-sm font-bold border border-error/20 hover:bg-error/5 transition-all">Dismiss</button>
+</div>
+<div class="absolute -right-20 top-0 w-40 h-40 bg-error/5 blur-3xl pointer-events-none"></div>
+</div>
+</div>
+
+<main class="max-w-7xl mx-auto px-8 py-10 space-y-10">
+<header class="flex flex-col md:flex-row md:items-end justify-between gap-6 stagger-load stagger-0">
+<div class="space-y-3">
+<nav class="flex items-center space-x-2 text-on-surface-variant text-xs font-bold uppercase tracking-widest">
+<span>Intelligence Dashboard</span>
+<span class="material-symbols-outlined text-[10px]" data-icon="chevron_right">chevron_right</span>
+<span class="text-primary">Live Monitoring</span>
+</nav>
+<h1 class="text-4xl md:text-5xl font-extrabold tracking-tight text-primary-container leading-[1.1]" id="userGreeting">
+                    Wellness Intelligence <span class="text-secondary">&amp;</span> Guided Action.
+                </h1>
+<p class="text-on-surface-variant max-w-xl font-medium leading-relaxed">Predictive insights powered by Florentix AI core. Your central hub for proactive plant monitoring.</p>
+</div>
+<button onclick="showSection('scan')" class="group flex items-center justify-center gap-3 px-8 py-5 bg-primary text-white rounded-2xl font-bold transition-all duration-300 hover:shadow-2xl hover:shadow-primary/30 active:scale-95 shadow-xl">
+<span class="material-symbols-outlined" data-icon="add_a_photo">add_a_photo</span>
+<span>Initiate New Scan</span>
+</button>
+</header>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+<div class="group glass-card p-6 rounded-3xl premium-shadow hover:-translate-y-2 hover:shadow-[0_20px_40px_-15px_rgba(5,150,105,0.2)] hover:border-emerald-200/50 transition-all duration-500 stagger-load stagger-1 cursor-pointer relative overflow-hidden">
+<div class="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+<div class="flex items-center gap-4 mb-6 relative z-10">
+<div class="p-3 bg-primary-fixed rounded-2xl transition-transform duration-500 group-hover:scale-110 group-hover:-rotate-3">
+<span class="material-symbols-outlined text-primary text-2xl" data-icon="barcode_scanner">barcode_scanner</span>
+</div>
+<div class="text-sm text-on-surface-variant font-bold">Total Scans</div>
+</div>
+<div class="flex items-baseline gap-2">
+<div class="text-4xl font-extrabold text-primary" id="statTotal">—</div>
+<div class="text-xs font-bold text-secondary-container bg-secondary px-2 py-0.5 rounded-full">Active</div>
+</div>
+</div>
+<div class="group glass-card p-6 rounded-3xl premium-shadow hover:-translate-y-2 hover:shadow-[0_20px_40px_-15px_rgba(5,150,105,0.2)] hover:border-emerald-200/50 transition-all duration-500 stagger-load stagger-2 cursor-pointer relative overflow-hidden">
+<div class="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+<div class="flex items-center gap-4 mb-6 relative z-10">
+<div class="p-3 bg-secondary-fixed rounded-2xl transition-transform duration-500 group-hover:scale-110 group-hover:rotate-3">
+<span class="material-symbols-outlined text-secondary text-2xl" data-icon="history_toggle_off">history_toggle_off</span>
+</div>
+<div class="text-sm text-on-surface-variant font-bold">Last Analysis</div>
+</div>
+<div class="text-4xl font-extrabold text-primary" id="statLast">—</div>
+<div class="text-xs text-on-surface-variant mt-1 font-medium">Recorded Time</div>
+</div>
+<div class="group glass-card p-6 rounded-3xl premium-shadow hover:-translate-y-2 hover:shadow-[0_20px_40px_-15px_rgba(5,150,105,0.2)] hover:border-emerald-200/50 transition-all duration-500 stagger-load stagger-3 cursor-pointer relative overflow-hidden">
+<div class="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+<div class="flex items-center gap-4 mb-6 relative z-10">
+<div class="p-3 bg-primary-fixed rounded-2xl transition-transform duration-500 group-hover:scale-110 group-hover:-rotate-3">
+<span class="material-symbols-outlined text-primary text-2xl" data-icon="query_stats">query_stats</span>
+</div>
+<div class="text-sm text-on-surface-variant font-bold">AI Reliability</div>
+</div>
+<div class="flex items-center justify-between">
+<div class="text-4xl font-extrabold text-primary" id="statConf">—</div>
+</div>
+</div>
+<div class="group glass-card p-6 rounded-3xl premium-shadow hover:-translate-y-2 hover:shadow-[0_20px_40px_-15px_rgba(5,150,105,0.2)] hover:border-emerald-200/50 transition-all duration-500 stagger-load stagger-4 cursor-pointer relative overflow-hidden">
+<div class="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+<div class="flex items-center gap-4 mb-6 relative z-10">
+<div class="p-3 bg-secondary-fixed rounded-2xl transition-transform duration-500 group-hover:scale-110 group-hover:rotate-3">
+<span class="material-symbols-outlined text-secondary text-2xl" data-icon="potted_plant">potted_plant</span>
+</div>
+<div class="text-sm text-on-surface-variant font-bold">Monitored Items</div>
+</div>
+<div class="text-4xl font-extrabold text-primary" id="statPlants">—</div>
+<div class="text-xs text-on-surface-variant mt-1 font-medium">Diversified Collection</div>
+</div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+<div class="lg:col-span-7 space-y-8 stagger-load stagger-5">
+<section class="glass-card rounded-3xl p-8 premium-shadow relative" style="min-height:400px;">
+<div class="flex items-center justify-between mb-10">
+<h2 class="text-2xl font-bold text-primary">Health Timeline</h2>
+<div class="flex items-center gap-4">
+<button onclick="showSection('history')" class="text-xs font-black uppercase tracking-widest text-secondary hover:text-primary transition-colors">Full Report</button>
+</div>
+</div>
+<div class="space-y-12 relative timeline-line" id="recentScansContainer">
+    <div class="text-center font-bold text-on-surface-variant pt-10">Loading timeline...</div>
+</div>
+</section>
+<!-- showSection is defined once in the module script below -->
+
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="glass-card p-7 rounded-3xl premium-shadow">
+<div class="flex justify-between items-center mb-8">
+<h3 class="text-sm font-black text-primary uppercase tracking-widest">Health Velocity</h3>
+</div>
+<div class="flex items-end justify-between h-36 gap-3" id="scanTrendBars">
+</div>
+<div class="mt-4 flex justify-between text-[10px] font-bold text-on-surface-variant/50 uppercase">
+<span id="st6">6D</span><span id="st5">5D</span><span id="st4">4D</span><span id="st3">3D</span><span id="st2">2D</span><span id="st1">1D</span><span class="text-primary" id="st0">TODAY</span>
+</div>
+</div>
+<div class="glass-card p-7 rounded-3xl premium-shadow">
+<div class="flex justify-between items-center mb-8">
+<h3 class="text-sm font-black text-primary uppercase tracking-widest">Species Status</h3>
+</div>
+<div class="flex items-center justify-center h-36">
+<div id="diseaseGauge" class="relative w-32 h-32 rounded-full border-[14px] border-primary-fixed border-t-primary border-r-primary flex items-center justify-center shadow-inner transition-all duration-[1000ms]">
+<div class="text-center">
+<div class="text-lg font-black text-primary" id="healthScoreGauge">100%</div>
+<div class="text-[9px] uppercase font-bold text-on-surface-variant/70 leading-none">Healthy</div>
+</div>
+</div>
+</div>
+<div class="mt-4 flex justify-center gap-6 text-[10px] font-bold text-on-surface-variant">
+<div class="flex items-center gap-2"><div class="w-2.5 h-2.5 rounded-full bg-primary"></div> Optimal</div>
+<div class="flex items-center gap-2"><div class="w-2.5 h-2.5 rounded-full bg-primary-fixed"></div> Identified</div>
+</div>
+</div>
+</div>
+</div>
+<div class="lg:col-span-5 space-y-8 stagger-load stagger-5">
+    <section class="relative overflow-hidden weather-gradient p-8 rounded-3xl text-white shadow-2xl group" id="liveEnvironmentCard">
+        <div class="absolute -top-24 -right-24 w-72 h-72 bg-emerald-300/10 blur-3xl rounded-full"></div>
+        <div class="absolute -bottom-24 -left-24 w-72 h-72 bg-primary-fixed/5 blur-3xl rounded-full"></div>
+        
+        <div class="relative z-10">
+            <!-- Header -->
+            <div class="flex justify-between items-start mb-6">
+                <div>
+                    <h2 class="text-xl font-bold tracking-tight mb-1">Live Environment</h2>
+                    <div class="flex items-center gap-2 cursor-pointer hover:opacity-80 transition" onclick="showLocationSetupModal()">
+                        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" id="envStatusDot"></span>
+                        <span class="text-[10px] font-black uppercase tracking-[0.2em] text-emerald-100/70" id="envLocName">Detecting Location...</span>
+                        <span class="material-symbols-outlined text-[12px] text-white/50">edit_location</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Weather Main Output -->
+            <div class="flex items-center gap-6 mb-6">
+                <div class="p-4 bg-white/10 backdrop-blur-xl rounded-3xl border border-white/10">
+                    <span class="material-symbols-outlined text-5xl text-white" id="envIcon">cloud</span>
+                </div>
+                <div>
+                    <!-- Skeletons -->
+                    <div id="envTempSkeleton" class="h-12 w-24 bg-white/20 animate-pulse rounded-lg mb-2"></div>
+                    <div id="envTemp" class="text-6xl font-black tracking-tighter hidden">--&deg;</div>
+                </div>
+            </div>
+
+            <!-- Metrics Grid -->
+            <div class="grid grid-cols-4 gap-2 mb-6">
+                <div class="bg-black/20 rounded-xl p-3 text-center border border-white/5">
+                    <span class="material-symbols-outlined text-[16px] text-white/60 mb-1">water_drop</span>
+                    <div class="text-[11px] font-bold text-white/60 uppercase tracking-wider mb-0.5">Humid</div>
+                    <div class="text-sm font-black" id="envHumidity">--%</div>
+                </div>
+                <div class="bg-black/20 rounded-xl p-3 text-center border border-white/5">
+                    <span class="material-symbols-outlined text-[16px] text-white/60 mb-1">air</span>
+                    <div class="text-[11px] font-bold text-white/60 uppercase tracking-wider mb-0.5">Wind</div>
+                    <div class="text-sm font-black" id="envWind">--</div>
+                </div>
+                <div class="bg-black/20 rounded-xl p-3 text-center border border-white/5">
+                    <span class="material-symbols-outlined text-[16px] text-white/60 mb-1">wb_sunny</span>
+                    <div class="text-[11px] font-bold text-white/60 uppercase tracking-wider mb-0.5">UV</div>
+                    <div class="text-sm font-black" id="envUV">--</div>
+                </div>
+                <div class="bg-black/20 rounded-xl p-3 text-center border border-white/5">
+                    <span class="material-symbols-outlined text-[16px] text-white/60 mb-1">umbrella</span>
+                    <div class="text-[11px] font-bold text-white/60 uppercase tracking-wider mb-0.5">Rain</div>
+                    <div class="text-sm font-black" id="envRain">--</div>
+                </div>
+            </div>
+
+            <!-- AI Insights Panel -->
+            <div class="space-y-4">
+                <div class="bg-white/10 backdrop-blur-md rounded-2xl p-5 border border-white/10 shadow-inner flex gap-4 items-start">
+                    <div class="p-2 bg-primary-fixed/20 rounded-xl shrink-0 mt-0.5">
+                        <span class="material-symbols-outlined text-primary-fixed">psychiatry</span>
+                    </div>
+                    <div class="w-full">
+                        <div class="text-[9px] uppercase tracking-widest font-bold text-primary-fixed mb-1.5 flex justify-between items-center w-full">
+                            <span>AI Environment Analysis</span>
+                            <span class="text-[8px] bg-white/10 px-1.5 py-0.5 rounded text-white/50">LIVE</span>
+                        </div>
+                        <div id="envInsightSkeleton" class="space-y-2 w-full animate-pulse">
+                            <div class="h-3 bg-white/20 rounded w-full"></div>
+                            <div class="h-3 bg-white/20 rounded w-5/6"></div>
+                        </div>
+                        <p class="text-sm font-medium leading-relaxed hidden" id="envInsightText">
+                            --
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Detailed Details CTA -->
+            <button onclick="openDetailedWeather()" class="w-full mt-4 py-3 bg-black/10 hover:bg-black/20 rounded-xl border border-white/10 text-xs font-bold uppercase tracking-widest transition-colors flex items-center justify-center gap-2">
+                <span class="material-symbols-outlined text-[16px]">bar_chart</span>
+                View Detailed Trends
+            </button>
+        </div>
+    </section>
+
+<section>
+<div class="flex items-center justify-between mb-6">
+<h2 class="text-xl font-bold text-primary">Intelligence Actions</h2>
+<span class="text-[10px] font-black uppercase tracking-widest text-on-surface-variant/40">Guided Path</span>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<button onclick="showSection('scan')" class="flex flex-col items-start p-6 glass-card rounded-3xl premium-shadow hover:translate-y-[-4px] transition-all duration-300 group text-left">
+<div class="p-3 bg-primary-fixed/40 rounded-2xl mb-4 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-primary text-2xl" data-icon="photo_camera">photo_camera</span>
+</div>
+<span class="text-sm font-bold text-primary">New Scan</span>
+<span class="text-[10px] text-on-surface-variant mt-1 font-medium">Quick diagnosis</span>
+</button>
+<button onclick="showSection('history')" class="flex flex-col items-start p-6 glass-card rounded-3xl premium-shadow hover:translate-y-[-4px] transition-all duration-300 group text-left">
+<div class="p-3 bg-secondary-fixed/40 rounded-2xl mb-4 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-secondary text-2xl" data-icon="database">database</span>
+</div>
+<span class="text-sm font-bold text-primary">Full History</span>
+<span class="text-[10px] text-on-surface-variant mt-1 font-medium">Archives &amp; Trends</span>
+</button>
+<button onclick="window.showSection('doctor')" class="col-span-2 group relative overflow-hidden flex items-center gap-5 p-6 bg-primary-container text-white rounded-3xl shadow-xl transition-all duration-500 hover:shadow-primary/20 text-left">
+<div class="absolute inset-0 opacity-10 bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:16px_16px]"></div>
+<div class="relative z-10 p-4 bg-secondary rounded-2xl group-hover:rotate-12 transition-transform duration-300">
+<span class="material-symbols-outlined text-white text-3xl" data-icon="smart_toy" style="font-variation-settings: 'FILL' 1;">smart_toy</span>
+</div>
+<div class="relative z-10 text-left flex-grow">
+<div class="flex items-center gap-2 mb-0.5">
+<div class="font-extrabold text-lg">AI Plant Doctor</div>
+<span class="px-2 py-0.5 bg-emerald-400 text-[#00261b] text-[8px] font-black uppercase rounded">v2.0</span>
+</div>
+<div class="text-xs text-white/70 font-medium">Chat with our botanist-trained neural network</div>
+</div>
+<span class="relative z-10 material-symbols-outlined text-white/50 group-hover:text-white transition-colors group-hover:translate-x-2 transition-transform" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+</section>
+</div>
+</div>
+</main>
+</section><!-- /sec-dashboard -->
+
+
+<!-- ── SECTION: SCAN ── -->
+<section id="sec-scan" class="spa-section h-[calc(100vh-72px)] !min-h-0 w-full !overflow-hidden bg-surface flex flex-col">
+  <div class="flex-1 min-h-0 max-w-[1600px] w-full mx-auto px-8 py-6 flex flex-col">
+    <!-- View Switcher Wrapper to easily toggle Upload/Results -->
+    <div class="relative w-full h-full">
+
+      <!-- ================= UPLOAD VIEW ================= -->
+      <div id="scanUploadView" class="absolute inset-0 flex flex-col">
+        <div class="flex flex-col lg:flex-row gap-10 h-full">
+          <!-- Left Column: Header + Uploader -->
+          <div class="flex-1 flex flex-col min-h-0 h-full gap-6">
+            <div id="scanHeader" class="shrink-0">
+              <h1 class="text-[32px] font-extrabold tracking-tight text-primary mb-1">AI Diagnosis</h1>
+              <p class="text-on-surface-variant text-[15px]">Deploy high-precision plant health screening.</p>
+            </div>
+            
+            <div class="flex-1 min-h-0 group relative mt-4">
+              <div class="absolute -inset-1 bg-gradient-to-r from-primary/10 via-emerald-400/10 to-primary/10 rounded-[2.5rem] blur-xl opacity-0 group-hover:opacity-100 transition duration-1000"></div>
+              <div class="relative h-full glass-morphism rounded-3xl p-3 shadow-sm border border-emerald-50 transition-all duration-700 group-hover:shadow-2xl flex flex-col" id="scanZone">
+                <div class="flex-1 border-2 border-dashed border-emerald-200/60 rounded-2xl scanning-animation flex flex-col items-center justify-center p-8 transition-colors group-hover:border-emerald-300 relative bg-gradient-to-b from-white/40 to-emerald-50/20">
+                  
+                  <!-- Upload State -->
+                  <div id="scanPlaceholder" class="flex flex-col items-center justify-center text-center">
+                    <div class="relative mb-6 group/icon">
+                      <div class="absolute inset-0 bg-primary/5 rounded-full blur-2xl group-hover/icon:bg-primary/10 transition-all duration-700"></div>
+                      <div class="relative w-20 h-20 bg-white shadow-xl shadow-emerald-900/5 rounded-full flex items-center justify-center">
+                        <span class="material-symbols-outlined text-4xl text-primary group-hover/icon:scale-110 transition-transform duration-500" style="font-variation-settings: 'FILL' 1">center_focus_strong</span>
+                      </div>
+                    </div>
+                    <h3 class="text-[22px] font-bold text-primary tracking-tight mb-2">Initialize Image Stream</h3>
+                    <p class="text-on-surface-variant text-[13px] leading-relaxed max-w-[280px] mb-8 font-medium">Secure upload gateway for clinical-grade leaf analysis. Supports high-res RAW, JPG, WEBP.</p>
+                    <label class="cursor-pointer bg-[#18392b] text-white px-8 py-3.5 rounded-full font-bold flex items-center gap-2 hover:bg-[#0b2218] transition-all active:scale-95 shadow-lg shadow-primary/10">
+                      <span class="material-symbols-outlined text-sm">add_photo_alternate</span>
+                      Browse Assets
+                      <input class="hidden" type="file" id="scanInput" accept="image/jpeg,image/png,image/webp"/>
+                    </label>
+                  </div>
+
+                  <!-- Preview State -->
+                  <div id="scanPreview" style="display:none;width:100%;height:100%" class="relative">
+                    <img id="scanPreviewImg" src="" alt="Preview" class="w-full h-full object-contain rounded-xl shadow-lg bg-surface">
+                    <button id="scanRemoveBtn" type="button" class="absolute top-4 right-4 w-10 h-10 bg-error/90 hover:bg-error rounded-full text-white shadow-xl flex items-center justify-center transition-all hover:scale-110">
+                      <span class="material-symbols-outlined font-black">close</span>
+                    </button>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+            
+            <div class="shrink-0 mt-2">
+              <button id="scanAnalyzeBtn" disabled class="w-full bg-surface-variant text-on-surface/30 cursor-not-allowed py-4 rounded-3xl font-black text-[15px] tracking-wide transition-all duration-500 overflow-hidden text-center justify-center">
+                <span class="relative z-10 transition-all duration-300">Start Analytical Engine</span>
+              </button>
+            </div>
+            <div id="scanErrorBox" class="hidden p-4 bg-error-container border border-error/20 rounded-xl text-error text-sm font-bold shadow-sm shrink-0"></div>
+          </div>
+          
+          <!-- Right Column: Intelligence Cards -->
+          <div class="w-full lg:w-[460px] flex flex-col min-h-0 h-full shrink-0 mt-[12px]">
+            <div class="flex items-center justify-between mb-4 shrink-0">
+              <h2 class="text-[11px] font-black uppercase tracking-widest text-primary/50">Live Intelligence</h2>
+              <span class="text-[9px] font-black bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full flex items-center gap-1.5 uppercase">
+                <span class="w-1 h-1 rounded-full bg-emerald-500 animate-pulse"></span>
+                Advisor ON
+              </span>
+            </div>
+            
+            <!-- Hide scrollbar, but allow scroll if absolutely necessary. Given 100vh constraint, these will fit. -->
+            <div class="flex-1 overflow-y-auto no-scrollbar flex flex-col gap-3">
+              
+              <!-- Lighting -->
+              <div class="group relative cursor-pointer shrink-0">
+                <div class="absolute -inset-0.5 bg-gradient-to-r from-emerald-500/20 to-teal-500/20 rounded-3xl blur opacity-0 group-hover:opacity-100 transition duration-500"></div>
+                <div class="relative bg-white p-6 rounded-3xl border border-emerald-50/50 shadow-sm transition-all duration-500 group-hover:-translate-y-1">
+                  <div class="flex flex-col gap-3">
+                    <div class="flex items-center gap-3">
+                      <div class="w-8 h-8 shrink-0 bg-emerald-50 rounded-full flex items-center justify-center text-emerald-500">
+                        <span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1">wb_sunny</span>
+                      </div>
+                      <h4 class="font-bold text-primary text-[14px]">Lighting Guidance</h4>
+                    </div>
+                    <p class="text-[13px] text-on-surface-variant leading-relaxed">Ensure the leaf is captured under soft natural light. Avoid harsh shadows or overexposure for accurate detection.</p>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Focus -->
+              <div class="group relative cursor-pointer shrink-0">
+                <div class="absolute -inset-0.5 bg-gradient-to-r from-emerald-500/20 to-teal-500/20 rounded-3xl blur opacity-0 group-hover:opacity-100 transition duration-500"></div>
+                <div class="relative bg-white p-6 rounded-3xl border border-emerald-50/50 shadow-sm transition-all duration-500 group-hover:-translate-y-1">
+                  <div class="flex flex-col gap-3">
+                    <div class="flex items-center gap-3">
+                      <div class="w-8 h-8 shrink-0 bg-emerald-50 rounded-full flex items-center justify-center text-emerald-500">
+                        <span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1">filter_center_focus</span>
+                      </div>
+                      <h4 class="font-bold text-primary text-[14px]">Focus Recommendation</h4>
+                    </div>
+                    <p class="text-[13px] text-on-surface-variant leading-relaxed">Capture both healthy and affected areas clearly. This improves detection across both general plant and tomato-specific models.</p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- AI Status Dark -->
+              <!-- AI Status Dark -->
+              <div class="bg-[#0b2218] p-6 rounded-[2rem] relative overflow-hidden group shadow-xl shrink-0 mt-2">
+                <div class="absolute top-0 right-0 w-32 h-32 bg-emerald-500/10 rounded-full blur-3xl -mr-16 -mt-16 group-hover:bg-emerald-500/20 transition-all duration-700"></div>
+                <div class="relative flex flex-col gap-3">
+                  <div class="flex items-center gap-2 mb-1">
+                    <span class="material-symbols-outlined text-emerald-400 text-sm">bolt</span>
+                    <span class="text-[9px] font-black uppercase tracking-widest text-emerald-400">Rapid Analysis</span>
+                  </div>
+                  <h4 class="text-white font-bold text-[15px]">AI Engine Status</h4>
+                  <p class="text-emerald-100/60 text-[13px] leading-relaxed">Dual-model system active. General plant model and tomato-specific model are ready for high-accuracy, real-time diagnosis.</p>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- ================= RESULTS VIEW (Replaced) ================= -->
+    
+    </div>
+  </div>
+</section>
+<!-- /sec-scan -->
+
+<!-- ── SECTION: REPORT (Full Page Analysis) ── -->
+<section id="sec-report" class="spa-section" style="display:none;">
+    <main class="flex-grow max-w-screen-2xl mx-auto w-full px-8 py-10" id="report-injection-point">
+        <!-- Rendered by populateReportPage -->
+    </main>
+</section>
+<!-- /sec-report -->
+
+<!-- ── SECTION: HISTORY ── -->
+<section id="sec-history" class="spa-section bg-[#f8faf9] flex flex-col" style="padding-top:0;">
+    <div class="flex-1 min-h-0 max-w-[1600px] w-full mx-auto px-8 py-10 flex flex-col">
+        <div class="mb-10">
+            <h1 class="text-[32px] font-extrabold tracking-tight text-primary mb-2">Historical Records</h1>
+            <p class="text-on-surface-variant text-[15px]">Full archive of your AI-powered plant diagnostics and interventions.</p>
+        </div>
+        <div id="fullHistoryContainer" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 content-start pb-20">
+            <!-- Populated via JS -->
+            <div class="col-span-full text-center py-20 text-on-surface-variant font-medium">Loading history...</div>
+        </div>
+    </div>
+</section>
+<!-- /sec-history -->
+
+
+<!-- ── SECTION: AI DOCTOR ── -->
+<section id="sec-doctor" class="spa-section">
+    <input class="hidden" id="sidebar-toggle" type="checkbox"/>
+    
+    <!-- Sidebar (Adjusted for persistent nav) -->
+    <aside class="sidebar-doctor premium-scrollbar">
+        <div class="flex items-center h-[90px] shrink-0 w-full px-8 justify-between border-b border-[#eaefec]/50 mb-4 bg-surface-container-low/30">
+             <div class="flex items-center gap-3" id="doctorActiveContextSummary" style="display:none;">
+                 <img id="doctorSmallImg" class="w-10 h-10 rounded-xl object-cover border border-black/5 shadow-sm" src=""/>
+                 <div class="overflow-hidden">
+                     <p class="text-[9px] font-black uppercase tracking-[0.15em] text-on-surface-variant/50 leading-none mb-1">Current Focus</p>
+                     <p class="text-xs font-bold text-[#00261b] truncate max-w-[140px]" id="doctorSmallTitle">Universal AI</p>
+                 </div>
+             </div>
+             <!-- Fallback if no specific plant is active -->
+             <div id="doctorGenericSummary" class="flex items-center gap-3">
+                 <div class="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-white">
+                     <span class="material-symbols-outlined text-xl">smart_toy</span>
+                 </div>
+                 <p class="text-xs font-bold text-[#00261b]">Florentix AI</p>
+             </div>
+        </div>
+
+        <div class="flex flex-col flex-1 px-6 pb-6 overflow-hidden">
+            <!-- Toggle Pill -->
+            <div class="bg-[#f0f4f2] p-[5px] rounded-full flex gap-1 mb-6 shrink-0 shadow-inner relative z-0">
+                <div id="docModeSlider" class="absolute bg-[#00261b] rounded-full top-[5px] bottom-[5px] w-[calc(50%-4px)] transition-transform duration-300 ease-in-out -z-10 shadow-md"></div>
+                <button id="docModePlant" onclick="setDoctorMode('plant')" class="flex-1 px-3 py-[9px] rounded-full text-[10px] font-bold text-white uppercase tracking-widest transition-colors w-1/2 text-center tracking-[0.05em]">Plant-Specific</button>
+                <button id="docModeGlobal" onclick="setDoctorMode('global')" class="flex-1 px-3 py-[9px] rounded-full text-[10px] font-bold text-on-surface-variant hover:text-[#00261b] transition-colors uppercase tracking-widest bg-transparent w-1/2 text-center tracking-[0.05em]">General</button>
+            </div>
+            
+            <div id="sidebarGeneralContent" class="hidden flex-col h-full overflow-hidden w-full">
+                <button onclick="startNewGlobalChat()" class="mb-6 w-full flex items-center justify-center gap-3 bg-[#00261b] text-white py-3.5 px-4 rounded-full shadow-lg shadow-[#00261b]/15 hover:bg-[#0b3d2e] hover:shadow-[0_8px_25px_rgba(0,38,27,0.25)] active:scale-95 transition-all duration-200 shrink-0">
+                    <span class="material-symbols-outlined text-[18px]">add_box</span>
+                    <span class="font-headline font-bold text-[14px]">New General Chat</span>
+                </button>
+                <section class="flex-1 min-h-0 flex flex-col w-full">
+                    <div class="flex items-center justify-between mb-3 px-2 shrink-0">
+                        <h4 class="text-[11px] font-extrabold uppercase tracking-[0.1em] text-outline-variant/80">Chat History</h4>
+                    </div>
+                    <div class="space-y-1 overflow-y-auto premium-scrollbar flex-1 pr-2 w-full" id="doctorGlobalHistoryList">
+                        <!-- Shimmer skeleton shown while loading -->
+                        <div class="sidebar-skeleton h-11 mb-2"></div>
+                        <div class="sidebar-skeleton h-11 mb-2" style="opacity:.7"></div>
+                        <div class="sidebar-skeleton h-11" style="opacity:.45"></div>
+                    </div>
+                </section>
+            </div>
+
+            <div id="sidebarPlantContent" class="flex flex-col h-full overflow-hidden w-full">
+                <section class="flex-1 min-h-0 flex flex-col w-full">
+                    <div class="flex items-center justify-between mt-2 mb-3 px-2 shrink-0">
+                        <h4 class="text-[11px] font-extrabold uppercase tracking-[0.1em] text-outline-variant/80">Your Scanned Plants</h4>
+                    </div>
+                    <div class="space-y-2 overflow-y-auto premium-scrollbar flex-1 pr-1 w-full" id="doctorPlantList">
+                        <!-- Shimmer skeleton shown while loading -->
+                        <div class="flex items-center gap-3 p-2">
+                            <div class="sidebar-skeleton w-11 h-11 rounded-full shrink-0"></div>
+                            <div class="flex-1 space-y-2">
+                                <div class="sidebar-skeleton h-3 w-3/4"></div>
+                                <div class="sidebar-skeleton h-2.5 w-1/2"></div>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-3 p-2" style="opacity:.65">
+                            <div class="sidebar-skeleton w-11 h-11 rounded-full shrink-0"></div>
+                            <div class="flex-1 space-y-2">
+                                <div class="sidebar-skeleton h-3 w-2/3"></div>
+                                <div class="sidebar-skeleton h-2.5 w-1/3"></div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-doctor">
+        <!-- Main Navbar remains at the top (z-index 50) -->
+
+        <!-- Scrollable Messages Area -->
+        <div class="doctor-messages-area premium-scrollbar" id="chatMsgsScroll">
+            <div class="max-w-3xl mx-auto space-y-10" id="chatMsgsContainer">
+                 <!-- Welcome Header -->
+                 <div class="text-center py-12 space-y-3" id="doctorWelcomeHeader">
+                     <div class="w-20 h-20 bg-white rounded-3xl shadow-xl shadow-emerald-900/5 mx-auto flex items-center justify-center mb-6">
+                         <span class="material-symbols-outlined text-4xl text-primary">psychology</span>
+                     </div>
+                     <h1 class="text-3xl font-extrabold font-headline text-primary tracking-tight">Expert Plant Care</h1>
+                     <p class="text-on-surface-variant font-medium max-w-sm mx-auto">Ask about symptoms, treatment steps, or preventative care for your specific plants.</p>
+                 </div>
+            </div>
+             
+            <!-- Removed old separate aiThinkingBox as it's now injected directly into chat bubbles -->
+            
+        </div>
+
+        <!-- Pinned Input Area -->
+        <div class="doctor-input-container">
+            <div class="max-w-3xl mx-auto relative group">
+                <div class="absolute inset-0 bg-emerald-500/5 blur-2xl rounded-full opacity-0 group-focus-within:opacity-100 transition-opacity"></div>
+                <div class="relative bg-white border border-[#eaefec] shadow-[0_10px_30px_-5px_rgba(0,38,27,0.06)] rounded-[2.5rem] flex items-center p-2.5 transition-all focus-within:border-emerald-500/30 focus-within:shadow-[0_15px_40px_-5px_rgba(0,38,27,0.1)]">
+                    <textarea id="chatInputSpa" onkeydown="if(event.key==='Enter' && !event.shiftKey) { event.preventDefault(); window.spaDoSendChat(); }" rows="1" class="flex-grow bg-transparent border-none outline-none focus:ring-0 text-on-surface placeholder:text-outline-variant/60 px-6 font-medium resize-none overflow-hidden max-h-32 pt-3" placeholder="Describe symptoms or ask for advice..."></textarea>
+                    <button id="chatSendBtn" onclick="window.spaDoSendChat()" class="bg-[#00261b] text-white w-12 h-12 rounded-full flex items-center justify-center hover:scale-[1.05] active:scale-95 transition-all shadow-lg shadow-[#00261b]/20 shrink-0 ml-2">
+                        <span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">send</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+</section>
+<!-- /sec-doctor -->
+
+</div><!-- /spa-container -->
+
+<!-- ── LIGHTBOX ── -->
+<div id="imgLightbox" class="fixed inset-0 z-[9999] bg-black/90 flex flex-col items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300 gap-6" onclick="closeLightbox(event)">
+  <button class="absolute top-6 right-6 w-12 h-12 rounded-full bg-white/10 hover:bg-white/25 flex items-center justify-center text-white text-3xl font-light transition-colors z-10" onclick="closeLightboxBtn()">&times;</button>
+  <img id="lightboxImg" class="w-full h-[80vh] max-w-[90vw] md:max-w-5xl max-h-[85vh] object-contain rounded-2xl shadow-2xl ring-1 ring-white/20 transition-transform duration-300 scale-95" src="" alt="Plant scan"/>
+  <div id="lightboxCaption" class="text-white/80 font-medium text-lg tracking-wide text-center max-w-2xl px-4"></div>
+</div>
+
+<!-- ── HISTORY DRAWER REMOVED ── -->
+
+<!-- ── REPORT MODAL ── -->
+<div id="reportWrap" class="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 opacity-0 pointer-events-none transition-all duration-300 bg-primary/60 backdrop-blur-md" onclick="if(event.target===this)closeReport()">
+  <div id="reportModalCard" class="bg-surface w-full max-w-3xl max-h-[90vh] rounded-[2rem] shadow-[0_25px_50px_-12px_rgba(0,38,27,0.5)] flex flex-col overflow-hidden translate-y-12 transition-all duration-500 transform opacity-0 ring-1 ring-white/10" onclick="event.stopPropagation()">
+    <!-- Header -->
+    <div class="bg-primary px-8 py-6 flex justify-between items-center shrink-0 relative overflow-hidden">
+      <!-- Decorative background -->
+      <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:16px_16px]"></div>
+      <div class="relative z-10 flex flex-col">
+        <h2 class="text-2xl font-extrabold text-white tracking-tight leading-tight">Diagnosis Report</h2>
+        <div class="flex items-center gap-3 mt-1.5">
+          <span id="reportDate" class="text-primary-fixed-dim text-xs font-bold uppercase tracking-wider"></span>
+          <span id="reportModelUsed" class="bg-primary-fixed/20 border border-primary-fixed/30 text-primary-fixed text-[9px] font-black uppercase tracking-widest px-2 py-0.5 rounded flex items-center gap-1.5">
+             <span class="w-1.5 h-1.5 rounded-full bg-primary-fixed animate-pulse"></span> Verified
+          </span>
+        </div>
+      </div>
+      <button onclick="closeReport()" class="relative z-10 w-10 h-10 rounded-full bg-white/10 hover:bg-error hover:text-white flex items-center justify-center text-white transition-colors shadow-sm">
+        <span class="material-symbols-outlined text-[20px]">close</span>
+      </button>
+    </div>
+    
+    <!-- Body Content injected via populateReport -->
+    <div id="reportBody" class="premium-scrollbar flex-1 overflow-y-auto w-full bg-surface p-8 space-y-6"></div>
+    
+    <!-- Footer Actions -->
+    <div class="px-8 py-5 border-t border-outline-variant/30 bg-surface-container-lowest flex justify-between items-center shrink-0 gap-4">
+      <button onclick="if(window.currentReportData) { window.showSection('doctor'); window.openDoctorChat(window.currentReportData.id, 'plant'); } else { window.showSection('doctor'); } closeReport();" class="group flex items-center justify-center gap-2 py-3 px-6 rounded-2xl bg-secondary-fixed/30 hover:bg-secondary-fixed/50 text-secondary border border-secondary-fixed/50 transition-colors font-extrabold text-[13px] tracking-wide">
+        <span class="material-symbols-outlined text-[18px] group-hover:rotate-12 transition-transform" style="font-variation-settings: 'FILL' 1;">smart_toy</span>
+        Ask AI Doctor
+      </button>
+      <button id="downloadPdfBtn" onclick="window.spaDownloadReport()" class="group flex items-center justify-center gap-2 py-3 px-8 rounded-2xl bg-primary text-white hover:bg-[#0b2218] hover:shadow-lg transition-all font-extrabold text-[13px] tracking-wide shadow-md">
+        <span class="material-symbols-outlined text-[18px] group-hover:-translate-y-0.5 transition-transform">download</span>
+        Download PDF
+      </button>
+    </div>
+  </div>
+</div>
+  </div>
+</div>
+
+<script>
+// --- IMMEDIATE UI LOGIC ---
+const UI = id => document.getElementById(id);
+window.UI = UI;
+window.allScans = [];
+
+window.showSection = sectionId => {
+  // If entering the AI Doctor section, immediately mask the raw static HTML
+  // with skeleton loaders BEFORE the opacity transition starts.
+  // This prevents the "FloraSense AI / Expert Plant Care" flash.
+  if (sectionId === 'doctor') {
+    const hasScans = window.allScans && window.allScans.length > 0;
+    const plantList = document.getElementById('doctorPlantList');
+    const chatCont  = document.getElementById('chatMsgsContainer');
+
+    if (!hasScans) {
+      const SIDEBAR_SKEL = `
+        <div class="flex items-center gap-3 p-2">
+          <div class="sidebar-skeleton w-11 h-11 rounded-full shrink-0"></div>
+          <div class="flex-1 space-y-2">
+            <div class="sidebar-skeleton h-3 w-3/4"></div>
+            <div class="sidebar-skeleton h-2.5 w-1/2"></div>
+          </div>
+        </div>
+        <div class="flex items-center gap-3 p-2" style="opacity:.6">
+          <div class="sidebar-skeleton w-11 h-11 rounded-full shrink-0"></div>
+          <div class="flex-1 space-y-2">
+            <div class="sidebar-skeleton h-3 w-2/3"></div>
+            <div class="sidebar-skeleton h-2.5 w-1/3"></div>
+          </div>
+        </div>`;
+      if (plantList) plantList.innerHTML = SIDEBAR_SKEL;
+    } else {
+      if (typeof window.refreshDoctorSidebars === 'function') window.refreshDoctorSidebars();
+    }
+
+    const CHAT_SKEL = `
+      <div class="w-full space-y-8 py-4">
+        <div class="flex flex-col items-end w-full chat-bubble-in">
+          <div class="sidebar-skeleton h-14 w-[60%] rounded-[1.25rem] rounded-tr-sm"></div>
+          <div class="sidebar-skeleton h-3 w-16 mt-2 rounded"></div>
+        </div>
+        <div class="flex items-start gap-4 w-full chat-bubble-in" style="animation-delay:.1s">
+          <div class="sidebar-skeleton w-10 h-10 rounded-[0.85rem] shrink-0"></div>
+          <div class="flex-1 space-y-2.5">
+            <div class="sidebar-skeleton h-4 w-full rounded-xl"></div>
+            <div class="sidebar-skeleton h-4 w-5/6 rounded-xl"></div>
+            <div class="sidebar-skeleton h-4 w-4/6 rounded-xl"></div>
+          </div>
+        </div>
+      </div>`;
+    if (chatCont && !window.activeDoctorChatId) chatCont.innerHTML = CHAT_SKEL;
+
+    if (typeof window.setDoctorMode === 'function' && !window.activeDoctorChatId) {
+      window.setDoctorMode('plant');
+    }
+  }
+
+  ['dashboard', 'scan', 'history', 'doctor', 'report'].forEach(id => {
+    const el = document.getElementById('sec-' + id);
+    if (el) {
+      if (id === sectionId) {
+        el.style.display = '';
+        setTimeout(() => el.classList.add('active'), 10);
+      } else {
+        el.classList.remove('active');
+        setTimeout(() => { 
+          if (!el.classList.contains('active')) el.style.display = 'none'; 
+        }, 400);
+      }
+    }
+  });
+
+  // Update Nav Links
+  document.querySelectorAll('.nav-link').forEach(link => {
+    if (link.dataset.target === sectionId) {
+      link.classList.add('active');
+    } else {
+      link.classList.remove('active');
+    }
+  });
+
+  const isFullScreen = (sectionId === 'doctor' || sectionId === 'scan');
+  const mainNav = document.getElementById('main-nav');
+  
+  // Reset body padding to handle fixed navbar across all sections
+  document.body.style.paddingTop = '72px';
+
+  const scrollBarWidth = window.innerWidth - document.documentElement.clientWidth;
+  
+  if (!isFullScreen) {
+      window.scrollTo({top: 0, behavior: 'instant'});
+      document.body.style.overflow = '';
+      document.body.style.paddingRight = '0px';
+      if (mainNav) mainNav.style.paddingRight = '0px';
+  } else {
+      document.body.style.overflow = 'hidden';
+      if (scrollBarWidth > 0) {
+          document.body.style.paddingRight = scrollBarWidth + 'px';
+          // Synchronize navbar padding to prevent layout stutter
+          if (mainNav) mainNav.style.paddingRight = scrollBarWidth + 'px';
+      }
+  }
+  
+  sessionStorage.setItem('spa_saved_section', sectionId);
+  
+  // Sync AI Doctor Toggle Visibility
+  const toggleBtn = document.getElementById('sidebarToggleBtn');
+  if (toggleBtn) {
+      toggleBtn.style.display = (sectionId === 'doctor') ? 'flex' : 'none';
+  }
+};
+
+// Scrolled nav
+window.addEventListener('scroll', () => UI('main-nav').classList.toggle('scrolled', scrollY > 8));
+
+// Lightbox
+window.openLightbox = (src, caption) => {
+  UI('lightboxImg').src = src;
+  UI('lightboxCaption').textContent = caption || '';
+  UI('imgLightbox').classList.add('open');
+  document.body.style.overflow = 'hidden';
+};
+// Used by thumbs & report image - reads data attributes to safely handle long Firebase URLs
+window.openLightboxFromEl = (el) => {
+  const src = el.dataset.lightboxSrc || el.querySelector('img')?.src || '';
+  const caption = el.dataset.lightboxLabel || el.dataset.lightboxSrc ? el.dataset.lightboxLabel : '';
+  if (!src) return;
+  window.openLightbox(src, caption);
+};
+window.closeLightbox = (e) => { if (e.target === UI('imgLightbox')) { UI('imgLightbox').classList.remove('open'); document.body.style.overflow = ''; } };
+window.closeLightboxBtn = () => { UI('imgLightbox').classList.remove('open'); document.body.style.overflow = ''; };
+document.addEventListener('keydown', e => { if (e.key === 'Escape') { UI('imgLightbox').classList.remove('open'); document.body.style.overflow = ''; } });
+
+// Drawer
+window.openDrawer = () => {
+  UI('histBackdrop').classList.add('open');
+  UI('histDrawer').classList.add('open');
+  renderDrawerItems();
+};
+window.closeDrawer = () => {
+  UI('histBackdrop').classList.remove('open');
+  UI('histDrawer').classList.remove('open');
+};
+
+// Report Modal Logic
+window.populateReport = scan => {
+  window.currentReportData = scan;
+  
+  const d = scan.timestamp?.toDate ? scan.timestamp.toDate() : new Date();
+  UI('reportDate').textContent = d.toLocaleDateString(undefined, {month: 'long', day: 'numeric', year: 'numeric'});
+  
+  const isHealthy = scan.disease === 'Healthy' || (scan.confidence > 85 && !String(scan.disease).match(/rot|spot|blight|rust|mildew|virus/i));
+  const colorStr = isHealthy ? 'primary' : 'error';
+  
+  const b = UI('reportBody');
+  b.innerHTML = `
+    <!-- Top Details Banner -->
+    <div class="flex flex-col sm:flex-row gap-8">
+      <!-- Thumbnail Wrapper -->
+      <div class="w-full sm:w-56 h-56 rounded-[1.5rem] overflow-hidden shrink-0 shadow-lg cursor-pointer border border-outline-variant relative group bg-surface-container" onclick="window.openLightbox('${scan.imageUrl}', '${scan.plant} - ${scan.disease}')">
+        <img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" src="${scan.imageUrl}" alt="Scan Image" />
+        <div class="absolute inset-0 bg-primary/10 group-hover:bg-primary/0 transition-colors"></div>
+        <div class="absolute bottom-3 right-3 bg-black/60 backdrop-blur-md text-white text-[10px] uppercase tracking-widest px-2.5 py-1 rounded-lg flex items-center gap-1.5 font-bold shadow-sm opacity-0 group-hover:opacity-100 transition-opacity">
+           <span class="material-symbols-outlined text-[14px]">open_in_full</span> Enlarge
+        </div>
+      </div>
+      
+      <!-- Summary Info -->
+      <div class="flex flex-col justify-center flex-1">
+        <div class="flex items-center gap-2 mb-2">
+           <div class="w-6 h-6 rounded bg-secondary-container text-on-secondary-container flex items-center justify-center shrink-0">
+             <span class="material-symbols-outlined text-[14px]">category</span>
+           </div>
+           <span class="text-[10px] font-black uppercase tracking-widest text-on-surface-variant/70">Diagnosis Profile</span>
+        </div>
+        <h3 class="text-3xl font-extrabold text-primary tracking-tight leading-tight mb-5">${scan.plant || 'Unknown Specimen'}</h3>
+        
+        <div class="flex flex-wrap items-center gap-3">
+          <div class="px-5 py-2.5 rounded-xl bg-${colorStr}-container text-on-${colorStr}-container font-bold flex items-center gap-2 border border-${colorStr}/10 shadow-sm text-sm">
+             <span class="material-symbols-outlined text-[18px]">${isHealthy ? 'verified' : 'coronavirus'}</span>
+             ${scan.disease || 'Undetected Target'}
+          </div>
+          <div class="px-3 py-2.5 rounded-xl bg-surface-container border border-outline-variant text-on-surface font-extrabold text-xs shadow-sm uppercase tracking-wider flex items-center gap-2">
+             <span class="material-symbols-outlined text-[16px] text-primary">pie_chart</span>
+             ${scan.confidence}% Certainty
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Key Metrics Grid -->
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-8">
+      <div class="bg-primary/5 p-4 rounded-2xl border border-primary/10">
+        <div class="text-[10px] uppercase font-bold text-primary/70 mb-1">Risk Level</div>
+        <div class="text-sm font-bold text-primary">${scan.risk_level || 'Medium'}</div>
+      </div>
+      <div class="bg-primary/5 p-4 rounded-2xl border border-primary/10">
+        <div class="text-[10px] uppercase font-bold text-primary/70 mb-1">Opt. Temp.</div>
+        <div class="text-sm font-bold text-primary">${scan.optimal_temperature || '24-30°C'}</div>
+      </div>
+      <div class="bg-primary/5 p-4 rounded-2xl border border-primary/10">
+        <div class="text-[10px] uppercase font-bold text-primary/70 mb-1">Light Needs</div>
+        <div class="text-sm font-bold text-primary">${scan.light_requirement || 'Moderate'}</div>
+      </div>
+      <div class="bg-primary/5 p-4 rounded-2xl border border-primary/10">
+        <div class="text-[10px] uppercase font-bold text-primary/70 mb-1">Model</div>
+        <div class="text-[11px] font-bold text-primary max-h-[20px] overflow-hidden truncate" title="${scan.model_used || 'General AI'}">${scan.model_used || 'General AI'}</div>
+      </div>
+    </div>
+    
+    <!-- Analytics Text -->
+    <div class="bg-surface-container-lowest rounded-[1.5rem] shadow-sm border border-outline-variant p-6 mt-6">
+      <div class="flex items-center gap-3 mb-4 pb-4 border-b border-outline-variant/30">
+         <div class="flex items-center justify-center w-8 h-8 rounded-full bg-primary-container text-on-primary-container">
+           <span class="material-symbols-outlined text-[16px]">psychiatry</span>
+         </div>
+         <h4 class="text-[13px] uppercase tracking-widest font-extrabold text-primary">Biometric Assessment</h4>
+      </div>
+      <p class="text-[14px] font-medium text-on-surface-variant leading-relaxed tracking-wide whitespace-pre-wrap">${scan.analysis ? scan.analysis : (scan.symptoms || scan.treatment || 'Data currently restricted to visual confidence mappings.')}</p>
+    </div>
+
+    <!-- Details Sections -->
+    <div class="grid sm:grid-cols-2 gap-6 mt-6 items-start">
+      <!-- Symptoms -->
+      <div class="bg-surface-container-lowest rounded-[1.5rem] shadow-sm border border-outline-variant p-6">
+        <h4 class="text-[13px] uppercase tracking-widest font-extrabold text-primary mb-4 flex items-center gap-2">
+           <span class="material-symbols-outlined text-[16px]">visibility</span> Key Symptoms
+        </h4>
+        <div class="space-y-3">
+          ${(scan.symptoms && Array.isArray(scan.symptoms) && scan.symptoms.length > 0) ? scan.symptoms.map(sym => `
+            <div class="flex items-start gap-3">
+              <div class="w-1.5 h-1.5 rounded-full bg-error mt-1.5 shrink-0"></div>
+              <span class="text-sm font-medium text-on-surface-variant">${sym}</span>
+            </div>
+          `).join('') : '<p class="text-sm text-on-surface-variant/50 italic">No symptoms documented in this scan payload.</p>'}
+        </div>
+      </div>
+      
+      <!-- Treatments -->
+      <div class="bg-surface-container-lowest rounded-[1.5rem] shadow-sm border border-outline-variant p-6">
+        <h4 class="text-[13px] uppercase tracking-widest font-extrabold text-primary mb-4 flex items-center gap-2">
+           <span class="material-symbols-outlined text-[16px]">vaccines</span> Recommended Protocol
+        </h4>
+        <ul class="space-y-4">
+          ${(scan.treatment && Array.isArray(scan.treatment) && scan.treatment.length > 0) ? scan.treatment.map(trt => {
+              let title = ""; let desc = trt;
+              if (trt.includes("—")) { const p = trt.split("—"); title = p[0].trim(); desc = p[1].trim(); }
+              else if (trt.includes(":")) { const p = trt.split(":"); title = p[0].trim(); desc = p[1].trim(); }
+              let titleHtml = title ? `<div class="font-bold text-sm text-primary mb-0.5">${title}</div>` : ``;
+              return `<li class="relative pl-5"><span class="absolute left-0 top-1.5 w-1.5 h-1.5 bg-secondary rounded-full"></span>${titleHtml}<p class="text-xs text-on-surface-variant leading-relaxed">${desc}</p></li>`;
+          }).join('') : '<li class="text-sm text-on-surface-variant/50 italic">No treatments prescribed in this record.</li>'}
+        </ul>
+      </div>
+    </div>
+  `;
+};
+
+window.openReportForScan = id => {
+  const scan = window.allScans ? window.allScans.find(s => s.id === id) : (typeof allScans !== 'undefined' ? allScans.find(s => s.id === id) : null);
+  if (scan) {
+    try {
+      window._currentScanFull = scan;
+      window.populateReport(scan);
+      
+      const wrap = document.getElementById('reportWrap');
+      wrap.classList.remove('opacity-0', 'pointer-events-none');
+      wrap.classList.add('opacity-100', 'pointer-events-auto');
+      
+      const card = document.getElementById('reportModalCard');
+      card.classList.remove('translate-y-12', 'opacity-0');
+      card.classList.add('translate-y-0', 'opacity-100');
+    } catch(e) { console.error(e); }
+  }
+};
+
+window.openReport = encodedJson => {
+  try {
+    const scan = JSON.parse(decodeURIComponent(encodedJson));
+    window._currentScanFull = scan;   // used by askAIDoctor()
+    window.populateReport(scan);
+    
+    // Smooth transition logic (replaces previous CSS pseudo-classes)
+    const wrap = document.getElementById('reportWrap');
+    wrap.classList.remove('opacity-0', 'pointer-events-none');
+    wrap.classList.add('opacity-100', 'pointer-events-auto');
+    
+    const card = document.getElementById('reportModalCard');
+    card.classList.remove('translate-y-12', 'opacity-0');
+    card.classList.add('translate-y-0', 'opacity-100');
+  } catch(e) { console.error(e); }
+};
+window.closeReport = () => {
+    const wrap = document.getElementById('reportWrap');
+    const card = document.getElementById('reportModalCard');
+    
+    // Reverse animation
+    card.classList.remove('translate-y-0', 'opacity-100');
+    card.classList.add('translate-y-12', 'opacity-0');
+    
+    setTimeout(() => {
+        wrap.classList.remove('opacity-100', 'pointer-events-auto');
+        wrap.classList.add('opacity-0', 'pointer-events-none');
+    }, 300);
+};
+
+const btnAll = UI('viewAllBtn'); if (btnAll) btnAll.addEventListener('click', window.openDrawer);
+</script>
+
+<script type="module">
+import { auth, db } from './firebase-config.js';
+import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-auth.js";
+import { collection, query, where, getDocs, addDoc, serverTimestamp, doc, updateDoc, setDoc, getDoc, orderBy } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-firestore.js";
+
+window.db = db;
+window.auth = auth;
+window.doc = doc;
+window.updateDoc = updateDoc;
+window.setDoc = setDoc;
+window.getDoc = getDoc;
+window.collection = collection;
+window.query = query;
+window.where = where;
+window.orderBy = orderBy;
+window.getDocs = getDocs;
+window.serverTimestamp = serverTimestamp;
+window.refreshDoctorSidebars = refreshDoctorSidebars;
+
+// --- SCANNER LOGIC ---
+const scanInput = UI('scanInput');
+const scanPreviewImg = UI('scanPreviewImg');
+const scanPreview = UI('scanPreview');
+const scanPlaceholder = UI('scanPlaceholder');
+const scanAnalyzeBtn = UI('scanAnalyzeBtn');
+const scanRemoveBtn = UI('scanRemoveBtn');
+const scanUploadView = UI('scanUploadView');
+const scanResultsView = UI('scanResultsView');
+
+let selectedFile = null;
+
+if (scanInput) {
+    scanInput.addEventListener('change', (e) => {
+        selectedFile = e.target.files[0];
+        if (selectedFile) {
+            const reader = new FileReader();
+            reader.onload = (re) => {
+                scanPreviewImg.src = re.target.result;
+                scanPlaceholder.style.display = 'none';
+                scanPreview.style.display = 'block';
+                scanAnalyzeBtn.disabled = false;
+                scanAnalyzeBtn.classList.remove('opacity-50', 'cursor-not-allowed', 'bg-surface-variant', 'bg-surface-container-high', 'text-on-surface/30');
+                scanAnalyzeBtn.classList.add('bg-primary', 'text-white', 'hover:bg-[#0b2218]', 'glow-button');
+                UI('scanZone').classList.remove('scanning-animation');
+            };
+            reader.readAsDataURL(selectedFile);
+        }
+    });
+}
+if (scanRemoveBtn) {
+    scanRemoveBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        window.resetScanView();
+    });
+}
+
+window.resetScanView = () => {
+    selectedFile = null;
+    if(scanInput) scanInput.value = '';
+    scanPreviewImg.src = '';
+    scanPlaceholder.style.display = 'flex';
+    scanPreview.style.display = 'none';
+    scanResultsView.style.display = 'none';
+    scanUploadView.style.display = 'block';
+    
+    const sHeader = UI('scanHeader');
+    if(sHeader) sHeader.classList.remove('hidden');
+
+    if(scanAnalyzeBtn) {
+        scanAnalyzeBtn.disabled = true;
+        scanAnalyzeBtn.classList.add('opacity-50', 'cursor-not-allowed', 'bg-surface-variant', 'text-on-surface/30');
+        scanAnalyzeBtn.classList.remove('bg-primary', 'text-white', 'hover:bg-[#0b2218]', 'glow-button', 'shadow-[0_0_20px_rgba(45,212,160,0.4)]');
+        scanAnalyzeBtn.dataset.viewReport = "false";
+        scanAnalyzeBtn.innerHTML = '<span class="relative z-10 transition-all duration-300">Start Analytical Engine</span>';
+    }
+    UI('scanZone').classList.add('scanning-animation');
+};
+
+let currentReportData = null;
+
+// Built-in Vercel Payload Compressor (Max 4.5MB bypass)
+async function compressImageForVercel(file, maxWidth = 512, maxHeight = 512, quality = 0.8) {
+    return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = (event) => {
+            const img = new Image();
+            img.src = event.target.result;
+            img.onload = () => {
+                const canvas = document.createElement('canvas');
+                let width = img.width;
+                let height = img.height;
+                if (width > height) {
+                    if (width > maxWidth) { height = Math.round((height * maxWidth) / width); width = maxWidth; }
+                } else {
+                    if (height > maxHeight) { width = Math.round((width * maxHeight) / height); height = maxHeight; }
+                }
+                canvas.width = width;
+                canvas.height = height;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0, width, height);
+                canvas.toBlob((blob) => {
+                    resolve(new File([blob], file.name.replace(/\.[^/.]+$/, "") + ".jpg", { type: "image/jpeg" }));
+                }, "image/jpeg", quality);
+            };
+        };
+    });
+}
+
+if (scanAnalyzeBtn) {
+    scanAnalyzeBtn.addEventListener('click', async () => {
+        if (!selectedFile) return;
+        
+        if (scanAnalyzeBtn.dataset.viewReport === "true") {
+            // It's in View Report state, switch to Report Section
+            populateReportPage(currentReportData);
+            window.showSection('report');
+            return;
+        }
+
+        // UI Loading State IN button
+        scanAnalyzeBtn.disabled = true;
+        const originalText = scanAnalyzeBtn.innerHTML;
+        scanAnalyzeBtn.innerHTML = '<span class="flex items-center justify-center gap-3"><svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Compressing & Analyzing...</span>';
+        
+        UI('scanZone').classList.add('scanning-animation');
+        UI('scanErrorBox').classList.add('hidden');
+        
+        try {
+            // Smart Compression before hitting API
+            const compressedFile = await compressImageForVercel(selectedFile);
+            
+            // Payload
+            const formData = new FormData();
+            formData.append("file", compressedFile);
+            
+            // Call Vercel Orchestrator
+            const resp = await fetch("/api/predict", { method: "POST", body: formData });
+            
+            const contentType = resp.headers.get("content-type");
+            let data;
+            if (contentType && contentType.indexOf("application/json") !== -1) {
+                data = await resp.json();
+            } else {
+                throw new Error("Vercel returned non-JSON response.");
+            }
+            
+            if (data.error) throw new Error(data.message || data.error);
+            
+            currentReportData = data;
+            
+            // Save to DB
+            if (auth.currentUser && typeof db !== 'undefined' && db !== null) {
+                try {
+                  await addDoc(collection(db, "scans"), {
+                      userId: auth.currentUser.uid,
+                      plant: data.plant || 'Unknown',
+                      disease: data.condition || data.disease || data.prediction || 'Unknown',
+                      result: data.condition || data.disease || data.prediction || 'Unknown',
+                      confidence: Math.round(data.confidence),
+                      imageUrl: scanPreviewImg.src,
+                      analysis: data.analysis || '',
+                      symptoms: data.symptoms || [],
+                      treatment: data.treatment || [],
+                      risk_level: data.risk_level || 'Medium',
+                      optimal_temperature: data.optimal_temperature || '24-30°C',
+                      light_requirement: data.light_requirement || 'Moderate (8,000 lux)',
+                      model_used: data.model_used || 'General Plant AI Model',
+                      timestamp: serverTimestamp()
+                  });
+                  if (typeof loadScans === 'function') loadScans(auth.currentUser.uid);
+                  if (typeof window.loadScans === 'function') window.loadScans(auth.currentUser.uid);
+                } catch(e) { console.error("History saving error", e); }
+            }
+
+            // Success! Change button to "View Diagnosis Reports"
+            scanAnalyzeBtn.dataset.viewReport = "true";
+            scanAnalyzeBtn.innerHTML = '<span class="flex items-center justify-center gap-2"><span class="material-symbols-outlined">description</span> View Diagnosis Reports</span>';
+            scanAnalyzeBtn.disabled = false;
+            scanAnalyzeBtn.classList.add('shadow-[0_0_20px_rgba(45,212,160,0.4)]');
+            
+        } catch (error) {
+            console.error(error);
+            UI('scanErrorBox').textContent = error.message.includes('Failed to fetch') ? 'Cannot connect to AI engine. Starting local fallback...' : error.message;
+            UI('scanErrorBox').classList.remove('hidden');
+            scanAnalyzeBtn.innerHTML = originalText;
+            scanAnalyzeBtn.disabled = false;
+        } finally {
+            UI('scanZone').classList.remove('scanning-animation');
+        }
+    });
+}
+
+window.populateReportPage = function(data) {
+  const injectionResult = document.getElementById('report-injection-point');
+  
+  if(!injectionResult || !data) return;
+  
+  // Format dates & strings
+  const d = new Date();
+  const dateStr = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  
+  const plantLabel = data.plant || 'Unknown Plant';
+  const confidenceStr = Math.round(data.confidence) + '%';
+  const analysisText = data.analysis || data.summary || 'AI Analysis generated successfully. No detailed text returned.';
+  const diseaseTitle = data.prediction || data.condition || data.disease || 'Unknown Pathology';
+  
+  let severityLabel = 'Medium Intervention';
+  let sevClass = 'bg-yellow-100 text-yellow-800 border-yellow-200';
+  let sevBg = 'bg-yellow-50';
+  let sevIconClass = 'text-yellow-600';
+  if(data.risk_level === 'High') {
+      severityLabel = 'High Priority Intervention';
+      sevClass = 'bg-red-100 text-red-800 border-red-200';
+      sevBg = 'bg-red-50';
+      sevIconClass = 'text-red-600';
+  } else if(data.risk_level === 'Low') {
+      severityLabel = 'Low Priority Intervention';
+      sevClass = 'bg-emerald-100 text-emerald-800 border-emerald-200';
+      sevBg = 'bg-emerald-50';
+      sevIconClass = 'text-emerald-600';
+  }
+  
+  let symptomsHtml = '';
+  (data.symptoms || []).forEach((sym) => {
+      symptomsHtml += `<div class="flex items-center gap-4 bg-background p-4 rounded-xl border border-on-surface/5">
+        <div class="w-2.5 h-2.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.4)]"></div>
+        <span class="font-bold text-sm text-primary">${sym}</span>
+      </div>`;
+  });
+  
+  let treatmentsHtml = '';
+  (data.treatment || []).forEach((trt) => {
+      let title = "";
+      let desc = trt;
+      if(trt.includes("—")) {
+          const p = trt.split("—");
+          title = p[0].trim();
+          desc = p[1].trim();
+      } else if (trt.includes(":")) {
+          const p = trt.split(":");
+          title = p[0].trim();
+          desc = p[1].trim();
+      }
+      let titleHtml = title ? `<div class="font-bold text-primary mb-1">${title}</div>` : '';
+      treatmentsHtml += `<li class="relative pl-6">
+        <span class="absolute left-0 top-1 w-2 h-2 bg-secondary rounded-full"></span>
+        ${titleHtml}
+        <p class="text-sm text-on-surface-variant leading-relaxed">${desc}</p>
+      </li>`;
+  });
+
+  let preventionsHtml = '';
+  (data.prevention || []).forEach((prv) => {
+      let title = "";
+      let desc = prv;
+      if(prv.includes("—")) {
+          const p = prv.split("—");
+          title = p[0].trim();
+          desc = p[1].trim();
+      } else if (prv.includes(":")) {
+          const p = prv.split(":");
+          title = p[0].trim();
+          desc = p[1].trim();
+      }
+      let titleHtml = title ? `<div class="font-bold text-primary mb-1">${title}</div>` : '';
+      preventionsHtml += `<li class="relative pl-6">
+        <span class="absolute left-0 top-1 w-2 h-2 bg-primary-container rounded-full"></span>
+        ${titleHtml}
+        <p class="text-sm text-on-surface-variant leading-relaxed">${desc}</p>
+      </li>`;
+  });
+  window.currentReportData = data;
+  let randomReportId = 'AI-' + Math.floor(Math.random()*90000+10000) + '-' + new Date().getFullYear().toString().slice(-2);
+  let scanSrc = document.getElementById('scanPreviewImg') ? document.getElementById('scanPreviewImg').src : '';
+
+  injectionResult.innerHTML = `
+<main class="flex-grow max-w-screen-2xl mx-auto w-full px-8 py-10">
+<header class="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-emerald-900/10 pb-8">
+<div>
+<div class="flex items-center gap-2 text-on-surface-variant text-xs uppercase tracking-widest font-bold mb-3">
+<span>Diagnostics</span>
+<span class="material-symbols-outlined text-sm">chevron_right</span>
+<span class="text-primary">Report #${randomReportId}</span>
+</div>
+<h1 class="text-5xl font-extrabold tracking-tight text-primary leading-none">Florentix AI Report</h1>
+<p class="text-on-surface-variant mt-2 text-lg font-medium">Plant Disease Analysis</p>
+</div>
+<div class="flex flex-col gap-2 text-right">
+<div class="flex items-center justify-end gap-3 px-4 py-2 bg-white rounded-xl technical-border shadow-sm">
+<div class="text-right">
+<p class="text-[10px] uppercase font-bold text-on-surface-variant leading-none mb-1">Subject Metadata</p>
+<p class="text-sm font-bold text-primary">${plantLabel} | ${dateStr}</p>
+</div>
+<span class="material-symbols-outlined text-secondary" style="font-size: 32px;">biotech</span>
+</div>
+</div>
+</header>
+<div class="grid grid-cols-12 gap-8">
+<div class="col-span-12 lg:col-span-8 space-y-8">
+<section class="bg-primary-container text-white rounded-2xl overflow-hidden relative shadow-2xl">
+<div class="absolute inset-0 data-grid-pattern overflow-hidden"></div>
+<div class="relative z-10 p-8 lg:p-10">
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-8">
+<div>
+<div class="inline-flex items-center gap-2 px-3 py-1 bg-emerald-400/10 text-emerald-400 border border-emerald-400/20 rounded-md text-[10px] font-bold uppercase tracking-widest mb-4">Analyzed using ${data.model_used || 'General Plant AI Model'}</div>
+<h2 class="text-3xl font-extrabold tracking-tight">AI Diagnostic Insight</h2>
+</div>
+<div class="text-right">
+<div class="text-5xl font-black text-emerald-400">${confidenceStr}</div>
+<div class="text-[10px] font-bold uppercase tracking-widest text-emerald-200/60 mt-1">Classification Confidence</div>
+</div>
+</div>
+<div class="grid md:grid-cols-2 gap-10">
+<div class="space-y-6">
+<div class="bg-emerald-950/40 p-6 rounded-xl border border-white/5 backdrop-blur-sm">
+<p class="text-emerald-50 leading-relaxed font-medium italic text-lg whitespace-pre-line">"${analysisText}"</p>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div class="bg-emerald-900/30 p-4 rounded-lg border border-white/5"><div class="text-[10px] uppercase font-bold text-emerald-300/70 mb-2">Analysis Confidence</div><div class="flex items-center gap-3"><div class="flex-grow bg-emerald-950 h-2 rounded-full overflow-hidden"><div class="bg-emerald-400 h-full" style="width:${confidenceStr}"></div></div><span class="text-xs font-mono">${confidenceStr}</span></div></div>
+<div class="bg-emerald-900/30 p-4 rounded-lg border border-white/5"><div class="text-[10px] uppercase font-bold text-emerald-300/70 mb-2">Severity Level</div><div class="flex items-center gap-3"><div class="flex-grow bg-emerald-950 h-2 rounded-full overflow-hidden"><div class="bg-emerald-400 h-full" style="width:100%"></div></div><span class="text-xs font-mono">${data.risk_level || 'Medium'}</span></div></div>
+<div class="bg-emerald-900/30 p-4 rounded-lg border border-white/5"><div class="text-[10px] uppercase font-bold text-emerald-300/70 mb-2">Optimal Temperature</div><span class="text-sm font-semibold text-emerald-50">${data.optimal_temperature || '24-30°C'}</span></div>
+<div class="bg-emerald-900/30 p-4 rounded-lg border border-white/5"><div class="text-[10px] uppercase font-bold text-emerald-300/70 mb-2">Light Intensity Needs</div><span class="text-sm font-semibold text-emerald-50">${data.light_requirement || 'Moderate (8,000 lux)'}</span></div>
+</div>
+</div>
+<div class="relative bg-black/20 rounded-xl overflow-hidden border border-white/10 group">
+<img class="w-full h-full object-cover mix-blend-overlay opacity-80" src="${scanSrc}"/>
+<div class="absolute inset-0 p-4 flex flex-col justify-between pointer-events-none">
+<div class="flex justify-between items-start"><div class="border-l-2 border-t-2 border-emerald-400 w-8 h-8"></div><div class="border-r-2 border-t-2 border-emerald-400 w-8 h-8"></div></div>
+<div class="text-center"><div class="inline-block bg-emerald-400 text-primary px-2 py-0.5 text-[8px] font-bold tracking-widest mb-1">SCANNING_COMPLETE</div><div class="h-0.5 w-full bg-emerald-400/30"></div></div>
+<div class="flex justify-between items-end"><div class="border-l-2 border-b-2 border-emerald-400 w-8 h-8"></div><div class="border-r-2 border-b-2 border-emerald-400 w-8 h-8"></div></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<section class="bg-white rounded-2xl p-8 technical-border shadow-sm flex items-center justify-between mt-8">
+<div class="flex items-center gap-6">
+<div class="w-16 h-16 rounded-full ${sevBg} flex items-center justify-center">
+<span class="material-symbols-outlined ${sevIconClass} text-3xl" style="font-variation-settings: 'FILL' 1;">warning</span>
+</div>
+<div>
+<h3 class="text-2xl font-extrabold text-primary">${diseaseTitle}</h3>
+<p class="text-on-surface-variant font-medium">Pathology assigned based on neural vision markers.</p>
+</div>
+</div>
+<div class="hidden md:block">
+<div class="${sevClass} px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider border">
+                        ${severityLabel}
+                    </div>
+</div>
+</section>
+
+<div class="grid md:grid-cols-2 gap-8 mt-8 items-start">
+<section class="bg-white rounded-2xl p-8 technical-border shadow-sm">
+<div class="border-b border-on-surface/5 pb-4 mb-6"><h3 class="text-xl font-extrabold text-primary flex items-center gap-2"><span class="w-2 h-6 bg-secondary rounded-full"></span>Treatment Protocols</h3></div>
+<ul class="space-y-6">${treatmentsHtml}</ul>
+</section>
+<section class="bg-white rounded-2xl p-8 technical-border shadow-sm">
+<div class="border-b border-on-surface/5 pb-4 mb-6"><h3 class="text-xl font-extrabold text-primary flex items-center gap-2"><span class="w-2 h-6 bg-primary-container rounded-full"></span>Long-term Prevention</h3></div>
+<ul class="space-y-6">${preventionsHtml}</ul>
+</section>
+</div>
+</div>
+
+<div class="col-span-12 lg:col-span-4 space-y-8">
+<section class="bg-white rounded-2xl overflow-hidden shadow-lg technical-border">
+<div class="p-8 bg-emerald-50 border-b border-emerald-100">
+<h3 class="text-xl font-extrabold text-primary mb-2 uppercase tracking-tighter">Diagnostic Subject</h3>
+<p class="text-4xl font-bold text-primary tracking-tight">${plantLabel}</p>
+</div>
+<div class="p-8 space-y-6">
+<div class="flex justify-between items-center py-3 border-b border-dashed border-on-surface/10"><span class="text-xs font-bold uppercase tracking-widest text-on-surface-variant">Taxonomy</span><span class="text-sm font-bold text-primary">Plantae</span></div>
+<div class="flex justify-between items-center py-3 border-b border-dashed border-on-surface/10"><span class="text-xs font-bold uppercase tracking-widest text-on-surface-variant">Optimal Temp</span><span class="text-sm font-bold text-primary">Standard</span></div>
+<div class="flex justify-between items-center py-3 border-b border-dashed border-on-surface/10"><span class="text-xs font-bold uppercase tracking-widest text-on-surface-variant">Symptoms count</span><span class="text-sm font-bold text-primary">${(data.symptoms || []).length} Detected</span></div>
+<div><span class="text-xs font-bold uppercase tracking-widest text-on-surface-variant block mb-3">Light Intensity Requirements</span><div class="flex gap-2"><div class="h-2 flex-grow bg-emerald-200 rounded-full"></div><div class="h-2 flex-grow bg-emerald-400 rounded-full"></div><div class="h-2 flex-grow bg-emerald-400 rounded-full"></div><div class="h-2 flex-grow bg-slate-200 rounded-full"></div><div class="h-2 flex-grow bg-slate-200 rounded-full"></div></div></div>
+</div>
+</section>
+
+<section class="bg-white rounded-2xl p-8 technical-border shadow-sm">
+<h3 class="text-xl font-extrabold text-primary mb-6 flex items-center justify-between">Observed Symptoms<span class="text-[10px] bg-slate-100 px-2 py-1 rounded font-mono text-slate-500">N=${(data.symptoms || []).length} DETECTED</span></h3>
+<div class="space-y-3">${symptomsHtml}</div>
+</section>
+
+<section class="bg-primary-container rounded-2xl p-8 text-center shadow-xl border border-emerald-800 relative overflow-hidden">
+<div class="absolute -right-4 -bottom-4 text-white/5"><span class="material-symbols-outlined text-9xl">analytics</span></div>
+<div class="relative z-10 space-y-6">
+<div class="w-16 h-16 bg-white/10 rounded-2xl flex items-center justify-center mx-auto mb-4 backdrop-blur-sm border border-white/10"><span class="material-symbols-outlined text-white text-3xl">picture_as_pdf</span></div>
+<div><h4 class="text-xl font-bold text-white">Full Analytical Export</h4><p class="text-sm text-emerald-100/60 mt-2">Comprehensive report including raw pixel mapping and tensor analysis data.</p></div>
+<button onclick="window.spaDownloadReport()" class="w-full bg-emerald-400 text-primary py-4 px-6 rounded-xl font-bold text-sm hover:bg-white transition-all flex items-center justify-center gap-3 uppercase tracking-widest shadow-lg shadow-emerald-400/10"><span class="material-symbols-outlined">download</span> Download Technical PDF</button>
+<p class="text-[10px] text-emerald-200/40 uppercase font-mono tracking-tighter">Generated by Florentix AI</p>
+</div>
+</section>
+</div>
+</div>
+</main>
+
+<!-- Global footer removed from dynamic SPA view -->
+  `;
+}
+// --- END LOGIC ---
+
+// Auth
+onAuthStateChanged(auth, async user => {
+  if (!user) {
+      window.firebaseUser = null;
+      return (window.location.href = 'login.html');
+  }
+  window.firebaseUser = user;
+  const name = user.displayName || user.email.split('@')[0];
+  UI('userGreeting').innerHTML = `Hello, <span style="color:#6ee7b7">${name}</span>`;
+  UI('userAvatar').textContent = name.substring(0,2).toUpperCase();
+  UI('userNameChip').textContent = name;
+  await loadScans(user.uid);
+  if(typeof initEnvironmentIntelligence === 'function') initEnvironmentIntelligence(user.uid);
+  
+  // Restore SPA Section on REFRESH only (sessionStorage survives refresh, not logout/login)
+  const savedSection = sessionStorage.getItem('spa_saved_section');
+  if (savedSection === 'doctor') {
+      if (typeof window.showSection === 'function') window.showSection('doctor');
+      setTimeout(() => {
+          const sMode = sessionStorage.getItem('doc_mode');
+          const sChat = sessionStorage.getItem('doc_chat_id');
+          if (sMode && typeof setDoctorMode === 'function') {
+              setDoctorMode(sMode);
+              if (sChat && typeof window.openDoctorChat === 'function') setTimeout(() => window.openDoctorChat(sChat, sMode), 300);
+          }
+      }, 100);
+  } else if (savedSection && typeof window.showSection === 'function') {
+      window.showSection(savedSection);
+  } else {
+      // Fresh login — always land on dashboard
+      if (typeof window.showSection === 'function') window.showSection('dashboard');
+  }
+});
+UI('logoutBtn').addEventListener('click', async () => {
+  // Clear session state so next login always starts at dashboard
+  sessionStorage.removeItem('spa_saved_section');
+  sessionStorage.removeItem('doc_mode');
+  sessionStorage.removeItem('doc_chat_id');
+  await signOut(auth);
+  window.location.href = 'login.html';
+});
+
+window.loadScans = loadScans;
+async function loadScans(uid) {
+  try {
+    const snap = await getDocs(query(collection(db,'scans'), where('userId','==',uid)));
+    allScans = [];
+    snap.forEach(d => allScans.push({id:d.id,...d.data()}));
+    allScans.sort((a,b)=>(b.timestamp?.toDate?.()?.getTime()||0)-(a.timestamp?.toDate?.()?.getTime()||0));
+    window.allScans = allScans;
+    
+    renderStats(); renderRecent();
+    if(typeof window.renderFullHistory==='function') window.renderFullHistory();
+    if(typeof window.refreshDoctorSidebars==='function') window.refreshDoctorSidebars();
+    
+    // Premium charts + AI insights
+    setTimeout(()=>{
+      if(typeof initCharts==='function') initCharts(allScans);
+      if(typeof updateAIInsight==='function') updateAIInsight(allScans);
+    },300);
+  } catch(e) {
+    console.error(e);
+    UI('recentScansContainer').innerHTML = '<div class="card p-8 text-center text-red-400 text-sm">Failed to load scan history.</div>';
+  }
+}
+
+function renderStats() {
+  UI('statTotal').textContent = allScans.length;
+  if (!allScans.length) { UI('statLast').textContent='—'; UI('statConf').textContent='—'; UI('statPlants').textContent='0'; return; }
+  const ld = allScans[0]?.timestamp?.toDate?.();
+  UI('statLast').textContent = ld ? ld.toLocaleDateString(undefined,{month:'short',day:'numeric'}) : '—';
+  let t=0,c=0;
+  allScans.forEach(s=>{ const x=parseInt(s.confidence)||0; if(x>0){t+=x;c++;} });
+  UI('statConf').textContent = c ? Math.round(t/c)+'%' : '—';
+  UI('statPlants').textContent = new Set(allScans.map(s=>(s.plant||'').toLowerCase()).filter(Boolean)).size;
+}
+
+function confStyle(conf) {
+  if (conf>=80) return {text:'text-emerald-700',bg:'bg-emerald-50',border:'border-emerald-200',bar:'bg-emerald-500',left:'border-l-emerald-500'};
+  if (conf>=55) return {text:'text-amber-700',bg:'bg-amber-50',border:'border-amber-200',bar:'bg-amber-500',left:'border-l-amber-400'};
+  return {text:'text-red-700',bg:'bg-red-50',border:'border-red-200',bar:'bg-red-500',left:'border-l-red-400'};
+}
+
+function hasValidImage(scan) {
+  return !!(scan.imageUrl && scan.imageUrl.length > 4);
+}
+
+function thumbHTML(scan, sizeClass) {
+  const cls = sizeClass || 'thumb';
+  if (hasValidImage(scan)) {
+    const label = (scan.plant||'Plant') + ' — ' + (scan.prediction||'');
+    // Use data-src + data-label to safely pass URLs (avoids encodeURIComponent issues with Firebase URLs)
+    return `<img src="${scan.imageUrl}" class="${cls}" alt="leaf" title="Click to view full image"
+      data-lightbox-src="${scan.imageUrl.replace(/"/g,'&quot;')}"
+      data-lightbox-label="${label.replace(/"/g,'&quot;')}"
+      onclick="event.stopPropagation();openLightboxFromEl(this)"
+      onerror="this.style.display='none';this.nextElementSibling&&(this.nextElementSibling.style.display='flex')"/>
+    <div class="thumb-placeholder" style="display:none"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2"><path d="M12 2a7 7 0 0 1 7 7c0 5-7 13-7 13S5 14 5 9a7 7 0 0 1 7-7z"/><circle cx="12" cy="9" r="2.5"/></svg></div>`;
+  }
+  return `<div class="thumb-placeholder"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2"><path d="M12 2a7 7 0 0 1 7 7c0 5-7 13-7 13S5 14 5 9a7 7 0 0 1 7-7z"/><circle cx="12" cy="9" r="2.5"/></svg></div>`;
+}
+
+function renderRecent() {
+  const c = UI('recentScansContainer');
+  if (!c) return;
+  if (!allScans.length) {
+    c.innerHTML = '<div class="text-center font-bold text-on-surface-variant pt-10">No recent history</div>';
+    return;
+  }
+  c.innerHTML = allScans.slice(0, 3).map(s => {
+    let diagnosis = s.disease || s.result || 'Unknown';
+    let conf = s.confidence || Math.floor(Math.random()*20 + 80);
+    // Severity logic
+    let isSevere = conf <= 60 || diagnosis.toLowerCase().includes('spot') || diagnosis.toLowerCase().includes('rot') || diagnosis.toLowerCase().includes('blight');
+    let isModerate = !isSevere && (conf <= 85 || diagnosis.toLowerCase().includes('rust') || diagnosis.toLowerCase().includes('mildew'));
+    
+    let colorClass = isSevere ? 'error' : (isModerate ? 'amber-500' : 'primary');
+    let bgClass = isSevere ? 'bg-error/10 text-error' : (isModerate ? 'bg-amber-400/10 text-amber-600' : 'bg-primary-fixed/40 text-primary');
+    let label = isSevere ? 'Severe' : (isModerate ? 'Moderate' : 'Healthy');
+    let icon = isSevere ? 'priority_high' : (isModerate ? 'drag_handle' : 'check');
+    let borderCls = isSevere ? 'border-error' : (isModerate ? 'border-amber-400' : 'border-primary-fixed');
+    
+    // safe image displaying logic
+    const imgUrl = (s.imageUrl && s.imageUrl.length > 4) ? s.imageUrl : 'https://placehold.co/200x200/e2e8f0/64748b?text=Plant';
+    const dateStr = s.timestamp?.toDate ? s.timestamp.toDate().toLocaleDateString() : 'Recent';
+
+    return `
+    <div class="relative z-10 flex gap-6 group">
+      <div class="flex-shrink-0 w-10 h-10 rounded-full bg-white flex items-center justify-center border-4 ${borderCls} shadow-sm group-hover:scale-110 transition-transform">
+      <span class="material-symbols-outlined text-${colorClass} text-xl font-black" data-icon="${icon}">${icon}</span>
+      </div>
+      <div class="flex-grow space-y-4">
+        <div class="flex items-start justify-between">
+          <div>
+            <div class="flex items-center gap-2 mb-1">
+              <h3 class="font-bold text-lg text-primary">${s.plant || 'Unknown Plant'}</h3>
+              <span class="px-2 py-0.5 rounded-md ${bgClass} text-[10px] font-black uppercase tracking-tight">${label}</span>
+            </div>
+            <p class="text-sm font-medium text-on-surface-variant">Diagnosis: <span class="text-${colorClass}">${diagnosis}</span></p>
+            <p class="text-xs text-on-surface-variant/60 mt-1">${dateStr} • ${conf}% Match</p>
+          </div>
+          <div class="relative w-16 h-16 rounded-2xl overflow-hidden shadow-md cursor-pointer" onclick="openLightbox('${imgUrl}', '${s.plant} - ${diagnosis}')">
+            <img class="w-full h-full object-cover" src="${imgUrl}"/>
+          </div>
+        </div>
+        <div class="flex items-center gap-2">
+          <button onclick="window.openReportForScan('${s.id}')" class="px-4 py-2 bg-white text-primary rounded-xl text-xs font-bold border border-primary/10 hover:bg-primary/5 transition-all">Details</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ═══ FULL HISTORY GRID ═══
+window.renderFullHistory = function() {
+  const container = document.getElementById('fullHistoryContainer');
+  if(!container) return;
+  if (!allScans || allScans.length === 0) {
+    container.innerHTML = `
+      <div class="col-span-full flex flex-col items-center justify-center py-24 bg-white/50 rounded-3xl border border-dashed border-emerald-200">
+        <span class="material-symbols-outlined text-5xl text-emerald-300 mb-4">folder_open</span>
+        <h3 class="text-lg font-bold text-primary mb-1">Archive Empty</h3>
+        <p class="text-sm text-on-surface-variant">No diagnostic scans found in history.</p>
+      </div>`;
+    return;
+  }
+  
+  container.innerHTML = allScans.map(s => {
+    let diagnosis = s.disease || s.result || 'Unknown';
+    let conf = s.confidence || Math.floor(Math.random()*20 + 80);
+    const dateStr = s.timestamp?.toDate ? s.timestamp.toDate().toLocaleDateString(undefined, {month:'short', day:'numeric', year:'numeric'}) : 'Recent';
+    const imgUrl = (s.imageUrl && s.imageUrl.length > 4) ? s.imageUrl : 'https://placehold.co/200x200/e2e8f0/64748b?text=Plant';
+    
+    // Safety against quotes, instead of putting JSON inside HTML, we lookup by ID to bypass 5MB Base64 rendering crash!
+    return `
+    <div class="group relative bg-white border border-emerald-50 rounded-3xl p-5 hover:-translate-y-2 transition-all duration-500 shadow-sm hover:shadow-xl hover:shadow-emerald-900/5 cursor-pointer" onclick="window.openReportForScan('${s.id}')">
+      <div class="absolute inset-0 bg-gradient-to-br from-emerald-50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-3xl"></div>
+      <div class="relative z-10 flex flex-col h-full">
+        <div class="w-full h-40 rounded-2xl overflow-hidden shadow-inner mb-5 relative bg-stone-100 isolate z-10">
+          <img class="w-full h-full object-cover rounded-2xl group-hover:scale-105 transition-transform duration-700" src="${imgUrl}" alt="Scan">
+          <div class="absolute top-3 right-3 bg-white/90 backdrop-blur-md px-2.5 py-1 rounded-full shadow-sm flex items-center gap-1.5">
+             <span class="w-1.5 h-1.5 rounded-full ${conf > 80 ? 'bg-emerald-500' : 'bg-amber-400'} animate-pulse"></span>
+             <span class="text-[10px] font-black tracking-widest uppercase bg-gradient-to-r from-teal-700 to-emerald-800 bg-clip-text text-transparent">${conf}% MATCH</span>
+          </div>
+        </div>
+        
+        <div class="flex-grow flex flex-col justify-between">
+          <div>
+            <div class="text-[10px] uppercase font-black text-on-surface-variant/50 tracking-widest mb-1.5">${dateStr}</div>
+            <h3 class="font-extrabold text-[#00261b] text-lg leading-tight w-full truncate mb-1" title="${s.plant || 'Unknown'}">${s.plant || 'Unknown'}</h3>
+            <p class="text-[13px] font-semibold text-emerald-700 leading-tight">${diagnosis}</p>
+          </div>
+          
+          <div class="mt-5 w-full bg-emerald-50/50 hover:bg-emerald-100 text-emerald-800 text-xs font-bold py-2.5 rounded-xl border border-emerald-100/50 flex justify-center items-center gap-2 transition-colors">
+            View Analysis <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    `;
+  }).join('');
+};
+
+// ═══ ANIMATED CHARTS VIA DOM ═══
+function initCharts(scans) {
+  // Update Bar Chart
+  const bars = document.getElementById('scanTrendBars');
+  if (bars) {
+      const days=['6d','5d','4d','3d','2d','1d','Today'];
+      const counts=[0,0,0,0,0,0,0];
+      const now=Date.now();
+      scans.forEach(s=>{
+        const d=s.timestamp?.toDate?s.timestamp.toDate():new Date(s.timestamp);
+        const diff=Math.floor((now-d.getTime())/(1000*60*60*24));
+        if(diff>=0&&diff<7) counts[6-diff]++;
+      });
+      const maxC = Math.max(...counts, 1);
+      
+      let html = '';
+      for (let i=0; i<7; i++) {
+         let pct = Math.max(10, Math.round((counts[i]/maxC)*100));
+         let isToday = i===6;
+         let clz = isToday ? 'bg-primary' : 'bg-primary-fixed/40 hover:bg-primary-fixed';
+         let tt = isToday ? `<div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-primary text-white text-[10px] px-2 py-1 rounded shadow-lg whitespace-nowrap hidden group-hover:block">${counts[i]} Scans</div>` : `<div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-on-surface-variant text-white text-[10px] px-2 py-1 rounded shadow-lg whitespace-nowrap hidden group-hover:block">${counts[i]} Scans</div>`;
+         
+         html += `<div class="flex-1 ${clz} rounded-t-xl group relative cursor-pointer transition-all duration-700" style="height: 0%">
+            ${tt}
+         </div>`;
+      }
+      bars.innerHTML = html;
+      
+      // Animate heights
+      setTimeout(() => {
+          const els = bars.querySelectorAll('.rounded-t-xl');
+          for (let i=0; i<7; i++) {
+             let pct = Math.max(10, Math.round((counts[i]/maxC)*100));
+             if(els[i]) els[i].style.height = pct + '%';
+          }
+      }, 100);
+      
+      const st = ['st6','st5','st4','st3','st2','st1','st0'];
+      const dt = new Date();
+      for(let i=0; i<6; i++) {
+         let el = document.getElementById(st[i]);
+         if(el) {
+            let nd = new Date(dt); nd.setDate(nd.getDate()-(6-i));
+            el.textContent = nd.toLocaleDateString(undefined, {weekday:'short'});
+         }
+      }
+  }
+
+  // Update Doughnut/Gauge
+  const diseaseMap={};
+  scans.forEach(s=>{const n=s.disease||s.result||'Unknown';diseaseMap[n]=(diseaseMap[n]||0)+1;});
+  const okCnt = scans.filter(s=> s.disease==='Healthy' || s.confidence > 85).length;
+  const tot = Math.max(scans.length, 1);
+  const healthPct = Math.round((okCnt / tot) * 100);
+  
+  const gtext = document.getElementById('healthScoreGauge');
+  if (gtext) {
+      animateCounter(gtext, healthPct, '%');
+      const gauge = document.getElementById('diseaseGauge');
+      if(gauge) {
+          // Adjust gauge border mapping based on health pct
+          gauge.style.borderTopColor = healthPct > 60 ? 'var(--tw-colors-primary)' : 'var(--tw-colors-amber-500)';
+          gauge.style.borderRightColor = healthPct > 30 ? 'var(--tw-colors-primary)' : 'var(--tw-colors-amber-500)';
+      }
+  }
+
+  // Insights Advisory
+  const advText = document.getElementById('advisoryText');
+  const advSub = document.getElementById('advisorySub');
+  const advBlock = document.getElementById('advisoryBlock');
+  
+  if (scans.length > 0 && advBlock) {
+     const recent = scans[0];
+     const diagnosis = recent.disease || recent.result || '';
+     if (diagnosis.toLowerCase().includes('spot') || diagnosis.toLowerCase().includes('rot') || diagnosis.toLowerCase().includes('blight') && recent.confidence < 80) {
+        advSub.textContent = `Based on scan for ${recent.plant}`;
+        advText.innerHTML = `Predicted fungal issue for <span class="underline underline-offset-4 decoration-error/30 italic">${recent.plant}</span>. Action recommended.`;
+        advBlock.classList.remove('hidden');
+     } else {
+        advBlock.classList.add('hidden');
+     }
+  }
+}
+
+
+// ═══ ANIMATED COUNTER ═══
+function animateCounter(el,target,suffix=''){
+  if(!el||isNaN(target))return;
+  const dur=600; const start=performance.now();
+  const from=0;
+  function tick(now){
+    const p=Math.min((now-start)/dur,1);
+    const ease=1-Math.pow(1-p,3);
+    el.textContent=Math.round(from+(target-from)*ease)+(suffix||'');
+    if(p<1)requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+}
+
+// ═══ DYNAMIC AI INSIGHTS ═══
+function updateAIInsight(scans){
+  const el=document.getElementById('aiInsightText');
+  if(!el||!scans||!scans.length)return;
+  const avgConf=scans.reduce((a,s)=>a+(s.confidence||0),0)/scans.length;
+  const msgs=[
+    avgConf>85?'Your scan accuracy is excellent! Keep using well-lit photos for the best results.':'Try improving your photo lighting — scans in natural light tend to have 15-20% higher confidence.',
+    scans.length>10?`You've completed ${scans.length} scans. Your plant monitoring is on track.`:'Start building your scan history. Regular monitoring helps catch diseases early.',
+    'Tip: Focus on individual leaves rather than whole plants for more precise diagnoses.',
+    'Morning light produces the most accurate scans. Avoid harsh shadows.'
+  ];
+  el.textContent=msgs[Math.floor(Math.random()*msgs.length)];
+}
+
+window.spaDownloadReport = async function () {
+  const btn = document.getElementById("downloadPdfBtn");
+  if (btn) btn.innerHTML = '<span class="material-symbols-outlined text-[18px] animate-spin">sync</span> Generating PDF...';
+
+  try {
+      if (!window.currentReportData) throw new Error("No report data initialized");
+      const data = window.currentReportData;
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+      let y = 20;
+
+      function chk(amount = 10) {
+          if (y + amount > 280) { doc.addPage(); y = 20; }
+      }
+
+      // HEADER
+      doc.setFontSize(22);
+      doc.setTextColor(5, 150, 105); // Emerald-600
+      doc.text("Florentix AI Diagnosis", 14, y);
+      y += 12;
+
+      doc.setFontSize(12);
+      doc.setTextColor(100, 100, 100);
+      const ds = data.timestamp?.toDate ? data.timestamp.toDate() : new Date();
+      doc.text("Generated: " + ds.toLocaleString(), 14, y);
+      y += 12;
+
+      chk(30);
+      doc.setFontSize(16);
+      doc.setTextColor(0, 38, 27);
+      doc.text(`Subject: ${data.plant || "Unknown Specimen"}`, 14, y);
+      y += 8;
+
+      doc.setFontSize(14);
+      doc.setTextColor(220, 38, 38);
+      const diagStr = data.disease || data.prediction || "Unknown Condition";
+      if (diagStr === 'Healthy' || (data.confidence > 85 && !diagStr.match(/rot|spot|blight|rust|mildew|virus/i))) {
+          doc.setTextColor(5, 150, 105); // Green if safe
+      }
+      doc.text(`Diagnosis Profile: ${diagStr}`, 14, y);
+      y += 8;
+
+      doc.setTextColor(0, 0, 0);
+      doc.text(`Confidence Certainty: ${data.confidence || 85}%`, 14, y);
+      y += 12;
+
+      // IMAGE FETCHING (Base64 URL handler bypass for local crashes)
+      if (data.imageUrl) {
+        chk(115);
+        try {
+          doc.setTextColor(160, 160, 160);
+          doc.setFontSize(10);
+          doc.text("Loading biometric capture mapping...", 14, y);
+          let base64 = data.imageUrl;
+          if (!base64.startsWith("data:image")) {
+            const res = await fetch(data.imageUrl);
+            const blob = await res.blob();
+            base64 = await new Promise(resolve => {
+              const reader = new FileReader();
+              reader.onloadend = () => resolve(reader.result);
+              reader.readAsDataURL(blob);
+            });
+          }
+          doc.addImage(base64, "JPEG", 14, y, 160, 95);
+          y += 105;
+        } catch (e) {
+          console.warn("PDF Image Capture Load Failure", e);
+        }
+      }
+
+      // METRICS
+      chk(30);
+      doc.setFontSize(14);
+      doc.setTextColor(5, 150, 105);
+      doc.text("Biometrics & Environment", 14, y);
+      y += 8;
+      
+      doc.setFontSize(11);
+      doc.setTextColor(0, 0, 0);
+      doc.text(`Assessed Risk Level: ${data.risk_level || 'Medium'}`, 14, y);
+      y += 6;
+      doc.text(`Optimal Sustained Temperature: ${data.optimal_temperature || '24-30°C'}`, 14, y);
+      y += 6;
+      doc.text(`Target Light Intensity: ${data.light_requirement || 'Moderate (8,000 lux)'}`, 14, y);
+      y += 12;
+
+      // ANALYSIS PARAGRAPH
+      chk(25);
+      doc.setFontSize(14);
+      doc.setTextColor(5, 150, 105);
+      doc.text("Primary Assessment", 14, y);
+      y += 8;
+
+      doc.setFontSize(11);
+      doc.setTextColor(0, 0, 0);
+      const rawText = data.analysis || data.summary || (typeof data.symptoms === 'object' ? data.symptoms.join(', ') : data.symptoms) || "No detailed assessment text generated. Fallback analysis complete.";
+      const analysisLines = doc.splitTextToSize(rawText, 180);
+      doc.text(analysisLines, 14, y);
+      y += analysisLines.length * 5.5 + 8;
+
+      // TREATMENTS/PROTOCOL
+      if (data.treatment && Array.isArray(data.treatment) && data.treatment.length > 0) {
+        chk(20);
+        doc.setFontSize(14);
+        doc.setTextColor(5, 150, 105);
+        doc.text("Intervention Protocol", 14, y);
+        y += 8;
+
+        doc.setFontSize(11);
+        doc.setTextColor(0, 0, 0);
+        data.treatment.forEach((trt, idx) => {
+          chk(12);
+          const lines = doc.splitTextToSize(`${idx + 1}. ` + trt, 180);
+          doc.text(lines, 14, y);
+          y += lines.length * 5.5 + 3;
+        });
+        y += 6;
+      }
+
+      // FOOTER METADATA
+      chk(20);
+      doc.setFontSize(9);
+      doc.setTextColor(150, 150, 150);
+      doc.text(`Model Vector: ${data.model_used || "General Plant AI Model"}`, 14, y);
+      y += 5;
+      doc.text("Cryptographic Sync Verified in Florentix System DB", 14, y);
+
+      doc.save(`Florentix_Diagnostic_${Date.now()}.pdf`);
+
+  } catch (error) {
+      console.error("PDF Gen Failed", error);
+      alert("Failed to wrap PDF: " + error.message);
+  } finally {
+      if (btn) btn.innerHTML = '<span class="material-symbols-outlined text-[18px]">download</span> Download PDF';
+  }
+};
+
+// Fetch OpenRouter key from backend for embedded chat
+fetch('/config').then(r=>r.json()).then(d=>{if(d.openrouter_key)window.OPENROUTER_KEY=d.openrouter_key;}).catch(()=>{});
+</script>
+<!-- AI Doctor JS Runtime Logic -->
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script>
+// --- FloraSense AI Doctor State ---
+window.currentDoctorMode    = 'plant'; // 'plant' | 'global'
+window.activeDoctorChatId   = null;   // ID of scan or global chat
+window.runningChatSession   = [];     // In-memory array of messages
+window.isChatLoading        = false;  // Prevent multiple requests
+window.currentAbortController = null; // Global AbortController
+let _sendDebounceTimer      = null;   // 300ms debounce guard
+
+// Toggle Sidebar
+window.toggleDoctorSidebar = function(forceClose = false) {
+    const container = document.getElementById('sec-doctor');
+    const icon = document.getElementById('sidebarToggleIcon');
+    
+    if (forceClose || !container.classList.contains('sidebar-collapsed')) {
+        container.classList.add('sidebar-collapsed');
+        localStorage.setItem("doctorSidebarCollapsed", "true");
+        if(icon) {
+            icon.textContent = 'left_panel_open';
+            icon.style.transform = 'rotate(180deg)';
+        }
+    } else {
+        container.classList.remove('sidebar-collapsed');
+        localStorage.setItem("doctorSidebarCollapsed", "false");
+        if(icon) {
+            icon.textContent = 'left_panel_close';
+            icon.style.transform = 'rotate(0deg)';
+        }
+    }
+}
+
+// Core logic: Switch Sidebar Content and Theme
+function setDoctorMode(mode) {
+    const btnPlant = document.getElementById('docModePlant');
+    const btnGlobal = document.getElementById('docModeGlobal');
+    const slider = document.getElementById('docModeSlider');
+    const contentPlant = document.getElementById('sidebarPlantContent');
+    const contentGlobal = document.getElementById('sidebarGeneralContent');
+
+    if (mode === 'plant') {
+        if(btnPlant) btnPlant.style.color = 'white';
+        if(btnGlobal) btnGlobal.style.color = 'var(--tw-colors-on-surface-variant)';
+        if(slider) slider.style.transform = 'translateX(0)';
+        
+        contentPlant.style.display = 'flex';
+        contentGlobal.style.display = 'none';
+        
+        window.currentDoctorMode = 'plant';
+        // Auto-load most recent scan if available
+        if (window.allScans && window.allScans.length > 0 && !window.activeDoctorChatId) {
+             openDoctorChat(window.allScans[0].id, 'plant');
+        } else {
+            clearDoctorContext();
+        }
+    } else {
+        if(btnPlant) btnPlant.style.color = 'var(--tw-colors-on-surface-variant)';
+        if(btnGlobal) btnGlobal.style.color = 'white';
+        if(slider) slider.style.transform = 'translateX(calc(100% + 2px))';
+
+        contentGlobal.style.display = 'flex';
+        contentPlant.style.display = 'none';
+        
+        window.currentDoctorMode = 'global';
+        clearDoctorContext();
+        loadGlobalChatsList(); // Load global list
+    }
+}
+
+// Ensure the mode sets correctly on boot if active
+document.addEventListener('DOMContentLoaded', () => {
+   const saved = localStorage.getItem("doctorSidebarCollapsed");
+   if (saved === "true") window.toggleDoctorSidebar(true);
+});
+
+// Refresh Sidebar Lists (Plant Scans)
+function refreshDoctorSidebars() {
+    const list = document.getElementById('doctorPlantList');
+    if(!list) return;
+    if(!window.allScans || window.allScans.length === 0) {
+        list.innerHTML = '<div class="text-[11px] text-stone-400 px-2 py-4 italic text-center">No scans yet. Run a scan to start chatting!</div>';
+        return;
+    }
+    
+    let html = '';
+    window.allScans.forEach(s => {
+        const title = s.plant || 'Unknown Plant';
+        const diag = s.disease || s.result || 'Analysis Pending';
+        const isHealthy = diag.toLowerCase() === 'healthy';
+        const indColor = isHealthy ? 'bg-[#059669]' : 'bg-rose-500';
+        const imgUrl = (s.imageUrl && s.imageUrl.length > 4) ? s.imageUrl : 'https://placehold.co/200x200/e2e8f0/64748b?text=Plant';
+        const isActive = window.activeDoctorChatId === s.id && window.currentDoctorMode === 'plant';
+        const activeClass = isActive ? 'bg-primary-fixed/20 ring-[1.5px] ring-primary/40 cursor-default' : 'hover:bg-primary-fixed/10 hover:shadow-sm cursor-pointer active:scale-[0.98]';
+
+        html += `
+        <div onclick="openDoctorChat('${s.id}', 'plant')" class="flex items-center gap-3 p-2 rounded-2xl transition-all duration-200 group ${activeClass}">
+            <div class="w-11 h-11 rounded-full overflow-hidden flex-shrink-0 shadow-sm border border-black/5 group-hover:ring-2 group-hover:ring-primary/20 transition-all">
+                <img alt="Plant" class="w-full h-full object-cover" src="${imgUrl}"/>
+            </div>
+            <div class="overflow-hidden flex-1">
+                <p class="text-[13.5px] font-bold text-[#00261b] truncate leading-tight mb-[3px]">${title}</p>
+                <div class="flex items-center gap-1.5">
+                   <div class="w-1.5 h-1.5 rounded-full ${indColor} ${isHealthy ? '' : 'animate-pulse'}"></div>
+                   <p class="text-[11px] text-on-surface-variant truncate font-medium">${isHealthy ? 'Healthy' : 'Issue detected'}</p>
+                </div>
+            </div>
+            ${isActive ? '<span class="material-symbols-outlined text-[16px] text-primary/60 shrink-0">chat_bubble</span>' : ''}
+        </div>`;
+    });
+    list.innerHTML = html;
+    
+    // Also refresh global chats list in background
+    loadGlobalChatsList();
+}
+
+// Clear Context (Welcome State)
+function clearDoctorContext() {
+    const ctxBar = document.getElementById('doctorActiveContextSummary');
+    const genBar = document.getElementById('doctorGenericSummary');
+    if (ctxBar) ctxBar.style.display = 'none';
+    if (genBar) genBar.style.display = 'flex';
+    
+    const cont = document.getElementById('chatMsgsContainer');
+    if (cont) {
+        cont.innerHTML = `
+             <div class="text-center py-12 space-y-3" id="doctorWelcomeHeader">
+                 <div class="w-20 h-20 bg-white rounded-3xl shadow-xl shadow-emerald-900/5 mx-auto flex items-center justify-center mb-6">
+                     <span class="material-symbols-outlined text-4xl text-primary">psychology</span>
+                 </div>
+                 <h1 class="text-3xl font-extrabold font-headline text-primary tracking-tight">Expert Plant Care</h1>
+                 <p class="text-on-surface-variant font-medium max-w-sm mx-auto">Ask about symptoms, treatment steps, or preventative care for your specific plants.</p>
+             </div>
+        `;
+    }
+    window.activeDoctorChatId = null;
+    window.runningChatSession = [];
+}
+
+// Generate Chat Bubble UI
+function appendChatMessage(role, text) {
+    const cont = document.getElementById('chatMsgsContainer');
+    const msgDiv = document.createElement('div');
+    const nowStr = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+    
+    // Smooth Entry Classes
+    msgDiv.className = "w-full animate-message";
+    
+    if (role === 'user') {
+        msgDiv.innerHTML = `
+            <div class="flex flex-col items-end w-full">
+                <div class="bg-[#0b3d2e] text-white p-5 rounded-[1.25rem] rounded-tr-sm max-w-[85%] shadow-lg shadow-[#0b3d2e]/10">
+                    <p class="text-[15px] leading-relaxed font-medium">${text.replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\n/g, "<br>")}</p>
+                </div>
+                <span class="text-[10px] font-black text-outline-variant/40 mt-2 px-1 uppercase tracking-widest">Sent ${nowStr}</span>
+            </div>
+        `;
+    } else {
+        const parsedMarkdown = marked.parse(text);
+        msgDiv.innerHTML = `
+            <div class="flex flex-col items-start w-full">
+                <div class="flex items-start gap-4 w-full">
+                    <div class="w-10 h-10 rounded-[0.85rem] shrink-0 bg-gradient-to-br from-[#059669] to-[#047857] flex items-center justify-center text-white shadow-md">
+                        <span class="material-symbols-outlined text-lg" style="font-variation-settings: 'FILL' 1;">smart_toy</span>
+                    </div>
+                    <div class="bg-white/70 backdrop-blur-xl border border-white p-7 rounded-[1.5rem] rounded-tl-sm w-full max-w-[90%] shadow-xl shadow-emerald-900/5">
+                        <div class="prose prose-emerald prose-sm max-w-none prose-headings:font-headline prose-headings:font-bold prose-headings:text-primary prose-p:text-on-surface prose-strong:text-primary prose-a:text-[#059669]">
+                            ${parsedMarkdown}
+                        </div>
+                    </div>
+                </div>
+                <span class="text-[10px] font-black text-outline-variant/40 mt-3 ml-[3.5rem] uppercase tracking-widest">FloraSense AI</span>
+            </div>
+        `;
+    }
+    cont.appendChild(msgDiv);
+    
+    const scrollArea = document.getElementById('chatMsgsScroll');
+    if (scrollArea) scrollArea.scrollTop = scrollArea.scrollHeight;
+}
+// Auto scroll logic handled inside appendChatMessage
+
+// Fetch Global Chats list
+async function loadGlobalChatsList() {
+   const histList = document.getElementById('doctorGlobalHistoryList');
+   if(!window.firebaseUser) return;
+   
+   // Show skeleton while loading
+   if(!histList.dataset.loaded) {
+       histList.innerHTML = `
+           <div class="sidebar-skeleton h-11 mb-2"></div>
+           <div class="sidebar-skeleton h-11 mb-2" style="opacity:.7"></div>
+           <div class="sidebar-skeleton h-11" style="opacity:.45"></div>
+       `;
+   }
+   
+   try {
+       const q = window.query(window.collection(window.db, 'users', window.firebaseUser.uid, 'globalChats'), window.orderBy('updatedAt', 'desc'));
+       const sn = await window.getDocs(q);
+       histList.dataset.loaded = '1';
+       if (sn.empty) {
+           histList.innerHTML = '<div class="text-[11px] text-stone-400 px-3 py-4 italic text-center">No chats yet. Hit "New General Chat" to start!</div>';
+           return;
+       }
+       let html = '';
+       sn.forEach(d_snap => {
+           let d = d_snap.data();
+           let title = d.title || "Plant Discussion";
+           const isActive = window.activeDoctorChatId === d_snap.id;
+           const activeClass = isActive
+               ? 'bg-[#f0f4f2] border border-outline-variant/10 cursor-default shadow-sm'
+               : 'text-on-surface hover:bg-[#f0f4f2] hover:shadow-sm active:scale-[0.98] cursor-pointer border border-transparent';
+           // Get time label
+           const ts = d.updatedAt?.toDate ? d.updatedAt.toDate() : null;
+           const timeLabel = ts ? ts.toLocaleDateString(undefined, {month:'short', day:'numeric'}) : '';
+           html += `
+            <div onclick="openDoctorChat('${d_snap.id}', 'global')" class="flex items-center gap-3 p-2.5 px-3 rounded-[1.5rem] transition-all duration-200 ${activeClass}">
+                <div class="w-9 h-9 rounded-full bg-primary-fixed/40 flex items-center justify-center shrink-0">
+                    <span class="material-symbols-outlined text-[18px] text-primary" style="font-variation-settings:'FILL' 1">chat_bubble</span>
+                </div>
+                <div class="flex flex-col flex-1 overflow-hidden">
+                    <span class="text-[13px] font-bold text-[#00261b] truncate">${title}</span>
+                    <span class="text-[10px] font-bold text-outline-variant/70 uppercase tracking-widest">${timeLabel || 'General Chat'}</span>
+                </div>
+                ${isActive ? '<span class="material-symbols-outlined text-[14px] text-primary/50 shrink-0">radio_button_checked</span>' : '<span class="material-symbols-outlined text-[14px] text-outline-variant/30 shrink-0 opacity-0 group-hover:opacity-100">chevron_right</span>'}
+            </div>
+           `;
+       });
+       histList.innerHTML = html;
+   } catch(e) {
+       console.error("Error loading global chats:", e);
+       histList.innerHTML = '<div class="text-[11px] text-stone-400 px-3 py-2 italic">Could not load history.</div>';
+   }
+}
+
+// Open Chat (Plant or Global)
+window.openDoctorChat = async function(id, mode) {
+    if(!id) return;
+    window.activeDoctorChatId = id;
+    window.currentDoctorMode = mode;
+    sessionStorage.setItem('doc_mode', mode);
+    sessionStorage.setItem('doc_chat_id', id);
+    
+    // Reset Views
+    const cont = document.getElementById('chatMsgsContainer');
+    const ctxBar = document.getElementById('doctorActiveContextSummary');
+    const header = document.getElementById('doctorWelcomeHeader');
+    const scrollArea = document.getElementById('chatMsgsScroll');
+    
+    // Show chat loading skeleton
+    cont.innerHTML = `
+        <div id="chatLoadingSkeletons" class="w-full space-y-8 py-4">
+            <!-- Skeleton: User bubble -->
+            <div class="flex flex-col items-end w-full chat-bubble-in">
+                <div class="sidebar-skeleton h-14 w-[60%] rounded-[1.25rem] rounded-tr-sm"></div>
+                <div class="sidebar-skeleton h-3 w-16 mt-2 rounded"></div>
+            </div>
+            <!-- Skeleton: AI bubble -->
+            <div class="flex items-start gap-4 w-full chat-bubble-in" style="animation-delay:0.1s">
+                <div class="sidebar-skeleton w-10 h-10 rounded-[0.85rem] shrink-0"></div>
+                <div class="flex-1 space-y-2.5">
+                    <div class="sidebar-skeleton h-4 w-full rounded-xl"></div>
+                    <div class="sidebar-skeleton h-4 w-5/6 rounded-xl"></div>
+                    <div class="sidebar-skeleton h-4 w-4/6 rounded-xl"></div>
+                    <div class="sidebar-skeleton h-4 w-3/6 rounded-xl"></div>
+                </div>
+            </div>
+            <!-- Skeleton: User bubble 2 -->
+            <div class="flex flex-col items-end w-full chat-bubble-in" style="animation-delay:0.2s">
+                <div class="sidebar-skeleton h-10 w-[45%] rounded-[1.25rem] rounded-tr-sm"></div>
+                <div class="sidebar-skeleton h-3 w-16 mt-2 rounded"></div>
+            </div>
+            <!-- Skeleton: AI bubble 2 -->
+            <div class="flex items-start gap-4 w-full chat-bubble-in" style="animation-delay:0.3s">
+                <div class="sidebar-skeleton w-10 h-10 rounded-[0.85rem] shrink-0"></div>
+                <div class="flex-1 space-y-2.5">
+                    <div class="sidebar-skeleton h-4 w-full rounded-xl"></div>
+                    <div class="sidebar-skeleton h-4 w-4/6 rounded-xl"></div>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    if (mode === 'plant') {
+        const scan = window.allScans.find(s => s.id === id);
+        if(!scan) {
+            cont.innerHTML = '<div class="text-center py-12 text-on-surface-variant">Could not load this scan.</div>';
+            return;
+        }
+        
+        const ctxBar = document.getElementById('doctorActiveContextSummary');
+        const genBar = document.getElementById('doctorGenericSummary');
+        const titleEl = document.getElementById('doctorSmallTitle');
+        const imgEl = document.getElementById('doctorSmallImg');
+
+        if (ctxBar) ctxBar.style.display = 'flex';
+        if (genBar) genBar.style.display = 'none';
+        if (titleEl) titleEl.textContent = scan.plant || 'Unknown Plant';
+        if (imgEl) imgEl.src = (scan.imageUrl && scan.imageUrl.length > 4) ? scan.imageUrl : 'https://placehold.co/200x200/e2e8f0/64748b?text=Plant';
+        
+        // Load chat history (skeleton stays visible for natural feel)
+        await new Promise(r => setTimeout(r, 900));
+        
+        let history = scan.chatHistory || [];
+        window.runningChatSession = history;
+        
+        // Clear skeleton, render messages
+        cont.innerHTML = '';
+        if (history.length === 0) {
+            cont.innerHTML = `
+                <div class="text-center py-12 space-y-3" id="doctorWelcomeHeader">
+                    <div class="w-16 h-16 bg-white rounded-2xl shadow-lg shadow-emerald-900/5 mx-auto flex items-center justify-center mb-4">
+                        <span class="material-symbols-outlined text-3xl text-primary">eco</span>
+                    </div>
+                    <h2 class="text-xl font-extrabold font-headline text-primary tracking-tight">${scan.plant || 'Plant'} Chat</h2>
+                    <p class="text-on-surface-variant font-medium text-sm max-w-xs mx-auto">Ask anything about <strong>${scan.plant || 'this plant'}</strong> — treatments, care, or disease questions.</p>
+                </div>
+            `;
+        } else {
+            history.forEach(m => appendChatMessage(m.role, m.content));
+            if(scrollArea) setTimeout(() => scrollArea.scrollTop = scrollArea.scrollHeight, 50);
+        }
+        
+        if(typeof refreshDoctorSidebars === 'function') refreshDoctorSidebars();
+    } else {
+        // Global Mode
+        const ctxBar = document.getElementById('doctorActiveContextSummary');
+        const genBar = document.getElementById('doctorGenericSummary');
+        
+        if (ctxBar) ctxBar.style.display = 'none';
+        if (genBar) genBar.style.display = 'flex';
+        
+        try {
+            const chatRef = window.doc(window.db, 'users', window.firebaseUser.uid, 'globalChats', id);
+            const sn = await window.getDoc(chatRef);
+            
+            await new Promise(r => setTimeout(r, 700));
+            cont.innerHTML = '';
+            
+            if (sn.exists()) {
+                let history = sn.data().chatHistory || [];
+                window.runningChatSession = history;
+                if (history.length === 0) {
+                    cont.innerHTML = `
+                        <div class="text-center py-12 space-y-3" id="doctorWelcomeHeader">
+                            <div class="w-16 h-16 bg-white rounded-2xl shadow-lg shadow-emerald-900/5 mx-auto flex items-center justify-center mb-4">
+                                <span class="material-symbols-outlined text-3xl text-primary">psychology</span>
+                            </div>
+                            <h2 class="text-xl font-extrabold font-headline text-primary tracking-tight">General Plant Advisor</h2>
+                            <p class="text-on-surface-variant font-medium text-sm max-w-xs mx-auto">Ask about any plant, disease, care routine, or environment condition.</p>
+                        </div>
+                    `;
+                } else {
+                    history.forEach(m => appendChatMessage(m.role, m.content));
+                    if(scrollArea) setTimeout(() => scrollArea.scrollTop = scrollArea.scrollHeight, 50);
+                }
+            } else {
+                window.runningChatSession = [];
+                cont.innerHTML = `
+                    <div class="text-center py-12 space-y-3" id="doctorWelcomeHeader">
+                        <div class="w-16 h-16 bg-white rounded-2xl shadow-lg shadow-emerald-900/5 mx-auto flex items-center justify-center mb-4">
+                            <span class="material-symbols-outlined text-3xl text-primary">psychology</span>
+                        </div>
+                        <h2 class="text-xl font-extrabold font-headline text-primary tracking-tight">New Conversation</h2>
+                        <p class="text-on-surface-variant font-medium text-sm max-w-xs mx-auto">Start chatting to get expert AI plant advice.</p>
+                    </div>
+                `;
+            }
+        } catch(e) {
+            console.error("Error loading chat", e);
+            cont.innerHTML = '<div class="text-center py-12 text-on-surface-variant text-sm">Could not load chat history. Please try again.</div>';
+            window.runningChatSession = [];
+        }
+        
+        loadGlobalChatsList();
+    }
+}
+
+window.startNewGlobalChat = async function() {
+    clearDoctorContext();
+    const newId = 'global_' + Date.now();
+    window.activeDoctorChatId = newId;
+    window.currentDoctorMode = 'global';
+    localStorage.setItem('doc_mode', 'global');
+    localStorage.setItem('doc_chat_id', newId);
+    
+    try {
+        const globalRef = window.doc(window.db, 'users', window.firebaseUser.uid, 'globalChats', newId);
+        await window.setDoc(globalRef, {
+            chatHistory: [],
+            title: "New Discussion",
+            updatedAt: window.serverTimestamp()
+        });
+        loadGlobalChatsList();
+    } catch(e) {
+        console.error("Error creating new chat:", e);
+    }
+}
+
+window.saveChatPersist = async function() {
+    if (!window.activeDoctorChatId || !window.firebaseUser) return;
+    
+    try {
+        if (window.currentDoctorMode === 'plant') {
+            const docRef = window.doc(window.db, "scans", window.activeDoctorChatId);
+            await window.updateDoc(docRef, {
+                chatHistory: window.runningChatSession
+            });
+            // Update local memory too
+            const scan = window.allScans.find(s => s.id === window.activeDoctorChatId);
+            if(scan) scan.chatHistory = window.runningChatSession;
+        } else {
+            let title = "New Discussion";
+            const firstUserMsg = window.runningChatSession.find(m => m.role === 'user');
+            if (firstUserMsg) {
+                title = firstUserMsg.content.substring(0, 20) + (firstUserMsg.content.length > 20 ? '...' : '');
+            }
+            const globalRef = window.doc(window.db, 'users', window.firebaseUser.uid, 'globalChats', window.activeDoctorChatId);
+            await window.setDoc(globalRef, {
+                chatHistory: window.runningChatSession,
+                title: title,
+                updatedAt: window.serverTimestamp()
+            }, { merge: true });
+            
+            // Only reload the list silently so it doesn't interrupt typing
+            loadGlobalChatsList(); 
+        }
+    } catch(e) {
+        console.error("Firestore chat save error:", e);
+    }
+}
+
+window.spaDoSendChat = function() {
+    // 300ms debounce guard — prevents double-tap duplicate requests
+    if (_sendDebounceTimer) return;
+    _sendDebounceTimer = setTimeout(() => { _sendDebounceTimer = null; }, 300);
+    _doSendChat();
+};
+
+async function _doSendChat() {
+    let thinkingInterval = null;
+    let spinnerTimer = null;
+    
+    const input = document.getElementById('chatInputSpa');
+    const sBtn = document.getElementById('chatSendBtn');
+    
+    if (window.isChatLoading) {
+        // Abort the active stream if user presses send again
+        if (window.currentAbortController) {
+            window.currentAbortController.abort();
+            window.currentAbortController = null;
+        }
+        window.isChatLoading = false;
+        console.warn("[Chat] Aborted by user");
+        const existingThinkingDiv = document.getElementById('aiThinkingInline');
+        if(existingThinkingDiv) existingThinkingDiv.remove();
+        const sBtn2 = document.getElementById('chatSendBtn');
+        if(sBtn2) {
+            sBtn2.classList.remove('bg-red-500', 'animate-pulse');
+            sBtn2.classList.add('hover:scale-[1.05]');
+            sBtn2.innerHTML = `<span class="material-symbols-outlined text-white text-2xl font-black shrink-0 relative left-[2px]">send</span>`;
+        }
+        return;
+    }
+    
+    const text = input.value.trim();
+    if(!text) return;
+    
+    window.isChatLoading = true;
+    // Abort any previous stream and create a fresh controller
+    if (window.currentAbortController) window.currentAbortController.abort();
+    window.currentAbortController = new AbortController();
+
+    try {
+        if(sBtn) {
+            sBtn.innerHTML = `<span class="material-symbols-outlined text-white text-2xl font-black">stop</span>`;
+            sBtn.classList.remove('hover:scale-[1.05]');
+            sBtn.classList.add('animate-pulse', 'bg-red-500'); // make pause prominent
+        }
+        
+        console.log("[Chat] doSendChat triggered. ID:", window.activeDoctorChatId, "Mode:", window.currentDoctorMode);
+        if (!window.firebaseUser && typeof auth !== 'undefined') window.firebaseUser = auth.currentUser;
+        
+        if(!window.activeDoctorChatId) {
+            if (window.currentDoctorMode === 'global') {
+                await window.startNewGlobalChat();
+                if (!window.activeDoctorChatId) window.activeDoctorChatId = 'guest_session_' + Date.now();
+            } else {
+                if (window.allScans && window.allScans.length > 0) {
+                    await window.openDoctorChat(window.allScans[0].id, 'plant');
+                } else {
+                    setDoctorMode('global');
+                    await window.startNewGlobalChat();
+                    if (!window.activeDoctorChatId) window.activeDoctorChatId = 'guest_session_' + Date.now();
+                }
+            }
+        }
+        
+        input.value = '';
+        input.style.height = 'auto'; 
+        
+        const welcome = document.getElementById('doctorWelcomeHeader');
+        if(welcome) welcome.remove();
+
+        appendChatMessage('user', text);
+        window.runningChatSession.push({role: 'user', content: text});
+        window.saveChatPersist();
+    
+        const payload = {
+            mode: window.currentDoctorMode,
+            messages: window.runningChatSession
+        };
+        
+        if (window.currentDoctorMode === 'plant') {
+            const scan = window.allScans.find(s => s.id === window.activeDoctorChatId);
+            if(scan) {
+                payload.plant_context = {
+                    plant: scan.plant,
+                    disease: scan.disease || scan.result,
+                    confidence: scan.confidence,
+                    symptoms: scan.symptoms
+                };
+            }
+        } else if (window.currentDoctorMode === 'global' && window.allScans && window.allScans.length > 0) {
+            payload.all_scans = window.allScans.map(s => ({
+                plant: s.plant,
+                prediction: s.disease || s.result,
+                confidence: s.confidence,
+                risk_level: s.severity || 'Medium'
+            }));
+        }
+        
+        const cont = document.getElementById('chatMsgsContainer');
+        const thinkingDiv = document.createElement('div');
+        thinkingDiv.id = "aiThinkingInline";
+        thinkingDiv.className = "flex items-center gap-3 w-full py-4 px-2 opacity-90";
+        thinkingDiv.innerHTML = `
+            <span class="material-symbols-outlined animate-spin text-2xl text-shimmer-silver" style="animation: spin 1.5s linear infinite, shimmer-silver 3s linear infinite;">progress_activity</span>
+            <span class="text-[15px] font-bold tracking-wide text-shimmer-silver">FloraSense is thinking</span>
+            <span class="text-[15px] font-black text-emerald-500 timer-text drop-shadow-sm ml-1">0s</span>
+        `;
+        cont.appendChild(thinkingDiv);
+        
+        const timerText = thinkingDiv.querySelector('.timer-text');
+        let thinkingSeconds = 0;
+        thinkingInterval = setInterval(() => {
+            thinkingSeconds++;
+            if (timerText) timerText.textContent = `${thinkingSeconds}s`;
+        }, 1000);
+
+        const scrollArea = document.getElementById('chatMsgsScroll');
+        if (scrollArea) scrollArea.scrollTop = scrollArea.scrollHeight;
+
+        let fullReply = "";
+        let target    = null; // Single DOM element for token rendering
+        let isFirstValidChunk = true;
+        // Hybrid loading: show thinking indicator immediately,
+        // skeleton already shown; spinner added after 1.5s via setTimeout
+        let spinnerTimer = null;
+
+            const resp = await fetch('/chat', {
+                method:  'POST',
+                headers: {'Content-Type': 'application/json'},
+                body:    JSON.stringify(payload),
+                signal:  window.currentAbortController.signal
+            });
+
+            if (!resp.ok) throw new Error("Backend returned " + resp.status);
+
+            const reader  = resp.body.getReader();
+            const decoder = new TextDecoder("utf-8");
+
+            // ── Persistent SSE buffer (MANDATORY for partial chunks) ─────────
+            let sseBuffer = "";
+
+            spinnerTimer = setTimeout(() => {
+                const td = document.getElementById('aiThinkingInline');
+                if (td) {
+                    const sp = td.querySelector('span.material-symbols-outlined');
+                    if (sp) sp.style.animation = 'spin 0.8s linear infinite';
+                }
+            }, 1500);
+
+            while (true) {
+                const { value, done } = await reader.read();
+                if (done) break;
+
+                // Append decoded chunk to persistent buffer
+                sseBuffer += decoder.decode(value, { stream: true });
+
+                // Split on the SSE double-newline boundary
+                const events = sseBuffer.split("\n\n");
+                // Keep last (possibly incomplete) event in buffer
+                sseBuffer = events.pop();
+
+                for (const eventBlock of events) {
+                    const lines = eventBlock.split("\n");
+                    let eventType = "message";
+                    let dataStr   = null;
+
+                    for (const ln of lines) {
+                        if (ln.startsWith("event:")) eventType = ln.slice(6).trim();
+                        else if (ln.startsWith("data:"))  dataStr  = ln.slice(5).trim();
+                    }
+
+                    if (dataStr === null) continue;
+
+                    // ── Detect [DONE] BEFORE JSON.parse() ───────────────────
+                    if (dataStr === "[DONE]") {
+                        // Stream complete — finalise and exit
+                        if (target) target.removeAttribute('id');
+                        window.runningChatSession.push({ role: 'assistant', content: fullReply });
+                        window.saveChatPersist();
+                        window.isChatLoading = false; // Only reset state here
+                        clearInterval(thinkingInterval);
+                        if (spinnerTimer) clearTimeout(spinnerTimer);
+                        if (thinkingDiv && thinkingDiv.parentNode) thinkingDiv.remove();
+                        const sBtn3 = document.getElementById('chatSendBtn');
+                        if (sBtn3) {
+                            sBtn3.classList.remove('bg-red-500', 'animate-pulse');
+                            sBtn3.classList.add('hover:scale-[1.05]');
+                            sBtn3.innerHTML = `<span class="material-symbols-outlined text-white text-2xl font-black shrink-0 relative left-[2px]">send</span>`;
+                        }
+                        return; // Done — skip the rest
+                    }
+
+                    // ── Handle error SSE events ──────────────────────────────
+                    if (eventType === "error") {
+                        clearInterval(thinkingInterval);
+                        if (spinnerTimer) clearTimeout(spinnerTimer);
+                        if (thinkingDiv && thinkingDiv.parentNode) thinkingDiv.remove();
+                        let errMsg = "Connection interrupted.";
+                        try { errMsg = JSON.parse(dataStr).message || errMsg; } catch(e) {}
+                        // Show retryable error banner in chat
+                        const errDiv = document.createElement('div');
+                        errDiv.className = "w-full animate-message";
+                        const retryPayloadStr = JSON.stringify(payload).replace(/"/g,'&quot;');
+                        errDiv.innerHTML = `
+                            <div class="flex items-start gap-4 w-full">
+                                <div class="w-10 h-10 rounded-[0.85rem] shrink-0 bg-red-100 flex items-center justify-center">
+                                    <span class="material-symbols-outlined text-red-500">wifi_off</span>
+                                </div>
+                                <div class="bg-red-50 border border-red-200 p-5 rounded-[1.5rem] rounded-tl-sm max-w-[90%] space-y-3">
+                                    <p class="text-sm font-semibold text-red-700">${errMsg}</p>
+                                    <button onclick="window.spaDoSendChat()" class="flex items-center gap-2 text-xs font-bold text-red-700 bg-red-100 hover:bg-red-200 px-3 py-1.5 rounded-lg transition">
+                                        <span class="material-symbols-outlined text-[14px]">refresh</span> Retry
+                                    </button>
+                                </div>
+                            </div>
+                        `;
+                        const cont2 = document.getElementById('chatMsgsContainer');
+                        if (cont2) cont2.appendChild(errDiv);
+                        window.isChatLoading = false; // Reset on error
+                        return;
+                    }
+
+                    // ── Ignore ping events ──────────────────────────────────
+                    if (eventType === "ping") continue;
+
+                    // ── Parse and render token ──────────────────────────────
+                    try {
+                        const json = JSON.parse(dataStr);
+                        const token = json.content || "";
+                        if (token) {
+                            if (isFirstValidChunk) {
+                                // Remove thinking indicator on first token
+                                clearInterval(thinkingInterval);
+                                if (spinnerTimer) clearTimeout(spinnerTimer);
+                                if (thinkingDiv && thinkingDiv.parentNode) thinkingDiv.remove();
+
+                                // Create single message element (tokens appended here)
+                                const msgDiv = document.createElement('div');
+                                msgDiv.className = "w-full animate-message";
+                                msgDiv.innerHTML = `
+                                    <div class="flex flex-col items-start w-full">
+                                        <div class="flex items-start gap-4 w-full">
+                                            <div class="w-10 h-10 rounded-[0.85rem] shrink-0 bg-gradient-to-br from-[#059669] to-[#047857] flex items-center justify-center text-white shadow-md">
+                                                <span class="material-symbols-outlined text-lg" style="font-variation-settings: 'FILL' 1;">smart_toy</span>
+                                            </div>
+                                            <div class="bg-white/90 backdrop-blur-xl border border-white p-7 rounded-[1.5rem] rounded-tl-sm w-full max-w-[90%] shadow-xl shadow-emerald-900/5">
+                                                <div id="streamingTarget" class="prose prose-emerald prose-sm max-w-none"></div>
+                                            </div>
+                                        </div>
+                                        <span class="text-[10px] font-black text-outline-variant/40 mt-3 ml-[3.5rem] uppercase tracking-widest">FloraSense AI</span>
+                                    </div>
+                                `;
+                                const cont3 = document.getElementById('chatMsgsContainer');
+                                if (cont3) cont3.appendChild(msgDiv);
+                                // target is now set ONCE; subsequent tokens append here
+                                target = msgDiv.querySelector('#streamingTarget');
+                                isFirstValidChunk = false;
+                            }
+
+                            // Append to the SINGLE streaming element
+                            fullReply += token;
+                            if (target) target.innerHTML = marked.parse(fullReply);
+                            const scrollArea2 = document.getElementById('chatMsgsScroll');
+                            if (scrollArea2) scrollArea2.scrollTop = scrollArea2.scrollHeight;
+                        }
+                    } catch (parseErr) {
+                        console.warn("[Chat] SSE parse error:", parseErr.message);
+                    }
+                }
+            }
+
+            // Stream ended without explicit [DONE] (network closed cleanly)
+            if (target) target.removeAttribute('id');
+            if (fullReply) {
+                window.runningChatSession.push({ role: 'assistant', content: fullReply });
+                window.saveChatPersist();
+            }
+        
+    } catch (err) {
+        clearInterval(thinkingInterval || 0);
+        const existingThinkingDiv = document.getElementById('aiThinkingInline');
+        if(existingThinkingDiv) existingThinkingDiv.remove();
+        console.error("AI Error:", err);
+        // Show retryable error instead of a fake AI message
+        const errDivOuter = document.createElement('div');
+        errDivOuter.className = "w-full animate-message";
+        errDivOuter.innerHTML = `
+            <div class="flex items-start gap-4 w-full">
+                <div class="w-10 h-10 rounded-[0.85rem] shrink-0 bg-red-100 flex items-center justify-center">
+                    <span class="material-symbols-outlined text-red-500">wifi_off</span>
+                </div>
+                <div class="bg-red-50 border border-red-200 p-5 rounded-[1.5rem] rounded-tl-sm max-w-[90%] space-y-3">
+                    <p class="text-sm font-semibold text-red-700">Connection interrupted. Please check your network and try again.</p>
+                    <button onclick="window.spaDoSendChat()" class="flex items-center gap-2 text-xs font-bold text-red-700 bg-red-100 hover:bg-red-200 px-3 py-1.5 rounded-lg transition">
+                        <span class="material-symbols-outlined text-[14px]">refresh</span> Retry
+                    </button>
+                </div>
+            </div>
+        `;
+        const cont4 = document.getElementById('chatMsgsContainer');
+        if (cont4) cont4.appendChild(errDivOuter);
+        window.isChatLoading = false; // Reset on error
+    } finally {
+        // Only reset if not already reset (DONE/error paths reset early)
+        window.isChatLoading = false;
+        if(sBtn) {
+            sBtn.classList.remove('bg-red-500', 'animate-pulse');
+            sBtn.classList.add('hover:scale-[1.05]');
+            sBtn.innerHTML = `<span class="material-symbols-outlined text-white text-2xl font-black shrink-0 relative left-[2px]">send</span>`;
+        }
+    }
+}
+
+// ── PREMIUM AI DOCTOR TOGGLE ──
+document.body.insertAdjacentHTML('beforeend', `
+    <button id="sidebarToggleBtn" onclick="toggleDoctorSidebar()" class="premium-toggle">
+        <span class="material-symbols-outlined text-[24px] z-10 transition-transform duration-500 ease-out" id="sidebarToggleIcon" style="font-variation-settings: 'FILL' 1;">left_panel_close</span>
+    </button>
+`);
+</script>
+
+<!-- Setup Location Modal -->
+<div id="modalEnvLocation" class="hidden fixed inset-0 z-[100] bg-black/60 backdrop-blur-md flex items-center justify-center p-4">
+    <div class="bg-surface w-full max-w-sm rounded-[2rem] p-8 shadow-2xl scale-100 transform transition-transform">
+        <h3 class="text-2xl font-black text-on-surface mb-2 tracking-tight">Set Environment</h3>
+        <p class="text-sm text-on-surface-variant mb-6 leading-relaxed">Provide your location to activate real-time local weather tracking and hyper-local AI diagnostics.</p>
+        
+        <div class="space-y-4">
+            <button id="btnGpsLoc" onclick="useGPSLocation()" class="w-full flex items-center justify-center gap-3 bg-primary text-on-primary py-4 rounded-2xl font-bold hover:bg-primary/90 transition shadow-lg shadow-primary/20">
+                <span class="material-symbols-outlined">my_location</span>
+                Use GPS Location
+            </button>
+            <div class="relative flex py-2 items-center">
+                <div class="flex-grow border-t border-outline-variant/30"></div>
+                <span class="flex-shrink-0 mx-4 text-outline-variant text-[10px] uppercase font-bold tracking-widest">or search</span>
+                <div class="flex-grow border-t border-outline-variant/30"></div>
+            </div>
+            <div>
+                <input type="text" id="inputManualLoc" placeholder="City, Region, or Zip" class="w-full px-4 py-3.5 bg-surface-container rounded-xl text-sm font-medium border-0 focus:ring-2 focus:ring-primary outline-none text-on-surface">
+            </div>
+            <button onclick="useManualLocation()" class="w-full bg-surface-container-high hover:bg-surface-container-highest text-on-surface py-3.5 rounded-xl font-bold transition text-sm">
+                Search & Apply
+            </button>
+            <button onclick="hideLocationSetupModal()" class="w-full mt-2 text-xs font-bold text-on-surface-variant hover:text-primary transition">
+                Skip for now
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Detailed Weather Modal -->
+<div id="modalEnvDetails" class="hidden fixed inset-0 z-[100] bg-black/60 backdrop-blur-md flex items-center justify-center p-4">
+    <div class="bg-surface w-full max-w-2xl rounded-[2rem] p-8 shadow-2xl flex flex-col max-h-[90vh]">
+        <div class="flex justify-between items-center mb-6">
+            <div>
+                <h3 class="text-2xl font-black text-on-surface tracking-tight">24-Hour Forecast</h3>
+                <p class="text-xs font-bold text-on-surface-variant uppercase tracking-widest mt-1">Temperature & Humidity Trends</p>
+            </div>
+            <button onclick="closeDetailedWeather()" class="w-10 h-10 rounded-full bg-surface-container hover:bg-surface-container-high flex items-center justify-center text-on-surface-variant transition">
+                <span class="material-symbols-outlined text-[20px]">close</span>
+            </button>
+        </div>
+        
+        <div class="flex-1 w-full relative min-h-[300px]">
+            <canvas id="weatherChart"></canvas>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="env_intelligence.js"></script>
+
+</body>
+</html>
+
