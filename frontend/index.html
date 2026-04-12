@@ -181,6 +181,11 @@
         .from-gradient-2-start { --tw-gradient-from: #10b981; --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(16, 185, 129, 0)); }
         .to-gradient-2-end { --tw-gradient-to: #14b8a6; }
 
+        /* Ensure smooth scrolling across the entire document */
+        html {
+            scroll-behavior: smooth;
+            overscroll-behavior: none;
+        }
     </style>
 </head>
 <body class="bg-stone-50 text-stone-900">
@@ -591,19 +596,22 @@
             if (user) {
                 // Update Nav Button
                 if (navAuthBtn) {
-                    navAuthBtn.href = "dashboard.html";
+                    navAuthBtn.href = "dashboard.html#overview";
+                    navAuthBtn.onclick = () => sessionStorage.clear();
                     navAuthBtn.innerHTML = 'Dashboard <i data-lucide="arrow-right" class="w-4 h-4 ml-1"></i>';
                 }
 
                 // Update Hero Button
                 if (heroAuthBtn) {
-                    heroAuthBtn.href = "dashboard.html";
+                    heroAuthBtn.href = "dashboard.html#overview";
+                    heroAuthBtn.onclick = () => sessionStorage.clear();
                     heroAuthBtn.innerHTML = '<i data-lucide="layout-dashboard" class="w-5 h-5"></i> Go to Dashboard →';
                 }
                 
                 // Update CTA Buttons
                 if (ctaPrimaryBtn) {
-                    ctaPrimaryBtn.href = "dashboard.html";
+                    ctaPrimaryBtn.href = "dashboard.html#overview";
+                    ctaPrimaryBtn.onclick = () => sessionStorage.clear();
                     ctaPrimaryBtn.innerHTML = '<span class="relative z-10 flex items-center gap-2">Enter Dashboard <i data-lucide="layout-dashboard" class="w-5 h-5 group-hover/btn:scale-110 transition-transform duration-300"></i></span>';
                 }
                 if (ctaSecondaryBtn) {

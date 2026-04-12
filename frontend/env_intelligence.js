@@ -263,6 +263,12 @@ function openDetailedWeather() {
         },
         options: {
             responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: true
+                }
+            },
             interaction: { mode: 'index', intersect: false },
             scales: {
                 y: { type: 'linear', display: true, position: 'left' },

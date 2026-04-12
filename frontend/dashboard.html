@@ -303,6 +303,29 @@
   margin-left: 0;
 }
 
+/* Mobile Sidebar Fixes */
+@media (max-width: 1024px) {
+  .sidebar-doctor {
+    width: 80%;
+    z-index: 200;
+    transform: translateX(-100%); /* Default hidden */
+    height: 100dvh;
+    top: 0;
+    box-shadow: 10px 0 30px rgba(0,38,27,0.15);
+  }
+  .main-doctor {
+    margin-left: 0 !important; /* Do not shift content on mobile */
+  }
+  /* Active state (not collapsed) */
+  #sec-doctor:not(.sidebar-collapsed) .sidebar-doctor {
+    transform: translateX(0);
+  }
+  /* Collapsed state */
+  #sec-doctor.sidebar-collapsed .sidebar-doctor {
+    transform: translateX(-100%);
+  }
+}
+
 /* Premium Global Toggle for AI Doctor */
 .premium-toggle {
     position: fixed;
@@ -822,8 +845,15 @@ System healthy. Keep monitoring correctly.
 
 <!-- ── SECTION: REPORT (Full Page Analysis) ── -->
 <section id="sec-report" class="spa-section" style="display:none;">
-    <main class="flex-grow max-w-screen-2xl mx-auto w-full px-8 py-10" id="report-injection-point">
-        <!-- Rendered by populateReportPage -->
+    <main class="flex-grow max-w-screen-2xl mx-auto w-full px-8 py-10">
+        <div class="mb-4">
+            <button onclick="window.goBack()" class="flex items-center gap-2 text-sm font-bold text-primary hover:text-emerald-600 transition-colors mb-2">
+                <span class="material-symbols-outlined text-[18px]">arrow_back</span> Back to Dashboard
+            </button>
+        </div>
+        <div id="report-injection-point">
+            <!-- Rendered by populateReportPage -->
+        </div>
     </main>
 </section>
 <!-- /sec-report -->
@@ -831,9 +861,14 @@ System healthy. Keep monitoring correctly.
 <!-- ── SECTION: HISTORY ── -->
 <section id="sec-history" class="spa-section bg-[#f8faf9] flex flex-col" style="padding-top:0;">
     <div class="flex-1 min-h-0 max-w-[1600px] w-full mx-auto px-8 py-10 flex flex-col">
-        <div class="mb-10">
-            <h1 class="text-[32px] font-extrabold tracking-tight text-primary mb-2">Historical Records</h1>
-            <p class="text-on-surface-variant text-[15px]">Full archive of your AI-powered plant diagnostics and interventions.</p>
+        <div class="mb-10 flex items-center justify-between">
+            <div>
+                <button onclick="window.goBack()" class="flex items-center gap-2 text-sm font-bold text-primary hover:text-emerald-600 transition-colors mb-2">
+                    <span class="material-symbols-outlined text-[18px]">arrow_back</span> Back to Dashboard
+                </button>
+                <h1 class="text-[32px] font-extrabold tracking-tight text-primary mb-2">Historical Records</h1>
+                <p class="text-on-surface-variant text-[15px]">Full archive of your AI-powered plant diagnostics and interventions.</p>
+            </div>
         </div>
         <div id="fullHistoryContainer" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 content-start pb-20">
             <!-- Populated via JS -->
@@ -1013,6 +1048,12 @@ System healthy. Keep monitoring correctly.
 const UI = id => document.getElementById(id);
 window.UI = UI;
 window.allScans = [];
+
+window.goBack = () => {
+    if (typeof window.showSection === 'function') window.showSection('dashboard');
+    sessionStorage.setItem('spa_saved_section', 'dashboard');
+    window.location.hash = '#overview';
+};
 
 window.showSection = sectionId => {
   // If entering the AI Doctor section, immediately mask the raw static HTML
@@ -1739,22 +1780,28 @@ onAuthStateChanged(auth, async user => {
   if(typeof initEnvironmentIntelligence === 'function') initEnvironmentIntelligence(user.uid);
   
   // Restore SPA Section on REFRESH only (sessionStorage survives refresh, not logout/login)
-  const savedSection = sessionStorage.getItem('spa_saved_section');
-  if (savedSection === 'doctor') {
-      if (typeof window.showSection === 'function') window.showSection('doctor');
-      setTimeout(() => {
-          const sMode = sessionStorage.getItem('doc_mode');
-          const sChat = sessionStorage.getItem('doc_chat_id');
-          if (sMode && typeof setDoctorMode === 'function') {
-              setDoctorMode(sMode);
-              if (sChat && typeof window.openDoctorChat === 'function') setTimeout(() => window.openDoctorChat(sChat, sMode), 300);
-          }
-      }, 100);
-  } else if (savedSection && typeof window.showSection === 'function') {
-      window.showSection(savedSection);
-  } else {
-      // Fresh login — always land on dashboard
+  const hash = window.location.hash;
+  if (hash === '#overview') {
+      sessionStorage.removeItem('spa_saved_section');
       if (typeof window.showSection === 'function') window.showSection('dashboard');
+  } else {
+      const savedSection = sessionStorage.getItem('spa_saved_section');
+      if (savedSection === 'doctor') {
+          if (typeof window.showSection === 'function') window.showSection('doctor');
+          setTimeout(() => {
+              const sMode = sessionStorage.getItem('doc_mode');
+              const sChat = sessionStorage.getItem('doc_chat_id');
+              if (sMode && typeof setDoctorMode === 'function') {
+                  setDoctorMode(sMode);
+                  if (sChat && typeof window.openDoctorChat === 'function') setTimeout(() => window.openDoctorChat(sChat, sMode), 300);
+              }
+          }, 100);
+      } else if (savedSection && typeof window.showSection === 'function') {
+          window.showSection(savedSection);
+      } else {
+          // Fresh login — always land on dashboard
+          if (typeof window.showSection === 'function') window.showSection('dashboard');
+      }
   }
 });
 UI('logoutBtn').addEventListener('click', async () => {
@@ -2977,7 +3024,7 @@ document.body.insertAdjacentHTML('beforeend', `
             </button>
         </div>
         
-        <div class="flex-1 w-full relative min-h-[300px]">
+        <div class="flex-1 w-full min-h-0 relative">
             <canvas id="weatherChart"></canvas>
         </div>
     </div>

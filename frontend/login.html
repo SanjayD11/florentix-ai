@@ -77,6 +77,10 @@
           }
     </script>
     <style>
+        html, body {
+            overscroll-behavior: none;
+            scroll-behavior: smooth;
+        }
         body {
             font-family: 'Inter', sans-serif;
             background-color: #f9f9f8;
@@ -115,7 +119,7 @@
         .orb-anim-rev { animation: float-slow 24s ease-in-out infinite reverse; }
     </style>
 </head>
-<body class="mesh-gradient h-screen flex flex-col font-body selection:bg-primary-fixed-dim selection:text-primary overflow-hidden">
+<body class="mesh-gradient min-h-[100dvh] flex flex-col font-body selection:bg-primary-fixed-dim selection:text-primary overflow-x-hidden overflow-y-auto">
     <div class="grain-texture"></div>
     
     <header class="w-full px-4 sm:px-8 h-auto sm:h-20 py-4 flex flex-col sm:flex-row justify-between items-center relative z-10 shrink-0 gap-2 sm:gap-0">
