@@ -35,7 +35,10 @@
         /* Hero — raw background image, no heavy filters */
         .hero-section {
             position: relative; overflow: hidden;
-            background: url('hero_bg.jpg') center/cover no-repeat fixed;
+            background: url('hero_bg.jpg') center/cover no-repeat;
+        }
+        @media (min-width: 1024px) {
+            .hero-section { background-attachment: fixed; }
         }
         .hero-overlay {
             position: absolute; inset: 0;
@@ -214,7 +217,7 @@
                 AI-powered plant diagnostics
             </div>
 
-            <h1 class="hero-enter hero-enter-d2 tracking-tight flex select-none flex-col text-center text-5xl md:text-[3.75rem] lg:text-7xl font-extrabold leading-[1.1] text-white mx-auto drop-shadow-2xl">
+            <h1 class="hero-enter hero-enter-d2 tracking-tight flex select-none flex-col text-center text-4xl sm:text-5xl md:text-[3.75rem] lg:text-7xl font-extrabold leading-[1.1] text-white mx-auto drop-shadow-2xl">
                 <span data-content="See what's wrong." class="before:animate-gradient-background-1 relative block w-full pb-1 md:pb-2">
                     <span class="from-gradient-1-start to-gradient-1-end animate-gradient-foreground-1 bg-gradient-to-r bg-clip-text text-transparent absolute inset-0 text-center">See what's wrong.</span>
                     <span class="opacity-0">See what's wrong.</span>

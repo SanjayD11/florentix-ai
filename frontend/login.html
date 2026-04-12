@@ -86,7 +86,9 @@
                         radial-gradient(at 100% 0%, #f0fdf4 0%, transparent 50%),
                         radial-gradient(at 100% 100%, #ffffff 0%, transparent 50%),
                         radial-gradient(at 0% 100%, #f9f9f8 0%, transparent 50%);
-            background-attachment: fixed;
+        }
+        @media (min-width: 1024px) {
+            .mesh-gradient { background-attachment: fixed; }
         }
         .grain-texture {
             position: fixed;
@@ -116,11 +118,11 @@
 <body class="mesh-gradient h-screen flex flex-col font-body selection:bg-primary-fixed-dim selection:text-primary overflow-hidden">
     <div class="grain-texture"></div>
     
-    <header class="w-full px-8 h-20 flex justify-between items-center relative z-10 shrink-0">
-        <a href="index.html" class="text-2xl font-black tracking-tighter text-primary hover:opacity-80 transition-opacity">
+    <header class="w-full px-4 sm:px-8 h-auto sm:h-20 py-4 flex flex-col sm:flex-row justify-between items-center relative z-10 shrink-0 gap-2 sm:gap-0">
+        <a href="index.html" class="text-xl sm:text-2xl font-black tracking-tighter text-primary hover:opacity-80 transition-opacity">
             Florentix AI
         </a>
-        <div class="text-sm font-medium text-on-surface-variant">
+        <div class="text-xs sm:text-sm font-medium text-on-surface-variant text-center sm:text-right">
             Don't have an account? <a class="text-primary font-bold hover:underline" href="signup.html">Sign up</a>
         </div>
     </header>
@@ -165,7 +167,7 @@
             </div>
             
             <div class="flex flex-col items-center lg:items-end w-full flex-1">
-                <div class="glass-card bg-white/85 backdrop-blur-xl w-full max-w-[420px] p-8 lg:p-9 rounded-[28px] border border-white shadow-[0_32px_64px_-16px_rgba(4,120,87,0.12)] relative overflow-hidden shrink-0 group transition-all duration-500 hover:shadow-[0_40px_80px_-16px_rgba(4,120,87,0.2)]">
+                <div class="glass-card bg-white/85 backdrop-blur-xl w-full max-w-[420px] p-6 lg:p-9 rounded-[28px] border border-white shadow-[0_32px_64px_-16px_rgba(4,120,87,0.12)] relative overflow-hidden shrink-0 group transition-all duration-500 hover:shadow-[0_40px_80px_-16px_rgba(4,120,87,0.2)]">
                     <div class="absolute top-0 right-0 w-48 h-48 bg-gradient-to-bl from-teal-400/20 to-emerald-500/5 rounded-bl-full -mr-20 -mt-20 blur-2xl transition-transform duration-700 group-hover:scale-125"></div>
                     <div class="relative z-10">
                         <div class="mb-6">

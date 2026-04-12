@@ -460,7 +460,7 @@ System healthy. Keep monitoring correctly.
 <span class="material-symbols-outlined text-[10px]" data-icon="chevron_right">chevron_right</span>
 <span class="text-primary">Live Monitoring</span>
 </nav>
-<h1 class="text-4xl md:text-5xl font-extrabold tracking-tight text-primary-container leading-[1.1]" id="userGreeting">
+<h1 class="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-primary-container leading-[1.1]" id="userGreeting">
                     Wellness Intelligence <span class="text-secondary">&amp;</span> Guided Action.
                 </h1>
 <p class="text-on-surface-variant max-w-xl font-medium leading-relaxed">Predictive insights powered by Florentix AI core. Your central hub for proactive plant monitoring.</p>
@@ -521,7 +521,7 @@ System healthy. Keep monitoring correctly.
 </div>
 <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
 <div class="lg:col-span-7 space-y-8 stagger-load stagger-5">
-<section class="glass-card rounded-3xl p-8 premium-shadow relative" style="min-height:400px;">
+<section class="glass-card rounded-3xl p-5 sm:p-8 premium-shadow relative" style="min-height:400px;">
 <div class="flex items-center justify-between mb-10">
 <h2 class="text-2xl font-bold text-primary">Health Timeline</h2>
 <div class="flex items-center gap-4">
@@ -1851,21 +1851,21 @@ function renderRecent() {
     const dateStr = s.timestamp?.toDate ? s.timestamp.toDate().toLocaleDateString() : 'Recent';
 
     return `
-    <div class="relative z-10 flex gap-6 group">
+    <div class="relative z-10 flex gap-4 sm:gap-6 group">
       <div class="flex-shrink-0 w-10 h-10 rounded-full bg-white flex items-center justify-center border-4 ${borderCls} shadow-sm group-hover:scale-110 transition-transform">
       <span class="material-symbols-outlined text-${colorClass} text-xl font-black" data-icon="${icon}">${icon}</span>
       </div>
       <div class="flex-grow space-y-4">
-        <div class="flex items-start justify-between">
-          <div>
-            <div class="flex items-center gap-2 mb-1">
-              <h3 class="font-bold text-lg text-primary">${s.plant || 'Unknown Plant'}</h3>
-              <span class="px-2 py-0.5 rounded-md ${bgClass} text-[10px] font-black uppercase tracking-tight">${label}</span>
+        <div class="flex flex-col sm:flex-row items-start justify-between gap-3 sm:gap-0">
+          <div class="pr-2">
+            <div class="flex flex-wrap items-center gap-2 mb-1">
+              <h3 class="font-bold text-base sm:text-lg text-primary">${s.plant || 'Unknown Plant'}</h3>
+              <span class="px-2 py-0.5 rounded-md ${bgClass} text-[10px] font-black uppercase tracking-tight whitespace-nowrap">${label}</span>
             </div>
-            <p class="text-sm font-medium text-on-surface-variant">Diagnosis: <span class="text-${colorClass}">${diagnosis}</span></p>
+            <p class="text-[13px] sm:text-sm font-medium text-on-surface-variant">Diagnosis: <span class="text-${colorClass}">${diagnosis}</span></p>
             <p class="text-xs text-on-surface-variant/60 mt-1">${dateStr} • ${conf}% Match</p>
           </div>
-          <div class="relative w-16 h-16 rounded-2xl overflow-hidden shadow-md cursor-pointer" onclick="openLightbox('${imgUrl}', '${s.plant} - ${diagnosis}')">
+          <div class="relative w-14 h-14 sm:w-16 sm:h-16 shrink-0 rounded-2xl overflow-hidden shadow-md cursor-pointer self-start sm:self-auto" onclick="openLightbox('${imgUrl}', '${s.plant} - ${diagnosis}')">
             <img class="w-full h-full object-cover" src="${imgUrl}"/>
           </div>
         </div>
