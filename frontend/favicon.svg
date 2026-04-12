@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+    <!-- Definitions for premium gradients -->
+    <defs>
+        <linearGradient id="leafGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#34d399"/>
+            <stop offset="50%" stop-color="#10b981"/>
+            <stop offset="100%" stop-color="#059669"/>
+        </linearGradient>
+        <linearGradient id="glassGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#0f766e"/>
+            <stop offset="100%" stop-color="#022c22"/>
+        </linearGradient>
+        <linearGradient id="glassInside" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#a7f3d0" stop-opacity="0.1"/>
+            <stop offset="100%" stop-color="#059669" stop-opacity="0.0"/>
+        </linearGradient>
+        
+        <!-- Subtle shadow for the leaf overlap -->
+        <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+            <feDropShadow dx="8" dy="12" stdDeviation="10" flood-color="#022c22" flood-opacity="0.25"/>
+        </filter>
+    </defs>
+
+    <!-- Transparent Background (No rect) -->
+
+    <!-- Magnifying Glass Handle -->
+    <line x1="360" y1="360" x2="470" y2="470" stroke="url(#glassGradient)" stroke-width="56" stroke-linecap="round"/>
+    
+    <!-- Magnifying Glass Ring -->
+    <circle cx="280" cy="280" r="130" fill="url(#glassInside)" stroke="url(#glassGradient)" stroke-width="44" />
+
+    <!-- Abstract Geometric Leaf (Overlapping the glass) -->
+    <path d="M 60 40 
+             C 240 40 360 140 360 300 
+             C 160 300 60 200 60 40 Z" 
+          fill="url(#leafGradient)" 
+          filter="url(#shadow)" />
+          
+    <!-- Leaf Center Vein -->
+    <path d="M 80 65 Q 210 180 320 270" 
+          fill="none" 
+          stroke="#ffffff" 
+          stroke-width="12" 
+          stroke-linecap="round" 
+          opacity="0.35"/>
+          
+    <!-- Subtle Tech/DNA dot inside the glass representing "AI Data" -->
+    <circle cx="280" cy="340" r="16" fill="#34d399" opacity="0.8" />
+    <circle cx="340" cy="280" r="10" fill="#34d399" opacity="0.5" />
+    <line x1="280" y1="340" x2="340" y2="280" stroke="#34d399" stroke-width="4" opacity="0.4" stroke-dasharray="8 6"/>
+</svg>
