@@ -4,7 +4,7 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Florentix AI | Proactive Plant Wellness</title>
-<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon.png" type="image/svg+xml">
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@200;300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=block" rel="stylesheet">
@@ -1777,12 +1777,13 @@ onAuthStateChanged(auth, async user => {
   UI('userGreeting').innerHTML = `Hello, <span style="color:#6ee7b7">${name}</span>`;
   UI('userAvatar').textContent = name.substring(0,2).toUpperCase();
   UI('userNameChip').textContent = name;
-  await loadScans(user.uid);
-  if(typeof initEnvironmentIntelligence === 'function') initEnvironmentIntelligence(user.uid);
   
-  // Restore SPA Section on REFRESH only (sessionStorage survives refresh, not logout/login)
-  const hash = window.location.hash;
-  if (hash === '#overview') {
+  const finishInit = async () => {
+      try { await loadScans(user.uid); } catch(e){}
+      if(typeof initEnvironmentIntelligence === 'function') initEnvironmentIntelligence(user.uid);
+      
+      const hash = window.location.hash;
+      if (hash === '#overview') {
       sessionStorage.removeItem('spa_saved_section');
       if (typeof window.showSection === 'function') window.showSection('dashboard');
   } else {
@@ -2977,7 +2978,7 @@ async function _doSendChat() {
 
 // ── PREMIUM AI DOCTOR TOGGLE ──
 document.body.insertAdjacentHTML('beforeend', `
-    <button id="sidebarToggleBtn" onclick="toggleDoctorSidebar()" class="premium-toggle">
+    <button id="sidebarToggleBtn" onclick="toggleDoctorSidebar()" class="premium-toggle fixed z-50 left-0 top-[200px]" style="right: auto; left: 10px; top: 10px; position: fixed;">
         <span class="material-symbols-outlined text-[24px] z-10 transition-transform duration-500 ease-out" id="sidebarToggleIcon" style="font-variation-settings: 'FILL' 1;">left_panel_close</span>
     </button>
 `);
