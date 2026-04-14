@@ -509,7 +509,12 @@
 }
 @media (max-width: 640px) {
   .doctor-nav { padding: 0 20px; }
-  .doctor-messages-area, .doctor-input-container { padding-left: 20px; padding-right: 20px; }
+  .doctor-messages-area { padding-left: 20px; padding-right: 20px; }
+  .doctor-input-container { 
+      padding-left: 20px; padding-right: 20px; 
+      padding-bottom: 20px; /* remove 80px padding */
+      bottom: 80px; /* offset above bottom nav */
+  }
 }
 /* Hidden elements */
 .hidden{display:none;}
@@ -2436,7 +2441,7 @@ function setDoctorMode(mode) {
 // Ensure the mode sets correctly on boot if active
 document.addEventListener('DOMContentLoaded', () => {
    const saved = localStorage.getItem("doctorSidebarCollapsed");
-   if (saved === "true") window.toggleDoctorSidebar(true);
+   if (saved === "true" || window.innerWidth < 1024) window.toggleDoctorSidebar(true);
 });
 
 // Refresh Sidebar Lists (Plant Scans)
