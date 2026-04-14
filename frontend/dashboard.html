@@ -782,9 +782,9 @@ System healthy. Keep monitoring correctly.
                             <div class="h-3 bg-white/20 rounded w-full"></div>
                             <div class="h-3 bg-white/20 rounded w-5/6"></div>
                         </div>
-                        <p class="text-sm font-medium leading-relaxed hidden" id="envInsightText">
+                        <div class="text-[12px] text-white/80 font-medium leading-[1.6] hidden space-y-1 mt-1" id="envInsightText">
                             --
-                        </p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -940,7 +940,7 @@ System healthy. Keep monitoring correctly.
             </div>
 
             <!-- AI Status Dark -->
-            <div class="bg-[#0b2218] p-6 rounded-[2rem] relative overflow-hidden group shadow-xl shrink-0">
+            <div class="bg-[#0b2218] p-6 rounded-[2rem] relative overflow-hidden group shadow-xl flex flex-col justify-center flex-grow">
               <div class="absolute top-0 right-0 w-32 h-32 bg-emerald-500/10 rounded-full blur-3xl -mr-16 -mt-16 group-hover:bg-emerald-500/20 transition-all duration-700"></div>
               <div class="relative flex flex-col gap-3">
                 <div class="flex items-center gap-2 mb-1">
@@ -1125,7 +1125,7 @@ System healthy. Keep monitoring correctly.
 <!-- ── HISTORY DRAWER REMOVED ── -->
 
 <!-- ── REPORT MODAL ── -->
-<div id="reportWrap" class="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 opacity-0 pointer-events-none transition-all duration-300 bg-primary/60 backdrop-blur-md" onclick="if(event.target===this)closeReport()">
+<div id="reportWrap" class="fixed inset-0 z-[300] flex items-center justify-center p-4 sm:p-6 opacity-0 pointer-events-none transition-all duration-300 bg-primary/60 backdrop-blur-md" onclick="if(event.target===this)closeReport()">
   <div id="reportModalCard" class="bg-surface w-full max-w-3xl max-h-[90vh] rounded-[2rem] shadow-[0_25px_50px_-12px_rgba(0,38,27,0.5)] flex flex-col overflow-hidden translate-y-12 transition-all duration-500 transform opacity-0 ring-1 ring-white/10" onclick="event.stopPropagation()">
     <!-- Header -->
     <div class="bg-primary px-8 py-6 flex justify-between items-center shrink-0 relative overflow-hidden">
@@ -2668,12 +2668,17 @@ window.openDoctorChat = async function(id, mode) {
         cont.innerHTML = '';
         if (history.length === 0) {
             cont.innerHTML = `
-                <div class="text-center py-12 space-y-3" id="doctorWelcomeHeader">
-                    <div class="w-16 h-16 bg-white rounded-2xl shadow-lg shadow-emerald-900/5 mx-auto flex items-center justify-center mb-4">
-                        <span class="material-symbols-outlined text-3xl text-primary">eco</span>
+                <div class="text-center py-20 px-6 max-w-sm mx-auto space-y-4 animate-fade-in" id="doctorWelcomeHeader">
+                    <div class="relative w-24 h-24 mx-auto mb-6">
+                        <div class="absolute inset-0 bg-primary/10 rounded-full blur-xl"></div>
+                        <div class="relative w-full h-full bg-white rounded-[2rem] shadow-xl shadow-emerald-900/5 border border-emerald-50 flex items-center justify-center group">
+                            <span class="material-symbols-outlined text-[40px] text-primary transition-transform duration-500 group-hover:scale-110" style="font-variation-settings: 'FILL' 1">eco</span>
+                        </div>
                     </div>
-                    <h2 class="text-xl font-extrabold font-headline text-primary tracking-tight">${scan.plant || 'Plant'} Chat</h2>
-                    <p class="text-on-surface-variant font-medium text-sm max-w-xs mx-auto">Ask anything about <strong>${scan.plant || 'this plant'}</strong> — treatments, care, or disease questions.</p>
+                    <div class="space-y-2">
+                        <h2 class="text-[26px] font-black font-headline text-primary tracking-tight">${scan.plant || 'Plant'} Chat</h2>
+                        <p class="text-on-surface-variant font-medium text-[15px] leading-relaxed">Ask anything about <strong class="text-primary">${scan.plant || 'this plant'}</strong> — treatments, care, or disease questions.</p>
+                    </div>
                 </div>
             `;
         } else {
@@ -3114,7 +3119,7 @@ document.body.insertAdjacentHTML('beforeend', `
 </script>
 
 <!-- Setup Location Modal -->
-<div id="modalEnvLocation" class="hidden fixed inset-0 z-[100] bg-black/60 backdrop-blur-md flex items-center justify-center p-4">
+<div id="modalEnvLocation" class="hidden fixed inset-0 z-[300] bg-black/60 backdrop-blur-md flex items-center justify-center p-4">
     <div class="bg-surface w-full max-w-sm rounded-[2rem] p-8 shadow-2xl scale-100 transform transition-transform">
         <h3 class="text-2xl font-black text-on-surface mb-2 tracking-tight">Set Environment</h3>
         <p class="text-sm text-on-surface-variant mb-6 leading-relaxed">Provide your location to activate real-time local weather tracking and hyper-local AI diagnostics.</p>
@@ -3143,7 +3148,7 @@ document.body.insertAdjacentHTML('beforeend', `
 </div>
 
 <!-- Detailed Weather Modal -->
-<div id="modalEnvDetails" class="hidden fixed inset-0 z-[100] bg-black/60 backdrop-blur-md flex items-center justify-center p-4">
+<div id="modalEnvDetails" class="hidden fixed inset-0 z-[300] bg-black/60 backdrop-blur-md flex items-center justify-center p-4">
     <div class="bg-surface w-full max-w-2xl rounded-[2rem] p-8 shadow-2xl flex flex-col max-h-[90vh]">
         <div class="flex justify-between items-center mb-6">
             <div>

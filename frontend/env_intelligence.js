@@ -88,7 +88,12 @@ function renderWeatherUI(data) {
     
     // AI Insight
     if(data.plant_insight) {
-        document.getElementById('envInsightText').textContent = data.plant_insight;
+        let text = data.plant_insight;
+        // Parse simple markdown
+        text = text.replace(/\*\*(.*?)\*\*/g, '<strong class="text-white">$1</strong>');
+        text = text.replace(/\* /g, '<br><span class="text-emerald-400 font-black mr-1.5">•</span> ');
+        
+        document.getElementById('envInsightText').innerHTML = text;
     }
 }
 
