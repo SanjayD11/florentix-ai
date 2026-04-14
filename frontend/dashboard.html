@@ -274,7 +274,7 @@
   will-change:opacity,transform;
   overflow-x:hidden; /* Let body handle vertical scroll to prevent stuttering/jumping */
   padding-top:72px; /* nav height */
-  padding-bottom:110px; /* spacing for premium floating bottom nav */
+  padding-bottom:70px; /* space for minimal bottom nav */
   min-height:100vh;
 }
 @media (min-width:768px){
@@ -288,34 +288,41 @@
 .mobile-bottom-nav {
   display: flex;
   position: fixed;
-  bottom: max(16px, env(safe-area-inset-bottom));
-  left: 16px;
-  right: 16px;
+  bottom: 0;
+  left: 0;
+  right: 0;
   z-index: 200;
-  background: rgba(255,255,255,0.85);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  border: 1px solid rgba(255,255,255,0.6);
-  box-shadow: 0 16px 40px -12px rgba(0,38,27,0.15), 0 0 0 1px rgba(0,38,27,0.02);
-  border-radius: 20px;
-  padding: 8px;
+  background: rgba(255,255,255,0.98);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-top: 1px solid rgba(5,150,105,0.1);
+  padding: 12px 16px;
+  padding-bottom: max(12px, env(safe-area-inset-bottom));
   justify-content: space-around;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+body.keyboard-open .mobile-bottom-nav,
+body:has(input:focus) .mobile-bottom-nav,
+body:has(textarea:focus) .mobile-bottom-nav {
+  transform: translateY(100%);
+  opacity: 0;
+  pointer-events: none;
 }
 @media (min-width: 768px) {
   .mobile-bottom-nav { display: none; }
 }
 .mobile-nav-item {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 2px;
-  padding: 6px 12px;
-  border-radius: 12px;
+  justify-content: center;
+  padding: 8px;
+  border-radius: 14px;
   cursor: pointer;
   transition: all 0.2s ease;
   color: rgba(0,38,27,0.4);
   flex: 1;
 }
+.mobile-nav-item .nav-label { display: none; }
 .mobile-nav-item.active {
   color: #059669;
   background: rgba(5,150,105,0.08);
@@ -510,17 +517,21 @@
 }
 @media (max-width: 640px) {
   .doctor-nav { padding: 0 20px; }
-  .doctor-messages-area { padding-left: 20px; padding-right: 20px; padding-bottom: 220px !important; }
+  .doctor-messages-area { padding-left: 20px; padding-right: 20px; padding-bottom: 200px !important; }
   .doctor-input-container { 
       position: fixed;
       left: 0;
       right: 0;
-      bottom: max(95px, calc(env(safe-area-inset-bottom) + 95px)); 
-      padding: 16px 20px;
+      bottom: max(60px, calc(env(safe-area-inset-bottom) + 55px)); 
+      padding: 12px 16px;
       padding-bottom: 16px !important;
       background: linear-gradient(to top, rgba(248,250,249,1) 85%, rgba(248,250,249,0));
       z-index: 150;
       width: 100vw;
+      transition: bottom 0.3s ease;
+  }
+  body:has(textarea:focus) .doctor-input-container {
+      bottom: 0 !important;
   }
 }
 /* Hidden elements */
