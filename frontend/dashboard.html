@@ -268,12 +268,60 @@
   transition:opacity .45s cubic-bezier(.22,1,.36,1),transform .45s cubic-bezier(.22,1,.36,1);
   will-change:opacity,transform;
   overflow-y:auto;overflow-x:hidden;
-  padding-top:8px;
-  padding-bottom:24px;
+  padding-top:72px; /* nav height */
+  padding-bottom:80px; /* bottom nav on mobile */
+  min-height:100vh;
+}
+@media (min-width:768px){
+  .spa-section{ padding-bottom: 24px; padding-top: 64px; }
 }
 .spa-section.active{
   opacity:1;pointer-events:auto;
   transform:translateY(0);
+}
+/* Mobile bottom nav */
+.mobile-bottom-nav {
+  display: flex;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 200;
+  background: rgba(255,255,255,0.95);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-top: 1px solid rgba(5,150,105,0.1);
+  padding: 8px 16px 12px;
+  padding-bottom: max(12px, env(safe-area-inset-bottom));
+  justify-content: space-around;
+}
+@media (min-width: 768px) {
+  .mobile-bottom-nav { display: none; }
+}
+.mobile-nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 6px 12px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: rgba(0,38,27,0.4);
+  flex: 1;
+}
+.mobile-nav-item.active {
+  color: #059669;
+  background: rgba(5,150,105,0.08);
+}
+.mobile-nav-item span.material-symbols-outlined {
+  font-size: 22px !important;
+}
+.mobile-nav-item .nav-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
 }
 /* Basic modal/lightbox & scrollbar */
 #imgLightbox.open{opacity:1;pointer-events:auto;}
@@ -479,11 +527,11 @@
 
 
 <!-- ── NAV ── -->
-<nav id="main-nav" class="fixed top-0 left-0 right-0 z-50 glass-card border-b border-white/20" style="height:72px;">
-<div class="flex justify-between items-center w-full px-8 h-full max-w-7xl mx-auto">
-<a href="index.html" class="flex items-center gap-3 hover:opacity-80 transition-all duration-300">
-<img src="logo.png" alt="Florentix AI Logo" class="h-10 w-auto">
-<div class="text-2xl font-bold tracking-tighter text-primary brand">Florentix AI</div>
+<nav id="main-nav" class="fixed top-0 left-0 right-0 z-50 glass-card border-b border-white/20" style="height:64px;">
+<div class="flex justify-between items-center w-full px-4 sm:px-8 h-full max-w-7xl mx-auto">
+<a href="index.html" class="flex items-center gap-2 sm:gap-3 hover:opacity-80 transition-all duration-300 min-w-0">
+<img src="logo.png" alt="Florentix AI Logo" class="h-8 sm:h-10 w-auto flex-shrink-0">
+<div class="text-base sm:text-xl font-bold tracking-tighter text-primary brand whitespace-nowrap">Florentix AI</div>
 </a>
 <div class="hidden md:flex items-center space-x-10 relative">
 <a class="nav-link active cursor-pointer" data-target="dashboard" onclick="showSection('dashboard')">Dashboard</a>
@@ -491,18 +539,38 @@
 <a class="nav-link cursor-pointer" data-target="history" onclick="showSection('history')">History</a>
 <a class="nav-link cursor-pointer" data-target="doctor" onclick="showSection('doctor')">AI Doctor</a>
 </div>
-<div class="flex items-center space-x-3">
-<button id="logoutBtn" class="p-2.5 rounded-full bg-surface-container-high/50 hover:bg-white transition-all premium-shadow group" title="Logout">
+<div class="flex items-center space-x-2 sm:space-x-3">
+<button id="logoutBtn" class="p-2 sm:p-2.5 rounded-full bg-surface-container-high/50 hover:bg-white transition-all premium-shadow group" title="Logout">
 <span class="material-symbols-outlined text-primary group-hover:text-error" data-icon="logout">logout</span>
 </button>
-<button class="flex items-center gap-2 pl-2 pr-4 py-1.5 rounded-full bg-white premium-shadow border border-white/50">
+<button class="flex items-center gap-1.5 pl-1.5 pr-3 py-1.5 rounded-full bg-white premium-shadow border border-white/50">
 <div class="w-7 h-7 rounded-full bg-secondary-container flex items-center justify-center overflow-hidden text-secondary font-bold text-[10px]" id="userAvatar">
 U
 </div>
-<span class="text-xs font-bold text-primary" id="userNameChip">Account</span>
+<span class="text-xs font-bold text-primary hidden sm:block" id="userNameChip">Account</span>
 </button>
 </div>
 </div>
+</nav>
+
+<!-- ── MOBILE BOTTOM NAV (phones only) ── -->
+<nav class="mobile-bottom-nav" id="mobileBottomNav">
+  <button class="mobile-nav-item active" id="mbn-dashboard" onclick="showSection('dashboard')">
+    <span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1">dashboard</span>
+    <span class="nav-label">Home</span>
+  </button>
+  <button class="mobile-nav-item" id="mbn-scan" onclick="showSection('scan')">
+    <span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1">center_focus_strong</span>
+    <span class="nav-label">Scan</span>
+  </button>
+  <button class="mobile-nav-item" id="mbn-history" onclick="showSection('history')">
+    <span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1">history</span>
+    <span class="nav-label">History</span>
+  </button>
+  <button class="mobile-nav-item" id="mbn-doctor" onclick="showSection('doctor')">
+    <span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1">smart_toy</span>
+    <span class="nav-label">AI Doctor</span>
+  </button>
 </nav>
 
 <!-- ── SPA CONTAINER ── -->
@@ -772,25 +840,25 @@ System healthy. Keep monitoring correctly.
 
 
 <!-- ── SECTION: SCAN ── -->
-<section id="sec-scan" class="spa-section h-[calc(100vh-72px)] !min-h-0 w-full !overflow-hidden bg-surface flex flex-col">
-  <div class="flex-1 min-h-0 max-w-[1600px] w-full mx-auto px-8 py-6 flex flex-col">
-    <!-- View Switcher Wrapper to easily toggle Upload/Results -->
-    <div class="relative w-full h-full">
+<section id="sec-scan" class="spa-section w-full bg-surface flex flex-col" style="min-height:100vh;">
+  <div class="w-full max-w-[1600px] mx-auto px-4 sm:px-8 py-6 flex flex-col gap-6">
+    <!-- View Switcher Wrapper -->
+    <div class="w-full">
 
       <!-- ================= UPLOAD VIEW ================= -->
-      <div id="scanUploadView" class="absolute inset-0 flex flex-col">
-        <div class="flex flex-col lg:flex-row gap-10 h-full">
+      <div id="scanUploadView" class="flex flex-col">
+        <div class="flex flex-col lg:flex-row gap-6 lg:gap-10">
           <!-- Left Column: Header + Uploader -->
-          <div class="flex-1 flex flex-col min-h-0 h-full gap-6">
+          <div class="flex-1 flex flex-col gap-4">
             <div id="scanHeader" class="shrink-0">
-              <h1 class="text-[32px] font-extrabold tracking-tight text-primary mb-1">AI Diagnosis</h1>
-              <p class="text-on-surface-variant text-[15px]">Deploy high-precision plant health screening.</p>
+              <h1 class="text-2xl sm:text-[32px] font-extrabold tracking-tight text-primary mb-1">AI Diagnosis</h1>
+              <p class="text-on-surface-variant text-[14px] sm:text-[15px]">Deploy high-precision plant health screening.</p>
             </div>
             
-            <div class="flex-1 min-h-0 group relative mt-4">
+            <div class="group relative">
               <div class="absolute -inset-1 bg-gradient-to-r from-primary/10 via-emerald-400/10 to-primary/10 rounded-[2.5rem] blur-xl opacity-0 group-hover:opacity-100 transition duration-1000"></div>
-              <div class="relative h-full glass-morphism rounded-3xl p-3 shadow-sm border border-emerald-50 transition-all duration-700 group-hover:shadow-2xl flex flex-col" id="scanZone">
-                <div class="flex-1 border-2 border-dashed border-emerald-200/60 rounded-2xl scanning-animation flex flex-col items-center justify-center p-8 transition-colors group-hover:border-emerald-300 relative bg-gradient-to-b from-white/40 to-emerald-50/20">
+              <div class="relative glass-morphism rounded-3xl p-3 shadow-sm border border-emerald-50 transition-all duration-700 group-hover:shadow-2xl" id="scanZone">
+                <div class="border-2 border-dashed border-emerald-200/60 rounded-2xl flex flex-col items-center justify-center p-8 min-h-[280px] sm:min-h-[340px] transition-colors group-hover:border-emerald-300 relative bg-gradient-to-b from-white/40 to-emerald-50/20">
                   
                   <!-- Upload State -->
                   <div id="scanPlaceholder" class="flex flex-col items-center justify-center text-center">
@@ -800,7 +868,7 @@ System healthy. Keep monitoring correctly.
                         <span class="material-symbols-outlined text-4xl text-primary group-hover/icon:scale-110 transition-transform duration-500" style="font-variation-settings: 'FILL' 1">center_focus_strong</span>
                       </div>
                     </div>
-                    <h3 class="text-[22px] font-bold text-primary tracking-tight mb-2">Initialize Image Stream</h3>
+                    <h3 class="text-xl sm:text-[22px] font-bold text-primary tracking-tight mb-2">Initialize Image Stream</h3>
                     <p class="text-on-surface-variant text-[13px] leading-relaxed max-w-[280px] mb-8 font-medium">Secure upload gateway for clinical-grade leaf analysis. Supports high-res RAW, JPG, WEBP.</p>
                     <label class="cursor-pointer bg-[#18392b] text-white px-8 py-3.5 rounded-full font-bold flex items-center gap-2 hover:bg-[#0b2218] transition-all active:scale-95 shadow-lg shadow-primary/10">
                       <span class="material-symbols-outlined text-sm">add_photo_alternate</span>
@@ -810,8 +878,8 @@ System healthy. Keep monitoring correctly.
                   </div>
 
                   <!-- Preview State -->
-                  <div id="scanPreview" style="display:none;width:100%;height:100%" class="relative">
-                    <img id="scanPreviewImg" src="" alt="Preview" class="w-full h-full object-contain rounded-xl shadow-lg bg-surface">
+                  <div id="scanPreview" style="display:none;width:100%;" class="relative">
+                    <img id="scanPreviewImg" src="" alt="Preview" class="w-full max-h-[340px] object-contain rounded-xl shadow-lg bg-surface">
                     <button id="scanRemoveBtn" type="button" class="absolute top-4 right-4 w-10 h-10 bg-error/90 hover:bg-error rounded-full text-white shadow-xl flex items-center justify-center transition-all hover:scale-110">
                       <span class="material-symbols-outlined font-black">close</span>
                     </button>
@@ -821,7 +889,7 @@ System healthy. Keep monitoring correctly.
               </div>
             </div>
             
-            <div class="shrink-0 mt-2">
+            <div class="shrink-0">
               <button id="scanAnalyzeBtn" disabled class="w-full bg-surface-variant text-on-surface/30 cursor-not-allowed py-4 rounded-3xl font-black text-[15px] tracking-wide transition-all duration-500 overflow-hidden text-center justify-center">
                 <span class="relative z-10 transition-all duration-300">Start Analytical Engine</span>
               </button>
@@ -830,8 +898,8 @@ System healthy. Keep monitoring correctly.
           </div>
           
           <!-- Right Column: Intelligence Cards -->
-          <div class="w-full lg:w-[460px] flex flex-col min-h-0 h-full shrink-0 mt-[12px]">
-            <div class="flex items-center justify-between mb-4 shrink-0">
+          <div class="w-full lg:w-[460px] flex flex-col gap-3">
+            <div class="flex items-center justify-between mb-1 shrink-0">
               <h2 class="text-[11px] font-black uppercase tracking-widest text-primary/50">Live Intelligence</h2>
               <span class="text-[9px] font-black bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full flex items-center gap-1.5 uppercase">
                 <span class="w-1 h-1 rounded-full bg-emerald-500 animate-pulse"></span>
@@ -839,56 +907,51 @@ System healthy. Keep monitoring correctly.
               </span>
             </div>
             
-            <!-- Hide scrollbar, but allow scroll if absolutely necessary. Given 100vh constraint, these will fit. -->
-            <div class="flex-1 overflow-y-auto no-scrollbar flex flex-col gap-3">
-              
-              <!-- Lighting -->
-              <div class="group relative cursor-pointer shrink-0">
-                <div class="absolute -inset-0.5 bg-gradient-to-r from-emerald-500/20 to-teal-500/20 rounded-3xl blur opacity-0 group-hover:opacity-100 transition duration-500"></div>
-                <div class="relative bg-white p-6 rounded-3xl border border-emerald-50/50 shadow-sm transition-all duration-500 group-hover:-translate-y-1">
-                  <div class="flex flex-col gap-3">
-                    <div class="flex items-center gap-3">
-                      <div class="w-8 h-8 shrink-0 bg-emerald-50 rounded-full flex items-center justify-center text-emerald-500">
-                        <span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1">wb_sunny</span>
-                      </div>
-                      <h4 class="font-bold text-primary text-[14px]">Lighting Guidance</h4>
+            <!-- Lighting -->
+            <div class="group relative cursor-pointer shrink-0">
+              <div class="absolute -inset-0.5 bg-gradient-to-r from-emerald-500/20 to-teal-500/20 rounded-3xl blur opacity-0 group-hover:opacity-100 transition duration-500"></div>
+              <div class="relative bg-white p-5 rounded-3xl border border-emerald-50/50 shadow-sm transition-all duration-500 group-hover:-translate-y-1">
+                <div class="flex flex-col gap-3">
+                  <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 shrink-0 bg-emerald-50 rounded-full flex items-center justify-center text-emerald-500">
+                      <span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1">wb_sunny</span>
                     </div>
-                    <p class="text-[13px] text-on-surface-variant leading-relaxed">Ensure the leaf is captured under soft natural light. Avoid harsh shadows or overexposure for accurate detection.</p>
+                    <h4 class="font-bold text-primary text-[14px]">Lighting Guidance</h4>
                   </div>
+                  <p class="text-[13px] text-on-surface-variant leading-relaxed">Ensure the leaf is captured under soft natural light. Avoid harsh shadows or overexposure for accurate detection.</p>
                 </div>
               </div>
-              
-              <!-- Focus -->
-              <div class="group relative cursor-pointer shrink-0">
-                <div class="absolute -inset-0.5 bg-gradient-to-r from-emerald-500/20 to-teal-500/20 rounded-3xl blur opacity-0 group-hover:opacity-100 transition duration-500"></div>
-                <div class="relative bg-white p-6 rounded-3xl border border-emerald-50/50 shadow-sm transition-all duration-500 group-hover:-translate-y-1">
-                  <div class="flex flex-col gap-3">
-                    <div class="flex items-center gap-3">
-                      <div class="w-8 h-8 shrink-0 bg-emerald-50 rounded-full flex items-center justify-center text-emerald-500">
-                        <span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1">filter_center_focus</span>
-                      </div>
-                      <h4 class="font-bold text-primary text-[14px]">Focus Recommendation</h4>
-                    </div>
-                    <p class="text-[13px] text-on-surface-variant leading-relaxed">Capture both healthy and affected areas clearly. This improves detection across both general plant and tomato-specific models.</p>
-                  </div>
-                </div>
-              </div>
-
-              <!-- AI Status Dark -->
-              <!-- AI Status Dark -->
-              <div class="bg-[#0b2218] p-6 rounded-[2rem] relative overflow-hidden group shadow-xl shrink-0 mt-2">
-                <div class="absolute top-0 right-0 w-32 h-32 bg-emerald-500/10 rounded-full blur-3xl -mr-16 -mt-16 group-hover:bg-emerald-500/20 transition-all duration-700"></div>
-                <div class="relative flex flex-col gap-3">
-                  <div class="flex items-center gap-2 mb-1">
-                    <span class="material-symbols-outlined text-emerald-400 text-sm">bolt</span>
-                    <span class="text-[9px] font-black uppercase tracking-widest text-emerald-400">Rapid Analysis</span>
-                  </div>
-                  <h4 class="text-white font-bold text-[15px]">AI Engine Status</h4>
-                  <p class="text-emerald-100/60 text-[13px] leading-relaxed">Dual-model system active. General plant model and tomato-specific model are ready for high-accuracy, real-time diagnosis.</p>
-                </div>
-              </div>
-
             </div>
+            
+            <!-- Focus -->
+            <div class="group relative cursor-pointer shrink-0">
+              <div class="absolute -inset-0.5 bg-gradient-to-r from-emerald-500/20 to-teal-500/20 rounded-3xl blur opacity-0 group-hover:opacity-100 transition duration-500"></div>
+              <div class="relative bg-white p-5 rounded-3xl border border-emerald-50/50 shadow-sm transition-all duration-500 group-hover:-translate-y-1">
+                <div class="flex flex-col gap-3">
+                  <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 shrink-0 bg-emerald-50 rounded-full flex items-center justify-center text-emerald-500">
+                      <span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1">filter_center_focus</span>
+                    </div>
+                    <h4 class="font-bold text-primary text-[14px]">Focus Recommendation</h4>
+                  </div>
+                  <p class="text-[13px] text-on-surface-variant leading-relaxed">Capture both healthy and affected areas clearly. This improves detection across both general plant and tomato-specific models.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- AI Status Dark -->
+            <div class="bg-[#0b2218] p-6 rounded-[2rem] relative overflow-hidden group shadow-xl shrink-0">
+              <div class="absolute top-0 right-0 w-32 h-32 bg-emerald-500/10 rounded-full blur-3xl -mr-16 -mt-16 group-hover:bg-emerald-500/20 transition-all duration-700"></div>
+              <div class="relative flex flex-col gap-3">
+                <div class="flex items-center gap-2 mb-1">
+                  <span class="material-symbols-outlined text-emerald-400 text-sm">bolt</span>
+                  <span class="text-[9px] font-black uppercase tracking-widest text-emerald-400">Rapid Analysis</span>
+                </div>
+                <h4 class="text-white font-bold text-[15px]">AI Engine Status</h4>
+                <p class="text-emerald-100/60 text-[13px] leading-relaxed">Dual-model system active. General plant model and tomato-specific model are ready for high-accuracy, real-time diagnosis.</p>
+              </div>
+            </div>
+
           </div>
         </div>
       </div>
@@ -903,7 +966,7 @@ System healthy. Keep monitoring correctly.
 
 <!-- ── SECTION: REPORT (Full Page Analysis) ── -->
 <section id="sec-report" class="spa-section" style="display:none;">
-    <main class="flex-grow max-w-screen-2xl mx-auto w-full px-8 py-10">
+    <main class="flex-grow max-w-screen-2xl mx-auto w-full px-4 sm:px-6 md:px-8 py-6 sm:py-10">
         <div class="mb-4">
             <button onclick="window.goBack()" class="flex items-center gap-2 text-sm font-bold text-primary hover:text-emerald-600 transition-colors mb-2">
                 <span class="material-symbols-outlined text-[18px]">arrow_back</span> Back to Dashboard
@@ -1169,11 +1232,7 @@ window.showSection = sectionId => {
     const el = document.getElementById('sec-' + id);
     if (el) {
       if (id === sectionId) {
-        if (id === 'scan' || id === 'history' || id === 'doctor' || id === 'report') {
-            el.style.display = 'flex';
-        } else {
-            el.style.display = 'block';
-        }
+        el.style.display = 'block';
         // Force DOM reflow to enable transition smoothly
         void el.offsetWidth;
         el.classList.add('active');
@@ -1184,7 +1243,7 @@ window.showSection = sectionId => {
     }
   });
 
-  // Update Nav Links
+  // Update Desktop Nav Links
   document.querySelectorAll('.nav-link').forEach(link => {
     if (link.dataset.target === sectionId) {
       link.classList.add('active');
@@ -1193,27 +1252,25 @@ window.showSection = sectionId => {
     }
   });
 
+  // Update Mobile Bottom Nav active state
+  ['dashboard','scan','history','doctor'].forEach(id => {
+    const btn = document.getElementById('mbn-' + id);
+    if (btn) {
+      if (id === sectionId) btn.classList.add('active');
+      else btn.classList.remove('active');
+    }
+  });
+
   const isFullScreen = (sectionId === 'doctor' || sectionId === 'scan');
   const mainNav = document.getElementById('main-nav');
   
-  // Reset body padding to handle fixed navbar across all sections
-  document.body.style.paddingTop = '72px';
-
-  const scrollBarWidth = window.innerWidth - document.documentElement.clientWidth;
+  // Always keep body scrollable — sections self-scroll via min-height:100vh
+  document.body.style.overflow = '';
+  document.body.style.paddingTop = '0px';
+  document.body.style.paddingRight = '0px';
+  if (mainNav) mainNav.style.paddingRight = '0px';
   
-  if (!isFullScreen) {
-      window.scrollTo({top: 0, behavior: 'instant'});
-      document.body.style.overflow = '';
-      document.body.style.paddingRight = '0px';
-      if (mainNav) mainNav.style.paddingRight = '0px';
-  } else {
-      document.body.style.overflow = 'hidden';
-      if (scrollBarWidth > 0) {
-          document.body.style.paddingRight = scrollBarWidth + 'px';
-          // Synchronize navbar padding to prevent layout stutter
-          if (mainNav) mainNav.style.paddingRight = scrollBarWidth + 'px';
-      }
-  }
+  window.scrollTo({top: 0, behavior: 'instant'});
   
   sessionStorage.setItem('spa_saved_section', sectionId);
   
@@ -1697,102 +1754,104 @@ window.populateReportPage = function(data) {
   let scanSrc = document.getElementById('scanPreviewImg') ? document.getElementById('scanPreviewImg').src : '';
 
   injectionResult.innerHTML = `
-<main class="flex-grow max-w-screen-2xl mx-auto w-full px-8 py-10">
-<header class="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-emerald-900/10 pb-8">
+<main class="flex-grow max-w-screen-2xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-6 sm:py-10">
+<header class="mb-6 sm:mb-10 flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-emerald-900/10 pb-6 sm:pb-8">
 <div>
 <div class="flex items-center gap-2 text-on-surface-variant text-xs uppercase tracking-widest font-bold mb-3">
 <span>Diagnostics</span>
 <span class="material-symbols-outlined text-sm">chevron_right</span>
 <span class="text-primary">Report #${randomReportId}</span>
 </div>
-<h1 class="text-5xl font-extrabold tracking-tight text-primary leading-none">Florentix AI Report</h1>
-<p class="text-on-surface-variant mt-2 text-lg font-medium">Plant Disease Analysis</p>
+<h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-primary leading-none">Florentix AI Report</h1>
+<p class="text-on-surface-variant mt-2 text-base sm:text-lg font-medium">Plant Disease Analysis</p>
 </div>
-<div class="flex flex-col gap-2 text-right">
-<div class="flex items-center justify-end gap-3 px-4 py-2 bg-white rounded-xl technical-border shadow-sm">
-<div class="text-right">
+<div class="flex flex-row sm:flex-col gap-2 sm:text-right">
+<div class="flex items-center justify-start sm:justify-end gap-3 px-4 py-2 bg-white rounded-xl technical-border shadow-sm">
+<div class="text-left sm:text-right">
 <p class="text-[10px] uppercase font-bold text-on-surface-variant leading-none mb-1">Subject Metadata</p>
 <p class="text-sm font-bold text-primary">${plantLabel} | ${dateStr}</p>
 </div>
-<span class="material-symbols-outlined text-secondary" style="font-size: 32px;">biotech</span>
+<span class="material-symbols-outlined text-secondary" style="font-size: 28px;">biotech</span>
 </div>
 </div>
 </header>
-<div class="grid grid-cols-12 gap-8">
-<div class="col-span-12 lg:col-span-8 space-y-8">
+
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
+
+<!-- LEFT COLUMN -->
+<div class="lg:col-span-8 space-y-6 sm:space-y-8">
+
 <section class="bg-primary-container text-white rounded-2xl overflow-hidden relative shadow-2xl">
 <div class="absolute inset-0 data-grid-pattern overflow-hidden"></div>
-<div class="relative z-10 p-8 lg:p-10">
-<div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-8">
+<div class="relative z-10 p-5 sm:p-8 lg:p-10">
+<div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 sm:mb-8">
 <div>
-<div class="inline-flex items-center gap-2 px-3 py-1 bg-emerald-400/10 text-emerald-400 border border-emerald-400/20 rounded-md text-[10px] font-bold uppercase tracking-widest mb-4">Analyzed using ${data.model_used || 'General Plant AI Model'}</div>
-<h2 class="text-3xl font-extrabold tracking-tight">AI Diagnostic Insight</h2>
+<div class="inline-flex items-center gap-2 px-3 py-1 bg-emerald-400/10 text-emerald-400 border border-emerald-400/20 rounded-md text-[10px] font-bold uppercase tracking-widest mb-3">Analyzed using ${data.model_used || 'General Plant AI Model'}</div>
+<h2 class="text-xl sm:text-3xl font-extrabold tracking-tight">AI Diagnostic Insight</h2>
 </div>
-<div class="text-right">
-<div class="text-5xl font-black text-emerald-400">${confidenceStr}</div>
+<div class="text-left sm:text-right">
+<div class="text-4xl sm:text-5xl font-black text-emerald-400">${confidenceStr}</div>
 <div class="text-[10px] font-bold uppercase tracking-widest text-emerald-200/60 mt-1">Classification Confidence</div>
 </div>
 </div>
-<div class="grid md:grid-cols-2 gap-10">
-<div class="space-y-6">
-<div class="bg-emerald-950/40 p-6 rounded-xl border border-white/5 backdrop-blur-sm">
-<p class="text-emerald-50 leading-relaxed font-medium italic text-lg whitespace-pre-line">"${analysisText}"</p>
+<div class="grid sm:grid-cols-2 gap-5 sm:gap-8 lg:gap-10">
+<div class="space-y-4 sm:space-y-6">
+<div class="bg-emerald-950/40 p-4 sm:p-6 rounded-xl border border-white/5 backdrop-blur-sm">
+<p class="text-emerald-50 leading-relaxed font-medium italic text-base sm:text-lg whitespace-pre-line">"${analysisText}"</p>
 </div>
-<div class="grid grid-cols-2 gap-4">
-<div class="bg-emerald-900/30 p-4 rounded-lg border border-white/5"><div class="text-[10px] uppercase font-bold text-emerald-300/70 mb-2">Analysis Confidence</div><div class="flex items-center gap-3"><div class="flex-grow bg-emerald-950 h-2 rounded-full overflow-hidden"><div class="bg-emerald-400 h-full" style="width:${confidenceStr}"></div></div><span class="text-xs font-mono">${confidenceStr}</span></div></div>
-<div class="bg-emerald-900/30 p-4 rounded-lg border border-white/5"><div class="text-[10px] uppercase font-bold text-emerald-300/70 mb-2">Severity Level</div><div class="flex items-center gap-3"><div class="flex-grow bg-emerald-950 h-2 rounded-full overflow-hidden"><div class="bg-emerald-400 h-full" style="width:100%"></div></div><span class="text-xs font-mono">${data.risk_level || 'Medium'}</span></div></div>
-<div class="bg-emerald-900/30 p-4 rounded-lg border border-white/5"><div class="text-[10px] uppercase font-bold text-emerald-300/70 mb-2">Optimal Temperature</div><span class="text-sm font-semibold text-emerald-50">${data.optimal_temperature || '24-30°C'}</span></div>
-<div class="bg-emerald-900/30 p-4 rounded-lg border border-white/5"><div class="text-[10px] uppercase font-bold text-emerald-300/70 mb-2">Light Intensity Needs</div><span class="text-sm font-semibold text-emerald-50">${data.light_requirement || 'Moderate (8,000 lux)'}</span></div>
+<div class="grid grid-cols-2 gap-3 sm:gap-4">
+<div class="bg-emerald-900/30 p-3 sm:p-4 rounded-lg border border-white/5"><div class="text-[10px] uppercase font-bold text-emerald-300/70 mb-2">Confidence</div><div class="flex items-center gap-2"><div class="flex-grow bg-emerald-950 h-2 rounded-full overflow-hidden"><div class="bg-emerald-400 h-full" style="width:${confidenceStr}"></div></div><span class="text-xs font-mono">${confidenceStr}</span></div></div>
+<div class="bg-emerald-900/30 p-3 sm:p-4 rounded-lg border border-white/5"><div class="text-[10px] uppercase font-bold text-emerald-300/70 mb-2">Severity</div><div class="flex items-center gap-2"><div class="flex-grow bg-emerald-950 h-2 rounded-full overflow-hidden"><div class="bg-emerald-400 h-full" style="width:100%"></div></div><span class="text-xs font-mono">${data.risk_level || 'Medium'}</span></div></div>
+<div class="bg-emerald-900/30 p-3 sm:p-4 rounded-lg border border-white/5"><div class="text-[10px] uppercase font-bold text-emerald-300/70 mb-2">Optimal Temp</div><span class="text-sm font-semibold text-emerald-50">${data.optimal_temperature || '24-30°C'}</span></div>
+<div class="bg-emerald-900/30 p-3 sm:p-4 rounded-lg border border-white/5"><div class="text-[10px] uppercase font-bold text-emerald-300/70 mb-2">Light Intensity</div><span class="text-sm font-semibold text-emerald-50">${data.light_requirement || 'Moderate (8,000 lux)'}</span></div>
 </div>
 </div>
-<div class="relative bg-black/20 rounded-xl overflow-hidden border border-white/10 group">
+<div class="relative bg-black/20 rounded-xl overflow-hidden border border-white/10 min-h-[180px] sm:min-h-[240px]">
 <img class="w-full h-full object-cover mix-blend-overlay opacity-80" src="${scanSrc}"/>
 <div class="absolute inset-0 p-4 flex flex-col justify-between pointer-events-none">
-<div class="flex justify-between items-start"><div class="border-l-2 border-t-2 border-emerald-400 w-8 h-8"></div><div class="border-r-2 border-t-2 border-emerald-400 w-8 h-8"></div></div>
+<div class="flex justify-between items-start"><div class="border-l-2 border-t-2 border-emerald-400 w-7 h-7"></div><div class="border-r-2 border-t-2 border-emerald-400 w-7 h-7"></div></div>
 <div class="text-center"><div class="inline-block bg-emerald-400 text-primary px-2 py-0.5 text-[8px] font-bold tracking-widest mb-1">SCANNING_COMPLETE</div><div class="h-0.5 w-full bg-emerald-400/30"></div></div>
-<div class="flex justify-between items-end"><div class="border-l-2 border-b-2 border-emerald-400 w-8 h-8"></div><div class="border-r-2 border-b-2 border-emerald-400 w-8 h-8"></div></div>
+<div class="flex justify-between items-end"><div class="border-l-2 border-b-2 border-emerald-400 w-7 h-7"></div><div class="border-r-2 border-b-2 border-emerald-400 w-7 h-7"></div></div>
 </div>
 </div>
 </div>
 </div>
 </section>
 
-<section class="bg-white rounded-2xl p-8 technical-border shadow-sm flex items-center justify-between mt-8">
-<div class="flex items-center gap-6">
-<div class="w-16 h-16 rounded-full ${sevBg} flex items-center justify-center">
-<span class="material-symbols-outlined ${sevIconClass} text-3xl" style="font-variation-settings: 'FILL' 1;">warning</span>
+<section class="bg-white rounded-2xl p-4 sm:p-8 technical-border shadow-sm flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+<div class="flex items-center gap-4 sm:gap-6">
+<div class="w-12 h-12 sm:w-16 sm:h-16 rounded-full ${sevBg} flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined ${sevIconClass} text-2xl sm:text-3xl" style="font-variation-settings: 'FILL' 1;">warning</span>
 </div>
 <div>
-<h3 class="text-2xl font-extrabold text-primary">${diseaseTitle}</h3>
-<p class="text-on-surface-variant font-medium">Pathology assigned based on neural vision markers.</p>
+<h3 class="text-lg sm:text-2xl font-extrabold text-primary">${diseaseTitle}</h3>
+<p class="text-on-surface-variant font-medium text-sm sm:text-base">Pathology assigned based on neural vision markers.</p>
 </div>
 </div>
-<div class="hidden md:block">
-<div class="${sevClass} px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider border">
-                        ${severityLabel}
-                    </div>
-</div>
+<div class="${sevClass} px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider border self-start sm:self-auto">${severityLabel}</div>
 </section>
 
-<div class="grid md:grid-cols-2 gap-8 mt-8 items-start">
-<section class="bg-white rounded-2xl p-8 technical-border shadow-sm">
-<div class="border-b border-on-surface/5 pb-4 mb-6"><h3 class="text-xl font-extrabold text-primary flex items-center gap-2"><span class="w-2 h-6 bg-secondary rounded-full"></span>Treatment Protocols</h3></div>
-<ul class="space-y-6">${treatmentsHtml}</ul>
+<div class="grid sm:grid-cols-2 gap-5 sm:gap-8 items-start">
+<section class="bg-white rounded-2xl p-5 sm:p-8 technical-border shadow-sm">
+<div class="border-b border-on-surface/5 pb-4 mb-5 sm:mb-6"><h3 class="text-lg sm:text-xl font-extrabold text-primary flex items-center gap-2"><span class="w-2 h-6 bg-secondary rounded-full"></span>Treatment Protocols</h3></div>
+<ul class="space-y-4 sm:space-y-6">${treatmentsHtml}</ul>
 </section>
-<section class="bg-white rounded-2xl p-8 technical-border shadow-sm">
-<div class="border-b border-on-surface/5 pb-4 mb-6"><h3 class="text-xl font-extrabold text-primary flex items-center gap-2"><span class="w-2 h-6 bg-primary-container rounded-full"></span>Long-term Prevention</h3></div>
-<ul class="space-y-6">${preventionsHtml}</ul>
+<section class="bg-white rounded-2xl p-5 sm:p-8 technical-border shadow-sm">
+<div class="border-b border-on-surface/5 pb-4 mb-5 sm:mb-6"><h3 class="text-lg sm:text-xl font-extrabold text-primary flex items-center gap-2"><span class="w-2 h-6 bg-primary-container rounded-full"></span>Long-term Prevention</h3></div>
+<ul class="space-y-4 sm:space-y-6">${preventionsHtml}</ul>
 </section>
 </div>
 </div>
 
-<div class="col-span-12 lg:col-span-4 space-y-8">
+<!-- RIGHT COLUMN -->
+<div class="lg:col-span-4 space-y-6 sm:space-y-8">
+
 <section class="bg-white rounded-2xl overflow-hidden shadow-lg technical-border">
-<div class="p-8 bg-emerald-50 border-b border-emerald-100">
-<h3 class="text-xl font-extrabold text-primary mb-2 uppercase tracking-tighter">Diagnostic Subject</h3>
-<p class="text-4xl font-bold text-primary tracking-tight">${plantLabel}</p>
+<div class="p-5 sm:p-8 bg-emerald-50 border-b border-emerald-100">
+<h3 class="text-base sm:text-xl font-extrabold text-primary mb-2 uppercase tracking-tighter">Diagnostic Subject</h3>
+<p class="text-3xl sm:text-4xl font-bold text-primary tracking-tight">${plantLabel}</p>
 </div>
-<div class="p-8 space-y-6">
+<div class="p-5 sm:p-8 space-y-4 sm:space-y-6">
 <div class="flex justify-between items-center py-3 border-b border-dashed border-on-surface/10"><span class="text-xs font-bold uppercase tracking-widest text-on-surface-variant">Taxonomy</span><span class="text-sm font-bold text-primary">Plantae</span></div>
 <div class="flex justify-between items-center py-3 border-b border-dashed border-on-surface/10"><span class="text-xs font-bold uppercase tracking-widest text-on-surface-variant">Optimal Temp</span><span class="text-sm font-bold text-primary">Standard</span></div>
 <div class="flex justify-between items-center py-3 border-b border-dashed border-on-surface/10"><span class="text-xs font-bold uppercase tracking-widest text-on-surface-variant">Symptoms count</span><span class="text-sm font-bold text-primary">${(data.symptoms || []).length} Detected</span></div>
@@ -1800,20 +1859,21 @@ window.populateReportPage = function(data) {
 </div>
 </section>
 
-<section class="bg-white rounded-2xl p-8 technical-border shadow-sm">
-<h3 class="text-xl font-extrabold text-primary mb-6 flex items-center justify-between">Observed Symptoms<span class="text-[10px] bg-slate-100 px-2 py-1 rounded font-mono text-slate-500">N=${(data.symptoms || []).length} DETECTED</span></h3>
+<section class="bg-white rounded-2xl p-5 sm:p-8 technical-border shadow-sm">
+<h3 class="text-lg sm:text-xl font-extrabold text-primary mb-5 sm:mb-6 flex items-center justify-between">Observed Symptoms<span class="text-[10px] bg-slate-100 px-2 py-1 rounded font-mono text-slate-500">N=${(data.symptoms || []).length}</span></h3>
 <div class="space-y-3">${symptomsHtml}</div>
 </section>
 
-<section class="bg-primary-container rounded-2xl p-8 text-center shadow-xl border border-emerald-800 relative overflow-hidden">
+<section class="bg-primary-container rounded-2xl p-5 sm:p-8 text-center shadow-xl border border-emerald-800 relative overflow-hidden">
 <div class="absolute -right-4 -bottom-4 text-white/5"><span class="material-symbols-outlined text-9xl">analytics</span></div>
-<div class="relative z-10 space-y-6">
-<div class="w-16 h-16 bg-white/10 rounded-2xl flex items-center justify-center mx-auto mb-4 backdrop-blur-sm border border-white/10"><span class="material-symbols-outlined text-white text-3xl">picture_as_pdf</span></div>
-<div><h4 class="text-xl font-bold text-white">Full Analytical Export</h4><p class="text-sm text-emerald-100/60 mt-2">Comprehensive report including raw pixel mapping and tensor analysis data.</p></div>
-<button onclick="window.spaDownloadReport()" class="w-full bg-emerald-400 text-primary py-4 px-6 rounded-xl font-bold text-sm hover:bg-white transition-all flex items-center justify-center gap-3 uppercase tracking-widest shadow-lg shadow-emerald-400/10"><span class="material-symbols-outlined">download</span> Download Technical PDF</button>
+<div class="relative z-10 space-y-5 sm:space-y-6">
+<div class="w-14 h-14 sm:w-16 sm:h-16 bg-white/10 rounded-2xl flex items-center justify-center mx-auto mb-2 backdrop-blur-sm border border-white/10"><span class="material-symbols-outlined text-white text-3xl">picture_as_pdf</span></div>
+<div><h4 class="text-lg sm:text-xl font-bold text-white">Full Analytical Export</h4><p class="text-sm text-emerald-100/60 mt-2">Comprehensive report including raw pixel mapping and tensor analysis data.</p></div>
+<button onclick="window.spaDownloadReport()" class="w-full bg-emerald-400 text-primary py-3 sm:py-4 px-6 rounded-xl font-bold text-sm hover:bg-white transition-all flex items-center justify-center gap-3 uppercase tracking-widest shadow-lg shadow-emerald-400/10"><span class="material-symbols-outlined">download</span> Download PDF</button>
 <p class="text-[10px] text-emerald-200/40 uppercase font-mono tracking-tighter">Generated by Florentix AI</p>
 </div>
 </section>
+
 </div>
 </div>
 </main>
