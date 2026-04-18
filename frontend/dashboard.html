@@ -335,9 +335,8 @@
 .spa-section{
   display: none;
   opacity:0;pointer-events:none;
-  transform:translateY(18px);
-  transition:opacity .45s cubic-bezier(.22,1,.36,1),transform .45s cubic-bezier(.22,1,.36,1);
-  will-change:opacity,transform;
+  transition:opacity .35s ease;
+  will-change:opacity;
   overflow-x:hidden; /* Let body handle vertical scroll to prevent stuttering/jumping */
   padding-top:64px; /* nav height = 64px */
   padding-bottom:74px; /* space for mobile bottom nav */
@@ -353,7 +352,6 @@
 }
 .spa-section.active{
   opacity:1;pointer-events:auto;
-  transform:translateY(0);
 }
 /* Mobile bottom nav */
 .mobile-bottom-nav {
@@ -1141,10 +1139,6 @@ System healthy. Keep monitoring correctly.
                      <p class="text-[13px] font-bold text-[#00261b]">FloraSense</p>
                  </div>
              </div>
-             <!-- Sidebar close/toggle button (works on ALL screen sizes) -->
-             <button class="sidebar-toggle-btn" onclick="window.toggleDoctorSidebar && window.toggleDoctorSidebar()" title="Toggle sidebar">
-                 <span class="material-symbols-outlined">menu_open</span>
-             </button>
         </div>
 
         <div class="flex flex-col flex-1 px-6 pb-6 overflow-hidden">
@@ -3279,12 +3273,8 @@ async function _doSendChat() {
     }
 }
 
-// ── PREMIUM AI DOCTOR TOGGLE ──
-document.body.insertAdjacentHTML('beforeend', `
-    <button id="sidebarToggleBtn" onclick="toggleDoctorSidebar()" class="premium-toggle fixed z-50 left-0 top-[200px]" style="right: auto; left: 10px; top: 10px; position: fixed;">
-        <span class="material-symbols-outlined text-[24px] z-10 transition-transform duration-500 ease-out" id="sidebarToggleIcon" style="font-variation-settings: 'FILL' 1;">left_panel_close</span>
-    </button>
-`);
+// Toggle removed from here as it caused duplicate buttons
+
 </script>
 
 <!-- Setup Location Modal -->
