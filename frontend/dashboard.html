@@ -93,8 +93,12 @@
                     /* Removed scrollbar-gutter: stable — it caused a scrollbar-width jump on load */
                 }
             }
-            html, body {
-                /* Prevent FOUC scrollbar jump */
+            html {
+                /* Reserve scrollbar width at all times to prevent nav shift */
+                overflow-y: scroll;
+                overflow-x: hidden;
+            }
+            body {
                 overflow-x: hidden;
             }
             h1, h2, h3, .brand { font-family: 'Manrope', sans-serif; }
@@ -446,8 +450,8 @@ body.keyboard-open .mobile-bottom-nav {
 /* ── FloraSense AI Chat — Full-screen fixed layout ── */
 #sec-doctor {
   display: flex !important;
-  /* On mobile: occupy full screen below top nav */
-  height: calc(100vh - 64px) !important;
+  /* Use dvh so it accounts for dynamic viewport on mobile browsers */
+  height: calc(100dvh - 64px) !important;
   width: 100% !important;
   overflow: hidden !important;
   position: fixed !important;
@@ -463,119 +467,100 @@ body.keyboard-open .mobile-bottom-nav {
   pointer-events: auto !important;
 }
 .sidebar-doctor {
-  width: 340px;
+  width: 280px;
   background: white;
-  height: calc(100vh - 64px);
+  height: calc(100dvh - 64px);
   position: fixed;
   left: 0; top: 64px; bottom: 0;
   border-right: 1px solid #eaefec;
   z-index: 150;
   transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   display: flex; flex-direction: column;
-  box-shadow: 10px 0 30px -15px rgba(0,0,0,0.04);
+  box-shadow: 4px 0 24px rgba(0,0,0,0.04);
 }
 .main-doctor {
   flex: 1;
-  margin-left: 340px;
-  height: calc(100vh - 64px);
+  margin-left: 280px;
+  height: calc(100dvh - 64px);
   display: flex;
   flex-direction: column;
   position: relative;
   transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  min-width: 0; /* Prevent flex overflow */
+  min-width: 0;
+  overflow: hidden;
 }
-/* Sidebar Collapsed State (Universal) */
+/* Sidebar Collapsed State (Universal — Desktop too) */
 .sidebar-collapsed .sidebar-doctor {
   transform: translateX(-100%);
-  /* Do not animate width, it causes severe text-wrapping layout stutters */
 }
 .sidebar-collapsed .main-doctor {
   margin-left: 0;
 }
 
+/* Sidebar backdrop (mobile/tablet only) */
+.doctor-sidebar-backdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,38,27,0.4);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+  z-index: 240;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+.doctor-sidebar-backdrop.visible {
+  opacity: 1;
+  visibility: visible;
+}
+
 /* ── Mobile/Tablet Sidebar — FloraSense ── */
 @media (max-width: 1023px) {
+  .doctor-sidebar-backdrop { display: block; }
   .sidebar-doctor {
-    width: min(320px, 82vw);
-    z-index: 250; /* Above chat input */
-    transform: translateX(-100%); /* Hidden by default on mobile */
-    /* Full height: from top of screen — covers everything on mobile */
+    width: min(300px, 85vw);
+    z-index: 250;
+    transform: translateX(-100%);
     height: 100dvh;
     top: 0;
     box-shadow: 16px 0 40px rgba(0,38,27,0.18);
   }
   .main-doctor {
-    margin-left: 0 !important; /* Never shift chat area on mobile */
+    margin-left: 0 !important;
   }
-  /* Sidebar overlay backdrop */
-  .doctor-sidebar-backdrop {
-    position: fixed;
-    inset: 0;
-    background: rgba(0,38,27,0.35);
-    backdrop-filter: blur(2px);
-    z-index: 240;
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.3s ease, visibility 0.3s ease;
-  }
-  .doctor-sidebar-backdrop.visible {
-    opacity: 1;
-    visibility: visible;
-  }
-  /* Show sidebar when not collapsed */
+  /* Show sidebar (open) */
   #sec-doctor:not(.sidebar-collapsed) .sidebar-doctor {
     transform: translateX(0);
   }
-  /* Hide sidebar when collapsed */
+  /* Hide sidebar (closed) */
   #sec-doctor.sidebar-collapsed .sidebar-doctor {
     transform: translateX(-100%);
   }
 }
 
-/* Premium Global Toggle for AI Doctor */
-.premium-toggle {
-    position: fixed;
-    top: 96px; /* 72px height + 24px offset */
-    left: 24px;
-    z-index: 99999; /* Highest possible */
-    width: 44px;
-    height: 44px;
-    background: rgba(255, 255, 255, 0.7);
-    backdrop-filter: blur(12px);
-    border: 1px solid rgba(0, 38, 27, 0.15);
-    border-radius: 50%; /* Circle toggle */
-    display: none; /* Controlled by JS */
-    align-items: center;
-    justify-content: center;
-    color: #00261b;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.06);
-    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), background 0.3s;
-    cursor: pointer;
-}
-.premium-toggle:hover {
-    background: #00261b;
-    color: white;
-    transform: scale(1.1);
-}
-.sidebar-collapsed .premium-toggle {
-    background: #059669;
-    color: white;
-    box-shadow: 0 8px 25px rgba(5, 150, 105, 0.3);
-}
-.premium-toggle:active { transform: scale(0.9); }
-.premium-toggle span { font-size: 28px !important; }
-.doctor-nav {
-  height: 70px;
-  background: white;
-  border-bottom: 1px solid #eaefec;
+/* ── Desktop sidebar toggle button —inside sidebar header ── */
+.sidebar-toggle-btn {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 0 40px;
-  padding-left: 90px; /* Space for the fixed toggle */
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  border: 1px solid rgba(0,38,27,0.08);
+  background: rgba(248,250,249,0.8);
+  color: #00261b;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, transform 0.2s;
   flex-shrink: 0;
-  z-index: 100;
 }
+.sidebar-toggle-btn:hover {
+  background: #00261b;
+  color: white;
+  transform: scale(1.05);
+}
+.sidebar-toggle-btn:active { transform: scale(0.95); }
+.sidebar-toggle-btn .material-symbols-outlined { font-size: 20px !important; }
 .doctor-messages-area {
   flex: 1;
   overflow-y: auto;
@@ -603,41 +588,29 @@ body.keyboard-open .mobile-bottom-nav {
   50% { opacity: 0.6; transform: scale(0.98); }
 }
 
-/* ── Messages area + input — responsive ── */
+/* ── Messages area + input — always inside .main-doctor flex column ── */
 .doctor-messages-area {
   flex: 1;
+  min-height: 0;
   overflow-y: auto;
-  padding: 40px 10%;
+  -webkit-overflow-scrolling: touch;
+  padding: 32px 10% 24px 10%;
   scroll-behavior: smooth;
-  /* Ensure messages don't go under the pinned input */
-  padding-bottom: 140px;
 }
-/* Input container — always pinned to bottom of .main-doctor */
+/* Input container — anchors to bottom of flex column, never overlaps anything */
 .doctor-input-container {
-  padding: 16px 10% 24px 10%;
-  background: linear-gradient(to top, #f8faf9 80%, transparent);
-  position: sticky; bottom: 0; z-index: 140;
+  padding: 12px 10% 20px 10%;
+  background: linear-gradient(to top, rgba(248,250,249,1) 85%, rgba(248,250,249,0) 100%);
   flex-shrink: 0;
+  /* NOT sticky/fixed — it naturally sits at bottom of the flex column */
 }
 @media (max-width: 1023px) {
   .doctor-messages-area {
-    padding-left: 16px;
-    padding-right: 16px;
-    padding-top: 16px;
-    padding-bottom: 130px; /* space for pinned input */
+    padding: 16px 14px 16px 14px;
   }
   .doctor-input-container {
-    /* On mobile/tablet: Fix to BOTTOM of the flex column (main-doctor),
-       which itself is a fixed element filling the screen below the top nav.
-       The bottom navbar is auto-hidden when in this section, so we only need
-       safe-area-inset-bottom padding. */
-    padding-left: 12px;
-    padding-right: 12px;
+    padding: 10px 12px;
     padding-bottom: max(16px, env(safe-area-inset-bottom));
-    position: sticky;
-    bottom: 0;
-    background: linear-gradient(to top, rgba(248,250,249,1) 85%, rgba(248,250,249,0));
-    z-index: 160;
   }
 }
 /* Hidden elements */
@@ -1147,27 +1120,30 @@ System healthy. Keep monitoring correctly.
     <div class="doctor-sidebar-backdrop" id="doctorSidebarBackdrop" onclick="window.collapseDoctorSidebar && window.collapseDoctorSidebar()"></div>
     <input class="hidden" id="sidebar-toggle" type="checkbox"/>
     
-    <!-- Sidebar (Adjusted for persistent nav) -->
+    <!-- Sidebar -->
     <aside class="sidebar-doctor premium-scrollbar">
-        <!-- Mobile: Close sidebar header -->
-        <div class="flex items-center h-[72px] shrink-0 w-full px-5 justify-between border-b border-[#eaefec]/50 bg-surface-container-low/30">
-             <div class="flex items-center gap-3" id="doctorActiveContextSummary" style="display:none;">
-                 <img id="doctorSmallImg" class="w-9 h-9 rounded-xl object-cover border border-black/5 shadow-sm" src=""/>
-                 <div class="overflow-hidden">
-                     <p class="text-[9px] font-black uppercase tracking-[0.15em] text-on-surface-variant/50 leading-none mb-1">Current Focus</p>
-                     <p class="text-xs font-bold text-[#00261b] truncate max-w-[140px]" id="doctorSmallTitle">Universal AI</p>
+        <!-- Sidebar Header with toggle button (visible on all screen sizes) -->
+        <div class="flex items-center h-[60px] shrink-0 w-full px-4 justify-between border-b border-[#eaefec] bg-white">
+             <!-- Brand / Context -->
+             <div class="flex items-center gap-2.5 min-w-0 flex-1">
+                 <div class="flex items-center gap-2" id="doctorActiveContextSummary" style="display:none;">
+                     <img id="doctorSmallImg" class="w-8 h-8 rounded-xl object-cover border border-black/5 shadow-sm flex-shrink-0" src=""/>
+                     <div class="overflow-hidden">
+                         <p class="text-[9px] font-black uppercase tracking-[0.12em] text-on-surface-variant/50 leading-none mb-0.5">Focus</p>
+                         <p class="text-[13px] font-bold text-[#00261b] truncate" id="doctorSmallTitle">Plant Chat</p>
+                     </div>
+                 </div>
+                 <!-- Generic branding -->
+                 <div id="doctorGenericSummary" class="flex items-center gap-2">
+                     <div class="w-7 h-7 rounded-lg bg-primary flex items-center justify-center text-white flex-shrink-0">
+                         <span class="material-symbols-outlined" style="font-size:15px">psychiatry</span>
+                     </div>
+                     <p class="text-[13px] font-bold text-[#00261b]">FloraSense</p>
                  </div>
              </div>
-             <!-- Fallback if no specific plant is active -->
-             <div id="doctorGenericSummary" class="flex items-center gap-3">
-                 <div class="w-9 h-9 rounded-xl bg-primary flex items-center justify-center text-white flex-shrink-0">
-                     <span class="material-symbols-outlined text-[18px]">psychiatry</span>
-                 </div>
-                 <p class="text-sm font-bold text-[#00261b]">FloraSense</p>
-             </div>
-             <!-- Close button (mobile only) -->
-             <button class="ml-auto w-8 h-8 rounded-full bg-surface-container flex items-center justify-center text-on-surface-variant hover:bg-surface-container-high transition-colors lg:hidden" onclick="window.collapseDoctorSidebar && window.collapseDoctorSidebar()" title="Close sidebar">
-                 <span class="material-symbols-outlined text-[18px]">close</span>
+             <!-- Sidebar close/toggle button (works on ALL screen sizes) -->
+             <button class="sidebar-toggle-btn" onclick="window.toggleDoctorSidebar && window.toggleDoctorSidebar()" title="Toggle sidebar">
+                 <span class="material-symbols-outlined">menu_open</span>
              </button>
         </div>
 
@@ -1224,25 +1200,27 @@ System healthy. Keep monitoring correctly.
         </div>
     </aside>
 
-    <!-- Main Content -->
+    <!-- Main Chat Panel -->
     <main class="main-doctor">
-        <!-- Mobile back-to-dashboard button (only shown on small screens in doctor section) -->
-        <div class="flex items-center px-4 pt-3 pb-2 border-b border-[#eaefec]/80 bg-white/80 backdrop-blur-sm flex-shrink-0 lg:hidden">
-            <button onclick="window.showSection('dashboard')" class="flex items-center gap-2 text-xs font-bold text-primary hover:text-emerald-600 transition-colors py-1.5 px-3 rounded-full bg-primary-fixed/30 hover:bg-primary-fixed/60 active:scale-95">
+        <!-- Top bar: desktop shows title + toggle; mobile shows back button + toggle -->
+        <div class="flex items-center h-[60px] px-5 border-b border-[#eaefec] bg-white flex-shrink-0">
+            <!-- Desktop sidebar toggle (open sidebar if collapsed) -->
+            <button id="sidebarOpenBtn" onclick="window.toggleDoctorSidebar && window.toggleDoctorSidebar()" class="sidebar-toggle-btn mr-3" title="Toggle sidebar">
+                <span class="material-symbols-outlined">menu</span>
+            </button>
+            <!-- Mobile: back to dashboard -->
+            <button onclick="window.showSection('dashboard')" class="lg:hidden flex items-center gap-1.5 text-xs font-bold text-primary/70 hover:text-primary transition-colors mr-3">
                 <span class="material-symbols-outlined text-[16px]">arrow_back</span>
-                Dashboard
+                <span>Dashboard</span>
             </button>
-            <div class="ml-3 flex items-center gap-2">
-                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                <span class="text-[11px] font-bold text-primary">FloraSense</span>
+            <!-- Context title (updated by JS) -->
+            <div class="flex items-center gap-2 min-w-0">
+                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse flex-shrink-0"></span>
+                <span class="text-[13px] font-bold text-primary truncate" id="chatContextTitle">FloraSense</span>
             </div>
-            <!-- Sidebar toggle for mobile -->
-            <button id="sidebarToggleBtn" onclick="window.toggleDoctorSidebar && window.toggleDoctorSidebar()" class="ml-auto flex items-center justify-center w-8 h-8 rounded-full bg-surface-container hover:bg-surface-container-high transition-colors" title="Toggle plant sidebar">
-                <span class="material-symbols-outlined text-[18px] text-primary">menu</span>
-            </button>
         </div>
 
-        <!-- Scrollable Messages Area -->
+        <!-- Scrollable Messages Area —grows to fill remaining height -->
         <div class="doctor-messages-area premium-scrollbar" id="chatMsgsScroll">
             <div class="max-w-3xl mx-auto space-y-10" id="chatMsgsContainer">
                  <!-- Welcome Header -->
@@ -1439,14 +1417,12 @@ window.showSection = sectionId => {
   }
 
   // Always keep body scrollable — sections self-scroll via min-height:100vh
-  document.body.style.overflow = '';
+  // NOTE: do NOT manipulate body.overflow here — html { overflow-y: scroll } keeps the
+  // scrollbar width reserved at all times, preventing any navbar position shift.
   document.body.style.paddingTop = '0px';
   document.body.style.paddingRight = '0px';
-  const mainNav = document.getElementById('main-nav');
-  if (mainNav) mainNav.style.paddingRight = '0px';
-  
-  window.scrollTo({top: 0, behavior: 'instant'});
-  
+  // Only scroll to top for non-doctor sections (doctor is fixed panel)
+  if (sectionId !== 'doctor') window.scrollTo({top: 0, behavior: 'instant'});
   sessionStorage.setItem('spa_saved_section', sectionId);
 };
 
@@ -2644,12 +2620,12 @@ function refreshDoctorSidebars() {
         const indColor = isHealthy ? 'bg-[#059669]' : 'bg-rose-500';
         const imgUrl = (s.imageUrl && s.imageUrl.length > 4) ? s.imageUrl : 'https://placehold.co/200x200/e2e8f0/64748b?text=Plant';
         const isActive = window.activeDoctorChatId === s.id && window.currentDoctorMode === 'plant';
-        const activeClass = isActive ? 'bg-primary-fixed/20 ring-[1.5px] ring-primary/40 cursor-default' : 'hover:bg-primary-fixed/10 hover:shadow-sm cursor-pointer active:scale-[0.98]';
+        const activeClass = isActive ? 'bg-emerald-50/80 border border-emerald-200 shadow-[0_2px_10px_rgba(5,150,105,0.08)] cursor-default' : 'hover:bg-emerald-50/50 hover:border-emerald-100/60 hover:shadow-md cursor-pointer active:scale-[0.98] border border-transparent';
 
         html += `
-        <div onclick="openDoctorChat('${s.id}', 'plant')" class="flex items-center gap-3 p-2 rounded-2xl transition-all duration-200 group ${activeClass}">
-            <div class="w-11 h-11 rounded-full overflow-hidden flex-shrink-0 shadow-sm border border-black/5 group-hover:ring-2 group-hover:ring-primary/20 transition-all">
-                <img alt="Plant" class="w-full h-full object-cover" src="${imgUrl}"/>
+        <div onclick="openDoctorChat('${s.id}', 'plant')" class="flex items-center gap-3 p-2.5 rounded-[1.25rem] transition-all duration-300 group ${activeClass}">
+            <div class="w-11 h-11 rounded-full overflow-hidden flex-shrink-0 shadow-sm border border-black/5 group-hover:shadow-md transition-all">
+                <img alt="Plant" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="${imgUrl}"/>
             </div>
             <div class="overflow-hidden flex-1">
                 <p class="text-[13.5px] font-bold text-[#00261b] truncate leading-tight mb-[3px]">${title}</p>
@@ -2761,8 +2737,8 @@ async function loadGlobalChatsList() {
            let title = d.title || "Plant Discussion";
            const isActive = window.activeDoctorChatId === d_snap.id;
            const activeClass = isActive
-               ? 'bg-[#f0f4f2] border border-outline-variant/10 cursor-default shadow-sm'
-               : 'text-on-surface hover:bg-[#f0f4f2] hover:shadow-sm active:scale-[0.98] cursor-pointer border border-transparent';
+               ? 'bg-emerald-50/80 border border-emerald-200 shadow-[0_2px_10px_rgba(5,150,105,0.08)] cursor-default'
+               : 'text-on-surface hover:bg-emerald-50/50 hover:border-emerald-100/60 hover:shadow-md active:scale-[0.98] cursor-pointer border border-transparent';
            // Get time label
            const ts = d.updatedAt?.toDate ? d.updatedAt.toDate() : null;
            const timeLabel = ts ? ts.toLocaleDateString(undefined, {month:'short', day:'numeric'}) : '';
