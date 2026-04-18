@@ -89,9 +89,13 @@
         @layer base {
             @supports (font-variation-settings: normal) {
                 body { 
-                    font-family: 'Inter', sans-serif; 
-                    scrollbar-gutter: stable;
+                    font-family: 'Inter', sans-serif;
+                    /* Removed scrollbar-gutter: stable — it caused a scrollbar-width jump on load */
                 }
+            }
+            html, body {
+                /* Prevent FOUC scrollbar jump */
+                overflow-x: hidden;
             }
             h1, h2, h3, .brand { font-family: 'Manrope', sans-serif; }
         }
@@ -214,7 +218,7 @@
         .stagger-3 { animation-delay: 0.4s; }
         .stagger-4 { animation-delay: 0.5s; }
 
-        /* Smooth Preloader Styles */
+        /* ── PRELOADER: Smooth, minimal, no stutter ── */
         #loading-overlay {
             position: fixed;
             inset: 0;
@@ -224,44 +228,102 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.8s;
+            gap: 0;
+            /* Prevent layout shift by locking the overlay width to viewport */
+            overflow: hidden;
+            transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+                        visibility 0.6s cubic-bezier(0.16, 1, 0.3, 1);
         }
         #loading-overlay.hidden {
             opacity: 0;
             visibility: hidden;
             pointer-events: none;
         }
+        /* Subtle animated background */
+        .loader-bg-orb {
+            position: absolute;
+            border-radius: 50%;
+            pointer-events: none;
+            filter: blur(80px);
+            opacity: 0.3;
+        }
+        .loader-bg-orb-1 {
+            width: 400px; height: 400px;
+            background: radial-gradient(circle, rgba(16,185,129,0.25) 0%, transparent 70%);
+            top: -120px; right: -80px;
+            animation: orb-drift 8s ease-in-out infinite;
+        }
+        .loader-bg-orb-2 {
+            width: 300px; height: 300px;
+            background: radial-gradient(circle, rgba(5,150,105,0.2) 0%, transparent 70%);
+            bottom: -80px; left: -60px;
+            animation: orb-drift 10s ease-in-out infinite reverse;
+        }
+        @keyframes orb-drift {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(20px, -20px) scale(1.08); }
+        }
         .loader-logo {
-            width: 100px;
-            height: 100px;
-            margin-bottom: 24px;
-            animation: loader-pulse 2s ease-in-out infinite;
+            width: 72px;
+            height: 72px;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+            animation: loader-breathe 2.4s ease-in-out infinite;
         }
-        @keyframes loader-pulse {
-            0%, 100% { transform: scale(1); opacity: 1; filter: drop-shadow(0 0 0 rgba(16, 185, 129, 0)); }
-            50% { transform: scale(1.05); opacity: 0.8; filter: drop-shadow(0 0 20px rgba(16, 185, 129, 0.4)); }
+        @keyframes loader-breathe {
+            0%, 100% { transform: scale(1); filter: drop-shadow(0 8px 24px rgba(5,150,105,0.15)); }
+            50% { transform: scale(1.04); filter: drop-shadow(0 12px 32px rgba(5,150,105,0.3)); }
         }
-        .loader-bar {
-            width: 200px;
-            height: 3px;
-            background: rgba(0, 38, 27, 0.05);
+        .loader-brand {
+            font-family: 'Manrope', sans-serif;
+            font-size: 22px;
+            font-weight: 800;
+            color: #00261b;
+            letter-spacing: -0.02em;
+            margin-bottom: 6px;
+            position: relative; z-index: 1;
+            opacity: 0;
+            animation: loader-fade-in 0.5s 0.2s ease forwards;
+        }
+        .loader-tagline {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: rgba(0,38,27,0.35);
+            margin-bottom: 32px;
+            position: relative; z-index: 1;
+            opacity: 0;
+            animation: loader-fade-in 0.5s 0.35s ease forwards;
+        }
+        @keyframes loader-fade-in {
+            from { opacity: 0; transform: translateY(6px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        /* Progress track */
+        .loader-track {
+            width: 180px;
+            height: 2px;
+            background: rgba(0, 38, 27, 0.07);
             border-radius: 10px;
             overflow: hidden;
-            position: relative;
+            position: relative; z-index: 1;
         }
-        .loader-progress {
+        .loader-fill {
             position: absolute;
-            top: 0;
-            left: 0;
+            top: 0; left: 0;
             height: 100%;
-            width: 50%;
-            background: #10b981;
+            width: 40%;
+            background: linear-gradient(90deg, #10b981, #34d399);
             border-radius: 10px;
-            animation: loader-slide 1.5s infinite ease-in-out;
+            animation: loader-sweep 1.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+            box-shadow: 0 0 8px rgba(16,185,129,0.5);
         }
-        @keyframes loader-slide {
-            0% { left: -50%; }
-            100% { left: 100%; }
+        @keyframes loader-sweep {
+            0%   { left: -40%; width: 40%; }
+            50%  { left: 60%; width: 40%; }
+            100% { left: 120%; width: 40%; }
         }
         .stagger-5 { animation-delay: 0.6s; }
 
@@ -273,12 +335,17 @@
   transition:opacity .45s cubic-bezier(.22,1,.36,1),transform .45s cubic-bezier(.22,1,.36,1);
   will-change:opacity,transform;
   overflow-x:hidden; /* Let body handle vertical scroll to prevent stuttering/jumping */
-  padding-top:72px; /* nav height */
-  padding-bottom:70px; /* space for minimal bottom nav */
+  padding-top:64px; /* nav height = 64px */
+  padding-bottom:74px; /* space for mobile bottom nav */
   min-height:100vh;
 }
 @media (min-width:768px){
-  .spa-section{ padding-bottom: 24px; padding-top: 64px; }
+  /* Tablet: smaller bottom padding since bottom nav is hidden */
+  .spa-section{ padding-bottom: 32px; padding-top: 64px; }
+}
+@media (min-width:1024px){
+  /* Desktop: no bottom nav */
+  .spa-section{ padding-bottom: 40px; padding-top: 64px; }
 }
 .spa-section.active{
   opacity:1;pointer-events:auto;
@@ -299,17 +366,26 @@
   padding: 12px 16px;
   padding-bottom: max(12px, env(safe-area-inset-bottom));
   justify-content: space-around;
-  transition: transform 0.3s ease, opacity 0.3s ease;
+  /* Smooth hide/show */
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+              opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;
 }
-body.keyboard-open .mobile-bottom-nav,
-body:has(input:focus) .mobile-bottom-nav,
-body:has(textarea:focus) .mobile-bottom-nav {
+/* Auto-hide bottom nav when in AI Doctor / FloraSense chat section on mobile */
+body.in-doctor-section .mobile-bottom-nav {
+  transform: translateY(100%);
+  opacity: 0;
+  pointer-events: none;
+}
+/* Also hide when keyboard opens (input/textarea focused outside doctor section) */
+body.keyboard-open .mobile-bottom-nav {
   transform: translateY(100%);
   opacity: 0;
   pointer-events: none;
 }
 @media (min-width: 768px) {
-  .mobile-bottom-nav { display: none; }
+  /* On md+ screens (tablet/desktop), the bottom nav is hidden via display:none */
+  .mobile-bottom-nav { display: none !important; }
 }
 .mobile-nav-item {
   display: flex;
@@ -367,14 +443,15 @@ body:has(textarea:focus) .mobile-bottom-nav {
 .nav-link.active::after {
    transform: scaleX(1);
 }
-/* AI Doctor - Persistent Nav Fix */
+/* ── FloraSense AI Chat — Full-screen fixed layout ── */
 #sec-doctor {
   display: flex !important;
-  height: calc(100vh - 72px) !important;
+  /* On mobile: occupy full screen below top nav */
+  height: calc(100vh - 64px) !important;
   width: 100% !important;
   overflow: hidden !important;
   position: fixed !important;
-  top: 72px; left: 0; padding: 0; margin: 0;
+  top: 64px; left: 0; padding: 0; margin: 0;
   background: #f8faf9;
   z-index: 100;
   opacity: 0;
@@ -388,23 +465,24 @@ body:has(textarea:focus) .mobile-bottom-nav {
 .sidebar-doctor {
   width: 340px;
   background: white;
-  height: calc(100vh - 72px);
+  height: calc(100vh - 64px);
   position: fixed;
-  left: 0; top: 72px; bottom: 0;
+  left: 0; top: 64px; bottom: 0;
   border-right: 1px solid #eaefec;
   z-index: 150;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   display: flex; flex-direction: column;
   box-shadow: 10px 0 30px -15px rgba(0,0,0,0.04);
 }
 .main-doctor {
   flex: 1;
   margin-left: 340px;
-  height: calc(100vh - 72px);
+  height: calc(100vh - 64px);
   display: flex;
   flex-direction: column;
   position: relative;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  min-width: 0; /* Prevent flex overflow */
 }
 /* Sidebar Collapsed State (Universal) */
 .sidebar-collapsed .sidebar-doctor {
@@ -415,24 +493,40 @@ body:has(textarea:focus) .mobile-bottom-nav {
   margin-left: 0;
 }
 
-/* Mobile Sidebar Fixes */
-@media (max-width: 1024px) {
+/* ── Mobile/Tablet Sidebar — FloraSense ── */
+@media (max-width: 1023px) {
   .sidebar-doctor {
-    width: 80%;
-    z-index: 200;
-    transform: translateX(-100%); /* Default hidden */
+    width: min(320px, 82vw);
+    z-index: 250; /* Above chat input */
+    transform: translateX(-100%); /* Hidden by default on mobile */
+    /* Full height: from top of screen — covers everything on mobile */
     height: 100dvh;
     top: 0;
-    box-shadow: 10px 0 30px rgba(0,38,27,0.15);
+    box-shadow: 16px 0 40px rgba(0,38,27,0.18);
   }
   .main-doctor {
-    margin-left: 0 !important; /* Do not shift content on mobile */
+    margin-left: 0 !important; /* Never shift chat area on mobile */
   }
-  /* Active state (not collapsed) */
+  /* Sidebar overlay backdrop */
+  .doctor-sidebar-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,38,27,0.35);
+    backdrop-filter: blur(2px);
+    z-index: 240;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+  }
+  .doctor-sidebar-backdrop.visible {
+    opacity: 1;
+    visibility: visible;
+  }
+  /* Show sidebar when not collapsed */
   #sec-doctor:not(.sidebar-collapsed) .sidebar-doctor {
     transform: translateX(0);
   }
-  /* Collapsed state */
+  /* Hide sidebar when collapsed */
   #sec-doctor.sidebar-collapsed .sidebar-doctor {
     transform: translateX(-100%);
   }
@@ -509,29 +603,41 @@ body:has(textarea:focus) .mobile-bottom-nav {
   50% { opacity: 0.6; transform: scale(0.98); }
 }
 
-/* Responsive Doctor */
-@media (max-width: 1024px) {
-  .sidebar-doctor { transform: translateX(-100%); width: 300px; }
-  .main-doctor { margin-left: 0; }
-  #sidebar-toggle:checked + .sidebar-doctor { transform: translateX(0); }
+/* ── Messages area + input — responsive ── */
+.doctor-messages-area {
+  flex: 1;
+  overflow-y: auto;
+  padding: 40px 10%;
+  scroll-behavior: smooth;
+  /* Ensure messages don't go under the pinned input */
+  padding-bottom: 140px;
 }
-@media (max-width: 640px) {
-  .doctor-nav { padding: 0 20px; }
-  .doctor-messages-area { padding-left: 20px; padding-right: 20px; padding-bottom: 200px !important; }
-  .doctor-input-container { 
-      position: fixed;
-      left: 0;
-      right: 0;
-      bottom: max(60px, calc(env(safe-area-inset-bottom) + 55px)); 
-      padding: 12px 16px;
-      padding-bottom: 16px !important;
-      background: linear-gradient(to top, rgba(248,250,249,1) 85%, rgba(248,250,249,0));
-      z-index: 150;
-      width: 100vw;
-      transition: bottom 0.3s ease;
+/* Input container — always pinned to bottom of .main-doctor */
+.doctor-input-container {
+  padding: 16px 10% 24px 10%;
+  background: linear-gradient(to top, #f8faf9 80%, transparent);
+  position: sticky; bottom: 0; z-index: 140;
+  flex-shrink: 0;
+}
+@media (max-width: 1023px) {
+  .doctor-messages-area {
+    padding-left: 16px;
+    padding-right: 16px;
+    padding-top: 16px;
+    padding-bottom: 130px; /* space for pinned input */
   }
-  body:has(textarea:focus) .doctor-input-container {
-      bottom: 0 !important;
+  .doctor-input-container {
+    /* On mobile/tablet: Fix to BOTTOM of the flex column (main-doctor),
+       which itself is a fixed element filling the screen below the top nav.
+       The bottom navbar is auto-hidden when in this section, so we only need
+       safe-area-inset-bottom padding. */
+    padding-left: 12px;
+    padding-right: 12px;
+    padding-bottom: max(16px, env(safe-area-inset-bottom));
+    position: sticky;
+    bottom: 0;
+    background: linear-gradient(to top, rgba(248,250,249,1) 85%, rgba(248,250,249,0));
+    z-index: 160;
   }
 }
 /* Hidden elements */
@@ -546,11 +652,18 @@ body:has(textarea:focus) .mobile-bottom-nav {
 
 <!-- ── PRELOADER ── -->
 <div id="loading-overlay">
-    <img src="logo.png" class="loader-logo" alt="Loading Florentix...">
-    <div class="loader-bar">
-        <div class="loader-progress"></div>
+    <!-- Ambient background orbs -->
+    <div class="loader-bg-orb loader-bg-orb-1"></div>
+    <div class="loader-bg-orb loader-bg-orb-2"></div>
+    <!-- Logo -->
+    <img src="logo.png" class="loader-logo" alt="FloraSense AI">
+    <!-- Brand -->
+    <div class="loader-brand">FloraSense <span style="color:#059669">AI</span></div>
+    <div class="loader-tagline">Plant Intelligence Platform</div>
+    <!-- Progress bar -->
+    <div class="loader-track">
+        <div class="loader-fill"></div>
     </div>
-    <p class="mt-6 text-[10px] font-bold uppercase tracking-[0.25em] text-primary/40 animate-pulse">Initializing Neural Engine</p>
 </div>
 
 
@@ -565,7 +678,7 @@ body:has(textarea:focus) .mobile-bottom-nav {
 <a class="nav-link active cursor-pointer" data-target="dashboard" onclick="showSection('dashboard')">Dashboard</a>
 <a class="nav-link cursor-pointer" data-target="scan" onclick="showSection('scan')">Scan</a>
 <a class="nav-link cursor-pointer" data-target="history" onclick="showSection('history')">History</a>
-<a class="nav-link cursor-pointer" data-target="doctor" onclick="showSection('doctor')">AI Doctor</a>
+<a class="nav-link cursor-pointer" data-target="doctor" onclick="showSection('doctor')">FloraSense</a>
 </div>
 <div class="flex items-center space-x-2 sm:space-x-3">
 <button id="logoutBtn" class="p-2 sm:p-2.5 rounded-full bg-surface-container-high/50 hover:bg-white transition-all premium-shadow group" title="Logout">
@@ -596,8 +709,8 @@ U
     <span class="nav-label">History</span>
   </button>
   <button class="mobile-nav-item" id="mbn-doctor" onclick="showSection('doctor')">
-    <span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1">smart_toy</span>
-    <span class="nav-label">AI Doctor</span>
+    <span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1">psychiatry</span>
+    <span class="nav-label">FloraSense</span>
   </button>
 </nav>
 
@@ -852,8 +965,8 @@ System healthy. Keep monitoring correctly.
 </div>
 <div class="relative z-10 text-left flex-grow">
 <div class="flex items-center gap-2 mb-0.5">
-<div class="font-extrabold text-lg">AI Plant Doctor</div>
-<span class="px-2 py-0.5 bg-emerald-400 text-[#00261b] text-[8px] font-black uppercase rounded">v2.0</span>
+<div class="font-extrabold text-lg">FloraSense</div>
+<span class="px-2 py-0.5 bg-emerald-400 text-[#00261b] text-[8px] font-black uppercase rounded">AI Chat</span>
 </div>
 <div class="text-xs text-white/70 font-medium">Chat with our botanist-trained neural network</div>
 </div>
@@ -1028,15 +1141,18 @@ System healthy. Keep monitoring correctly.
 <!-- /sec-history -->
 
 
-<!-- ── SECTION: AI DOCTOR ── -->
+<!-- ── SECTION: AI DOCTOR (FloraSense) ── -->
 <section id="sec-doctor" class="spa-section">
+    <!-- Sidebar backdrop for mobile/tablet (tap to close) -->
+    <div class="doctor-sidebar-backdrop" id="doctorSidebarBackdrop" onclick="window.collapseDoctorSidebar && window.collapseDoctorSidebar()"></div>
     <input class="hidden" id="sidebar-toggle" type="checkbox"/>
     
     <!-- Sidebar (Adjusted for persistent nav) -->
     <aside class="sidebar-doctor premium-scrollbar">
-        <div class="flex items-center h-[90px] shrink-0 w-full px-8 justify-between border-b border-[#eaefec]/50 mb-4 bg-surface-container-low/30">
+        <!-- Mobile: Close sidebar header -->
+        <div class="flex items-center h-[72px] shrink-0 w-full px-5 justify-between border-b border-[#eaefec]/50 bg-surface-container-low/30">
              <div class="flex items-center gap-3" id="doctorActiveContextSummary" style="display:none;">
-                 <img id="doctorSmallImg" class="w-10 h-10 rounded-xl object-cover border border-black/5 shadow-sm" src=""/>
+                 <img id="doctorSmallImg" class="w-9 h-9 rounded-xl object-cover border border-black/5 shadow-sm" src=""/>
                  <div class="overflow-hidden">
                      <p class="text-[9px] font-black uppercase tracking-[0.15em] text-on-surface-variant/50 leading-none mb-1">Current Focus</p>
                      <p class="text-xs font-bold text-[#00261b] truncate max-w-[140px]" id="doctorSmallTitle">Universal AI</p>
@@ -1044,11 +1160,15 @@ System healthy. Keep monitoring correctly.
              </div>
              <!-- Fallback if no specific plant is active -->
              <div id="doctorGenericSummary" class="flex items-center gap-3">
-                 <div class="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-white">
-                     <span class="material-symbols-outlined text-xl">smart_toy</span>
+                 <div class="w-9 h-9 rounded-xl bg-primary flex items-center justify-center text-white flex-shrink-0">
+                     <span class="material-symbols-outlined text-[18px]">psychiatry</span>
                  </div>
-                 <p class="text-xs font-bold text-[#00261b]">Florentix AI</p>
+                 <p class="text-sm font-bold text-[#00261b]">FloraSense</p>
              </div>
+             <!-- Close button (mobile only) -->
+             <button class="ml-auto w-8 h-8 rounded-full bg-surface-container flex items-center justify-center text-on-surface-variant hover:bg-surface-container-high transition-colors lg:hidden" onclick="window.collapseDoctorSidebar && window.collapseDoctorSidebar()" title="Close sidebar">
+                 <span class="material-symbols-outlined text-[18px]">close</span>
+             </button>
         </div>
 
         <div class="flex flex-col flex-1 px-6 pb-6 overflow-hidden">
@@ -1106,18 +1226,32 @@ System healthy. Keep monitoring correctly.
 
     <!-- Main Content -->
     <main class="main-doctor">
-        <!-- Main Navbar remains at the top (z-index 50) -->
+        <!-- Mobile back-to-dashboard button (only shown on small screens in doctor section) -->
+        <div class="flex items-center px-4 pt-3 pb-2 border-b border-[#eaefec]/80 bg-white/80 backdrop-blur-sm flex-shrink-0 lg:hidden">
+            <button onclick="window.showSection('dashboard')" class="flex items-center gap-2 text-xs font-bold text-primary hover:text-emerald-600 transition-colors py-1.5 px-3 rounded-full bg-primary-fixed/30 hover:bg-primary-fixed/60 active:scale-95">
+                <span class="material-symbols-outlined text-[16px]">arrow_back</span>
+                Dashboard
+            </button>
+            <div class="ml-3 flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                <span class="text-[11px] font-bold text-primary">FloraSense</span>
+            </div>
+            <!-- Sidebar toggle for mobile -->
+            <button id="sidebarToggleBtn" onclick="window.toggleDoctorSidebar && window.toggleDoctorSidebar()" class="ml-auto flex items-center justify-center w-8 h-8 rounded-full bg-surface-container hover:bg-surface-container-high transition-colors" title="Toggle plant sidebar">
+                <span class="material-symbols-outlined text-[18px] text-primary">menu</span>
+            </button>
+        </div>
 
         <!-- Scrollable Messages Area -->
         <div class="doctor-messages-area premium-scrollbar" id="chatMsgsScroll">
             <div class="max-w-3xl mx-auto space-y-10" id="chatMsgsContainer">
                  <!-- Welcome Header -->
-                 <div class="text-center py-12 space-y-3" id="doctorWelcomeHeader">
-                     <div class="w-20 h-20 bg-white rounded-3xl shadow-xl shadow-emerald-900/5 mx-auto flex items-center justify-center mb-6">
-                         <span class="material-symbols-outlined text-4xl text-primary">psychology</span>
+                 <div class="text-center py-10 space-y-3" id="doctorWelcomeHeader">
+                     <div class="w-16 h-16 bg-white rounded-2xl shadow-lg shadow-emerald-900/5 mx-auto flex items-center justify-center mb-4">
+                         <span class="material-symbols-outlined text-3xl text-primary">psychiatry</span>
                      </div>
-                     <h1 class="text-3xl font-extrabold font-headline text-primary tracking-tight">Expert Plant Care</h1>
-                     <p class="text-on-surface-variant font-medium max-w-sm mx-auto">Ask about symptoms, treatment steps, or preventative care for your specific plants.</p>
+                     <h1 class="text-2xl font-extrabold font-headline text-primary tracking-tight">FloraSense</h1>
+                     <p class="text-on-surface-variant font-medium max-w-sm mx-auto text-sm">Ask about symptoms, treatment steps, or preventative care for your specific plants.</p>
                  </div>
             </div>
              
@@ -1289,24 +1423,55 @@ window.showSection = sectionId => {
     }
   });
 
-  const isFullScreen = (sectionId === 'doctor' || sectionId === 'scan');
-  const mainNav = document.getElementById('main-nav');
-  
+  // Auto-hide bottom nav when in doctor chat section (mobile/tablet)
+  if (sectionId === 'doctor') {
+    document.body.classList.add('in-doctor-section');
+    // On mobile, start with sidebar collapsed so user sees chat immediately
+    const isMobile = window.innerWidth < 1024;
+    if (isMobile) {
+      document.getElementById('sec-doctor')?.classList.add('sidebar-collapsed');
+    }
+  } else {
+    document.body.classList.remove('in-doctor-section');
+    // Close doctor sidebar backdrop if switching away
+    const backdrop = document.getElementById('doctorSidebarBackdrop');
+    if (backdrop) backdrop.classList.remove('visible');
+  }
+
   // Always keep body scrollable — sections self-scroll via min-height:100vh
   document.body.style.overflow = '';
   document.body.style.paddingTop = '0px';
   document.body.style.paddingRight = '0px';
+  const mainNav = document.getElementById('main-nav');
   if (mainNav) mainNav.style.paddingRight = '0px';
   
   window.scrollTo({top: 0, behavior: 'instant'});
   
   sessionStorage.setItem('spa_saved_section', sectionId);
-  
-  // Sync AI Doctor Toggle Visibility
-  const toggleBtn = document.getElementById('sidebarToggleBtn');
-  if (toggleBtn) {
-      toggleBtn.style.display = (sectionId === 'doctor') ? 'flex' : 'none';
+};
+
+// ── FloraSense Sidebar Toggle Helpers ──
+window.toggleDoctorSidebar = () => {
+  const sec = document.getElementById('sec-doctor');
+  const backdrop = document.getElementById('doctorSidebarBackdrop');
+  if (!sec) return;
+  const isCollapsed = sec.classList.contains('sidebar-collapsed');
+  if (isCollapsed) {
+    // Open sidebar
+    sec.classList.remove('sidebar-collapsed');
+    if (backdrop && window.innerWidth < 1024) backdrop.classList.add('visible');
+  } else {
+    // Close sidebar
+    sec.classList.add('sidebar-collapsed');
+    if (backdrop) backdrop.classList.remove('visible');
   }
+};
+
+window.collapseDoctorSidebar = () => {
+  const sec = document.getElementById('sec-doctor');
+  const backdrop = document.getElementById('doctorSidebarBackdrop');
+  if (sec) sec.classList.add('sidebar-collapsed');
+  if (backdrop) backdrop.classList.remove('visible');
 };
 
 // Scrolled nav
